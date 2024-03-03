@@ -1,4 +1,4 @@
 #[derive(Debug)]
 pub struct OtherWord {
-    pub value: std::vec<i16>,
+    pub value: std::vec::Vec<i16>,
 }

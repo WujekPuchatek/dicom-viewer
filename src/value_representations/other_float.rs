@@ -1,4 +1,4 @@
 #[derive(Debug)]
 pub struct OtherFloat {
-    pub value: std::vec<f32>,
+    pub value: std::vec::Vec<f32>,
 }

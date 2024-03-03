@@ -8,7 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/data_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/value_field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_double.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_double.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_float.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_float.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_word.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_word.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unknown.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,12 +37,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "WujekPuchatek"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;WujekPuchatek&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="6bbe2c4d-a076-4d29-9948-093a4e2ba00f" />
   </component>
@@ -45,6 +56,9 @@
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="fhviqm7y" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -60,6 +74,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Cargo.Run.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
@@ -107,6 +122,7 @@
       <workItem from="1709402669027" duration="325000" />
       <workItem from="1709403003640" duration="1971000" />
       <workItem from="1709463399986" duration="812000" />
+      <workItem from="1709504082336" duration="2373000" />
     </task>
     <servers />
   </component>
