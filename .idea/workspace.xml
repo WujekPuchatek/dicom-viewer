@@ -8,71 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dataset/tag.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dataset/value_representation.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/age_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/application_entity.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/code_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/date.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/date_time.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/integer_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/long_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/long_text.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_byte.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_double.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_float.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/other_word.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/person_name.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/short_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/short_text.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/signed_64bit_very_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/signed_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/signed_short.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/time.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dicom-viewer" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/dicom_viewer-f1d99dab9d6be496/bin-dicom_viewer" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/dicom_viewer-f1d99dab9d6be496/bin-dicom_viewer.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/dicom_viewer-f1d99dab9d6be496/dep-bin-dicom_viewer" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/dicom_viewer-f1d99dab9d6be496/invoked.timestamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/deps/dicom_viewer.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/deps/dicom_viewer.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/deps/dicom_viewer.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/dicom_viewer.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/dicom_viewer.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/dicom_viewer.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/1j30cgnopz65eyw6.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/1ylu0zta8ewkaxgv.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/210av6uzyl3xhmlb.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/34wil5wqb5iha36r.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/3f7dgjmwt2n8qkie.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/54tnxg9a73b1kscz.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/b9w91d0nr36f3o5.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/dep-graph.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/query-cache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020-5ndfif2qwgir44m0x36733ade/work-products.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/debug/incremental/dicom_viewer-eg421eqzjer5/s-gtk2vot7pd-uo8020.lock" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +26,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "WujekPuchatek"
+  }
+}]]></component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="6bbe2c4d-a076-4d29-9948-093a4e2ba00f" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="6bbe2c4d-a076-4d29-9948-093a4e2ba00f" />
+        <option name="url" value="https://github.com/WujekPuchatek/dicom-viewer.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="fhviqm7y" />
   </component>
@@ -103,23 +57,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package dicom_viewer --bin dicom_viewer" />
@@ -152,11 +106,23 @@
       <updated>1709402667477</updated>
       <workItem from="1709402669027" duration="325000" />
       <workItem from="1709403003640" duration="1971000" />
+      <workItem from="1709463399986" duration="812000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
