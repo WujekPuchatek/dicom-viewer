@@ -1,6 +1,10 @@
 use std::fs::File;
 use memmap2::Mmap;
 
+mod data_reader;
+mod dicom_file_parser;
+mod dicom_file_parser;
+
 fn main()  -> std::io::Result<()>
 {
     let path = "C:/Users/medapp/Desktop/CT/im001.dcm";
