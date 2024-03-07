@@ -10,6 +10,7 @@ pub struct DataReader<'a>  {
     endianness: Endianness,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Endianness {
     Little,
     Big,
@@ -28,6 +29,14 @@ impl<'a> DataReader<'a> {
             cursor: std::io::Cursor::new(data),
             endianness
         }
+    }
+
+    pub fn byte_order(&self) -> Endianness {
+        self.endianness
+    }
+
+    pub fn change_byte_order(&mut self, endianness : Endianness) {
+        self.endianness = endianness;
     }
     pub fn read_u8(&mut self) -> u8
     {
@@ -95,6 +104,10 @@ impl<'a> DataReader<'a> {
         buffer
     }
 
+    pub fn read_exact(&mut self, buffer: &mut [u8]) {
+        self.cursor.read_exact(buffer).unwrap();
+    }
+
     pub fn seek(&mut self, whence: Whence, pos: usize) {
         match whence {
             Whence::Start => self.cursor.set_position(pos as u64),
@@ -112,7 +125,6 @@ impl<'a> DataReader<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use byteorder::{LittleEndian, BigEndian};
 
     #[test]
     fn test_read_u8() {
@@ -125,7 +137,7 @@ mod tests {
     fn test_read_i8() {
         let data = [0x01, 0x02, 0x03, 0x04];
         let mut reader = DataReader::new(&data, Endianness::Little);
-        assert_eq!(reader.read_u8(), 0x01);
+        assert_eq!(reader.read_i8(), 0x01);
     }
 
     #[test]
@@ -278,5 +290,19 @@ mod tests {
         let mut reader = DataReader::new(&data, Endianness::Little);
         reader.seek(Whence::Current, 1);
         assert_eq!(reader.read_u8(), 0x02);
+    }
+
+    #[test]
+    fn test_read_string() {
+        let data = b"test string";
+        let mut reader = DataReader::new(data, Endianness::Little);
+        assert_eq!(reader.read_string(11), "test string".to_string());
+    }
+
+    #[test]
+    fn test_read_string_be() {
+        let data = b"test string";
+        let mut reader = DataReader::new(data, Endianness::Big);
+        assert_eq!(reader.read_string(11), "test string".to_string());
     }
 }

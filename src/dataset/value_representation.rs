@@ -1,4 +1,4 @@
 #[derive(Debug)]
 pub struct ValueRepresentation {
-    pub value: [char; 2],
+    pub value: [u8; 2],
 }

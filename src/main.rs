@@ -3,7 +3,8 @@ use memmap2::Mmap;
 
 mod data_reader;
 mod dicom_file_parser;
-mod dicom_file_parser;
+mod dicom_constants;
+mod dataset;
 
 fn main()  -> std::io::Result<()>
 {
@@ -11,7 +12,7 @@ fn main()  -> std::io::Result<()>
     let file = File::open(path).expect("failed to open the file");
     let mmap = unsafe { Mmap::map(&file).expect("failed to map the file") };
 
-    let data = &mmap[..];
+    let _data = &mmap[..];
 
     Ok(())
 }
