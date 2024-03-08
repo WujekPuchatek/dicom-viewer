@@ -7,21 +7,11 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Complete implementation of data_reader and add tests">
-      <change afterPath="$PROJECT_DIR$/src/dicom_constants/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_constants/numeric.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_constants/tags.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_constants/transfer_syntaxes.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_constants/value_representation.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_file_parser/validator.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start implementation of dicom_file_parser.rs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_reader/data_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/data_reader.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/value_representation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_representation.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/tag.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_constants/tags.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/tags.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +170,7 @@
       <workItem from="1709635250129" duration="4423000" />
       <workItem from="1709747837193" duration="906000" />
       <workItem from="1709759593520" duration="5580000" />
-      <workItem from="1709849912476" duration="36000" />
+      <workItem from="1709849912476" duration="3462000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -198,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709748715442</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Start implementation of dicom_file_parser.rs">
+      <option name="closed" value="true" />
+      <created>1709849991649</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709849991649</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,7 +217,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Complete implementation of data_reader" />
     <MESSAGE value="Complete implementation of data_reader and add tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Complete implementation of data_reader and add tests" />
+    <MESSAGE value="Start implementation of dicom_file_parser.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start implementation of dicom_file_parser.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

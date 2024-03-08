@@ -10,3 +10,7 @@ pub const IMPLEMENTATION_VERSION_NAME: Tag = Tag { group: 0x0002, element: 0x001
 pub const TRANSFER_SYNTAX_UID_TAG: Tag = Tag { group: 0x0002, element: 0x0010 };
 pub const IMPLEMENTATION_CLASS_UID_TAG: Tag = Tag { group: 0x0002, element: 0x0012 };
 pub const IMPLEMENTATION_VERSION_NAME_TAG: Tag = Tag { group: 0x0002, element: 0x0013 };
+
+pub const ITEM: Tag = Tag { group: 0xFFFE, element: 0xE000 };
+pub const ITEM_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE00D };
+pub const SEQUENCE_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE0DD };
