@@ -7,11 +7,14 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start implementation of dicom_file_parser.rs">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Continue implementation of dicom_file_parser.rs">
+      <change afterPath="$PROJECT_DIR$/src/dataset/value.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/tag.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_constants/tags.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/tags.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/age_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/age_string.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +30,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -171,6 +175,11 @@
       <workItem from="1709747837193" duration="906000" />
       <workItem from="1709759593520" duration="5580000" />
       <workItem from="1709849912476" duration="3462000" />
+      <workItem from="1709905510046" duration="703000" />
+      <workItem from="1709931271426" duration="61000" />
+      <workItem from="1709937315823" duration="80000" />
+      <workItem from="1709937425404" duration="1781000" />
+      <workItem from="1709944269823" duration="1208000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -196,7 +205,31 @@
       <option name="project" value="LOCAL" />
       <updated>1709849991649</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Continue implementation of dicom_file_parser.rs">
+      <option name="closed" value="true" />
+      <created>1709905532423</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1709905532423</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Continue implementation of dicom_file_parser.rs">
+      <option name="closed" value="true" />
+      <created>1709905596174</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1709905596174</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Continue implementation of dicom_file_parser.rs">
+      <option name="closed" value="true" />
+      <created>1709905619319</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1709905619319</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,14 +251,15 @@
     <MESSAGE value="Complete implementation of data_reader" />
     <MESSAGE value="Complete implementation of data_reader and add tests" />
     <MESSAGE value="Start implementation of dicom_file_parser.rs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start implementation of dicom_file_parser.rs" />
+    <MESSAGE value="Continue implementation of dicom_file_parser.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Continue implementation of dicom_file_parser.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>15</line>
+          <line>11</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -112,7 +112,10 @@ impl DicomFileParser {
     fn read_data_element_with_explicit_vr(&self, tag: &Tag, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
         if self.sequence_of_item_special_tag(tag) {
             reader.seek(Whence::Current, 4);
-            Ok(())
+            return
+
+
+                Ok(())
         }
 
         let value_representation = self.read_value_representation(reader);

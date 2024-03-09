@@ -1,2 +1,2 @@
-mod dicom_file_parser;
+pub mod dicom_file_parser;
 mod validator;
