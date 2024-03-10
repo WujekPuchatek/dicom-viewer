@@ -8,13 +8,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Continue implementation of dicom_file_parser.rs">
-      <change afterPath="$PROJECT_DIR$/src/dataset/value.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/value_representations/age_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/age_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/application_entity.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/application_entity.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/code_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/code_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/date.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/date.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/date_time.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/date_time.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/integer_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/integer_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/long_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/long_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/long_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/long_text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_byte.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_byte.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_double.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_double.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_float.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_float.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_word.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_word.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/person_name.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/person_name.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/short_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/short_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_64bit_very_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_short.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_short.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/time.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/time.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +210,7 @@
       <workItem from="1709937315823" duration="80000" />
       <workItem from="1709937425404" duration="1781000" />
       <workItem from="1709944269823" duration="1208000" />
+      <workItem from="1710103914456" duration="946000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
