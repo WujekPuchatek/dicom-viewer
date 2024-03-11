@@ -1,10 +1,12 @@
+use crate::value_representations::string_alike::StringAlike;
+
 #[derive(Debug)]
 pub struct ApplicationEntity {
     pub value: String,
 }
 
-impl ApplicationEntity {
-    pub fn new(value: String) -> Self {
-        Self { value }
+impl StringAlike for ApplicationEntity {
+    fn from_string(s: String) -> Self {
+        Self { value: s }
     }
 }

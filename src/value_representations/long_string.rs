@@ -1,10 +1,12 @@
+use crate::value_representations::string_alike::StringAlike;
+
 #[derive(Debug)]
 pub struct LongString {
     pub value: String,
 }
 
-impl LongString {
-    pub fn new(value: String) -> Self {
-        Self { value }
+impl StringAlike for LongString {
+    fn from_string(s: String) -> Self {
+        Self { value: s }
     }
 }

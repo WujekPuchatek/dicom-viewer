@@ -1,10 +1,12 @@
+use crate::value_representations::string_alike::StringAlike;
+
 #[derive(Debug)]
 pub struct UnlimitedCharacters {
     pub value: String,
 }
 
-impl UnlimitedCharacters {
-    pub fn new(value: String) -> Self {
-        Self { value }
+impl StringAlike for UnlimitedCharacters {
+    fn from_string(s: String) -> Self {
+        Self { value: s }
     }
 }

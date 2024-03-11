@@ -1,10 +1,14 @@
+use crate::value_representations::other_type::OtherType;
+
 #[derive(Debug)]
 pub struct OtherLong {
     pub value: std::vec::Vec<i32>,
 }
 
-impl OtherLong {
-    pub fn new(value: std::vec::Vec<i32>) -> Self {
+impl OtherType for OtherLong {
+    type Type = i32;
+
+    fn new(value: std::vec::Vec<i32>) -> Self {
         Self { value }
     }
 }

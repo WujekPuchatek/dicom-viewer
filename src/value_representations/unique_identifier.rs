@@ -1,10 +1,12 @@
+use crate::value_representations::string_alike::StringAlike;
+
 #[derive(Debug)]
 pub struct UniqueIdentifier {
     pub value: String,
 }
 
-impl UniqueIdentifier {
-    pub fn new(value: String) -> Self {
-        Self { value }
+impl StringAlike for UniqueIdentifier {
+    fn from_string(s: String) -> Self {
+        Self { value: s }
     }
 }

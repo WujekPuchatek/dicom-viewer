@@ -1,10 +1,12 @@
+use crate::value_representations::string_alike::StringAlike;
+
 #[derive(Debug)]
 pub struct ShortText {
     pub value: String,
 }
 
-impl ShortText {
-    pub fn new(value: String) -> Self {
-        Self { value }
+impl StringAlike for ShortText {
+    fn from_string(s: String) -> Self {
+        Self { value: s }
     }
 }

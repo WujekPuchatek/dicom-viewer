@@ -1,23 +1,26 @@
-use std::io::Read;
 use std::rc::Rc;
 use memmap2::Mmap;
 use crate::dataset::tag::Tag;
 use crate::data_reader::data_reader::{DataReader, Endianness, Whence};
-use crate::dataset::value_representation::ValueRepresentation;
 use crate::dicom_constants::numeric::HEADER_END;
 use crate::dicom_constants::tags::{ITEM, ITEM_DELIMITATION, SEQUENCE_DELIMITATION};
+use crate::dicom_file_parser::value_reader::{ExplicitValueReader, ValueReader};
 use super::validator::{Validator, ValidationResult};
+
+
 pub struct DicomFileParser {
     file_path: String,
     tags_to_read : std::collections::HashSet<Tag>,
-    read_all_tags : bool
+    read_all_tags : bool,
+    dicom_dataset_reader: ValueReader
 }
 
 impl DicomFileParser {
     pub fn new() -> Self {
         Self { file_path: "".parse().unwrap(),
                tags_to_read: std::collections::HashSet::new(),
-               read_all_tags: false }
+               read_all_tags: false,
+               dicom_dataset_reader: ValueReader::Explicit(ExplicitValueReader{}) }
     }
 
     pub fn read_all_tags(mut self) -> Self {
@@ -58,7 +61,7 @@ impl DicomFileParser {
     }
 
     fn sequence_of_item_special_tag(&self, tag: &Tag) -> bool {
-        tag == ITEM || tag == ITEM_DELIMITATION || tag == SEQUENCE_DELIMITATION
+        tag == &ITEM || tag == &ITEM_DELIMITATION || tag == &SEQUENCE_DELIMITATION
     }
 
     fn read_data_element_with_explicit_vr(&self, tag: &Tag, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
@@ -70,8 +73,8 @@ impl DicomFileParser {
                 Ok(())
         }
 
-        let value_representation = self.read_value_representation(reader);
-        let value_length = self.read_value_length(&value_representation, reader);
+        let value_representation = self.dicom_dataset_reader.read_value_representation(reader);
+        let value_length = self.dicom_dataset_reader.read_value_length(&value_representation, reader);
 
         if self.read_all_tags || self.tags_to_read.contains(tag) {
             let data = reader.read_bytes(value_length as usize);
@@ -86,110 +89,4 @@ impl DicomFileParser {
     fn read_meta_data(&self, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
         Ok(())
     }
-}
-
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_sequence_of_item_special_tag() {
-        let parser = DicomFileParser::new();
-
-        let item_tag = Tag { group: 0xFFFE, element: 0xE000 };
-        assert!(parser.sequence_of_item_special_tag(&item_tag));
-
-        let item_delimitation_tag = Tag { group: 0xFFFE, element: 0xE00D };
-        assert!(parser.sequence_of_item_special_tag(&item_delimitation_tag));
-
-        let sequence_delimitation_tag = Tag { group: 0xFFFE, element: 0xE0DD };
-        assert!(parser.sequence_of_item_special_tag(&sequence_delimitation_tag));
-
-        let non_special_tag = Tag { group: 0x0002, element: 0x0000 };
-        assert!(!parser.sequence_of_item_special_tag(&non_special_tag));
-    }
-
-    #[test]
-    fn test_value_length_kept_on_2_bytes() {
-        let parser = DicomFileParser::new();
-
-        let vr = ValueRepresentation { value: *b"AE" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"AS" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"AT" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"CS" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"DA" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"DS" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"DT" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"FL" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"FD" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"IS" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"LT" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"PN" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"SH" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"SL" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"SS" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"ST" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"TM" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"UI" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"UL" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"US" };
-        assert!(parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"OB" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"OW" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"OF" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"SQ" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"UN" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-
-        let vr = ValueRepresentation { value: *b"UT" };
-        assert!(!parser.value_length_kept_on_2_bytes(&vr));
-    }
-
-
 }
