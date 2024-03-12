@@ -48,7 +48,7 @@ impl DicomFileParser {
         let mut reader = DataReader::new(&content, Endianness::Little);
         reader.seek(Whence::Start, HEADER_END);
 
-        let meta_data = self.read_meta_data(&mut reader)?;
+        let meta_data = self.read_meta_data(&mut reader);
 
 
         Ok(())
@@ -67,10 +67,7 @@ impl DicomFileParser {
     fn read_data_element_with_explicit_vr(&self, tag: &Tag, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
         if self.sequence_of_item_special_tag(tag) {
             reader.seek(Whence::Current, 4);
-            return
-
-
-                Ok(())
+            return Ok(())
         }
 
         let value_representation = self.dicom_dataset_reader.read_value_representation(reader);
@@ -86,7 +83,8 @@ impl DicomFileParser {
         Ok(())
     }
 
-    fn read_meta_data(&self, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
-        Ok(())
+    fn read_meta_data(&self, reader: &mut DataReader) {
+        let tag = self.dicom_dataset_reader.read_tag(reader);
+
     }
 }

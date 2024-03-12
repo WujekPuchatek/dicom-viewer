@@ -1,6 +1,6 @@
 use crate::value_representations::other_type::OtherType;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OtherFloat {
     pub value: std::vec::Vec<f32>,
 }

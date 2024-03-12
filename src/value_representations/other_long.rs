@@ -1,6 +1,6 @@
 use crate::value_representations::other_type::OtherType;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OtherLong {
     pub value: std::vec::Vec<i32>,
 }

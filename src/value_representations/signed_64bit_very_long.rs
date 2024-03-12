@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Signed64bitVeryLong {
     pub value: i64,
 }

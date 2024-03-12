@@ -1,6 +1,6 @@
 use crate::value_representations::string_alike::StringAlike;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegerString {
     pub value: String,
 }

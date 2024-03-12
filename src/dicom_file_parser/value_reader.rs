@@ -1,9 +1,15 @@
-use std::mem::size_of;
 use crate::dataset::tag::Tag;
 use crate::data_reader::data_reader::{DataReader, Whence};
+use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
-use crate::value_representations::string_alike::StringAlike;
 use crate::value_representations::other_type::OtherType;
+use crate::value_representations::string_alike::StringAlike;
+
+mod private {
+    pub struct Local {}
+
+    pub const LOCAL : Local = Local{};
+}
 
 pub trait ValueReaderBase {
     fn read_tag(&self, reader: &mut DataReader) -> Tag {
@@ -20,7 +26,7 @@ pub trait ValueReaderBase {
     }
 
     fn read_value_length(&self, value_representation: &ValueRepresentation, reader: &mut DataReader) -> u32 {
-        if self.value_length_kept_on_2_bytes(value_representation) {
+        if self.value_length_kept_on_2_bytes(value_representation, private::LOCAL) {
             return reader.read_u16() as u32
         }
 
@@ -29,7 +35,149 @@ pub trait ValueReaderBase {
         reader.read_u32()
     }
 
-    fn value_length_kept_on_2_bytes(&self, value_representation: &ValueRepresentation) -> bool {
+    fn read_value(&self,
+                  value_representation: ValueRepresentation,
+                  value_length : u32,
+                  reader: &mut DataReader) -> ValueField {
+        if value_representation.value == *b"AE" {
+            return ValueField::ApplicationEntity(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"AS" {
+            return ValueField::AgeString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"AT" {
+            return ValueField::AttributeTag(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"CS" {
+            return ValueField::CodeString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"DA" {
+            return ValueField::Date(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"DS" {
+            return ValueField::DecimalString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"DT" {
+            return ValueField::DateTime(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"FL" {
+            // return ValueField::FloatingPointSingle(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"FD" {
+            // return ValueField::FloatingPointDouble(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"IS" {
+            return ValueField::IntegerString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"LO" {
+            return ValueField::LongString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"LT" {
+            return ValueField::LongText(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OB" {
+            return ValueField::OtherByte(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OD" {
+            return ValueField::OtherDouble(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OF" {
+            return ValueField::OtherFloat(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OL" {
+            return ValueField::OtherLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OV" {
+            return ValueField::Other64bitVeryLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"OW" {
+            return ValueField::OtherWord(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"PN" {
+            return ValueField::PersonName(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"SH" {
+            return ValueField::ShortString(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"SL" {
+            //return ValueField::SignedLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"SQ" {
+            //return ValueField::SequenceOfItems(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"SS" {
+            //return ValueField::SignedShort(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"ST" {
+            return ValueField::ShortText(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"SV" {
+            //return ValueField::Signed64bitVeryLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"TM" {
+            return ValueField::Time(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UC" {
+            return ValueField::UnlimitedCharacters(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UI" {
+            return ValueField::UniqueIdentifier(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UL" {
+            //return ValueField::UnsignedLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UN" {
+            //return ValueField::Unknown(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UR" {
+            return ValueField::UniversalResourceIdentifier(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"US" {
+            //return ValueField::UnsignedShort(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UT" {
+            return ValueField::UnlimitedText(self.read_string(reader, value_length, private::LOCAL));
+        }
+
+        if value_representation.value == *b"UV" {
+            //return ValueField::Unsigned64bitVeryLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+        }
+
+        panic!("Unknown value representation: {:?}", value_representation);
+    }
+    fn value_length_kept_on_2_bytes(&self, value_representation: &ValueRepresentation, _ : private::Local) -> bool {
         let vr = value_representation.value;
 
         vr == *b"AE" ||
@@ -42,6 +190,7 @@ pub trait ValueReaderBase {
         vr == *b"FL" ||
         vr == *b"FD" ||
         vr == *b"IS" ||
+        vr == *b"LO" ||
         vr == *b"LT" ||
         vr == *b"PN" ||
         vr == *b"SH" ||
@@ -54,35 +203,56 @@ pub trait ValueReaderBase {
         vr == *b"US"
     }
 
-    fn read_string<VR: StringAlike>(&self, reader: &mut DataReader, length: u32) -> VR {
-        let string = reader.read_string(length as usize);
-        VR::from_string(string)
+    fn read_string<VR: StringAlike>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+        let str = reader.read_string(length as usize);
+        VR::from_string(str)
     }
 
-    fn cast_to_u8_slice<'a, VR: OtherType>(&self, vec: &mut Vec<VR::Type>) -> &'a[u8] {
-        let ptr = vec.as_ptr() as *const u8;
-        let len = vec.len() * std::mem::size_of::<VR::Type>();
-        unsafe { std::slice::from_raw_parts(ptr, len) }
-    }
-
-    fn read_other_bytes<VR: OtherType>(&self, reader: &mut DataReader, length: u32) -> VR
-    where
-        VR::Type: Default + Copy
+    fn read_other_bytes<VR: OtherType>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR
+        where
+            VR::Type: Default + Copy
     {
-        let num_of_values = length / (size_of::<VR::Type>() as u32);
+        let length = length as usize / std::mem::size_of::<VR::Type>();
+        let mut vec = vec![VR::Type::default(); length as usize];
 
-        let mut bytes = vec![VR::Type::default(); length as usize];
-        let mut casted = self.cast_to_u8_slice::<VR>(&mut bytes);
-        reader.read_exact(&mut casted);
-        VR::new(bytes)
+        let slice = unsafe {
+            std::slice::from_raw_parts_mut(vec.as_mut_ptr() as *mut u8,
+                                           vec.len() * std::mem::size_of::<VR::Type>())
+        };
+
+        reader.read_exact(slice);
+        VR::new(vec)
+    }
+
+    fn cast_to_u8_slice<'a, VR: OtherType>(&self, vec: &mut Vec<VR::Type>, _ : private::Local) -> &'a [u8] {
+        unsafe {
+            std::slice::from_raw_parts(vec.as_ptr() as *const u8, vec.len() * std::mem::size_of::<VR::Type>())
+        }
     }
 }
 
-pub struct  ExplicitValueReader {}
+pub struct ExplicitValueReader {}
 impl ValueReaderBase for ExplicitValueReader {}
 
 pub struct ImplicitValueReader {}
 impl ValueReaderBase for ImplicitValueReader {}
+
+impl ImplicitValueReader {
+    pub fn read_value(&self,
+                  value_representation: Option<ValueRepresentation>,
+                  value_length : u32,
+                  reader: &mut DataReader) -> ValueField {
+        if self.find_element_in_dict() {
+            panic!("Not implemented")
+        }
+
+        panic!("Not implemented")
+    }
+
+    fn find_element_in_dict(&self) -> bool {
+        false
+    }
+}
 
 
 
@@ -93,6 +263,21 @@ pub enum ValueReader
 }
 
 impl ValueReader {
+    pub fn new_explicit() -> Self {
+        ValueReader::Explicit(ExplicitValueReader{})
+    }
+
+    pub fn new_implicit() -> Self {
+        ValueReader::Implicit(ImplicitValueReader{})
+    }
+
+    pub fn read_tag(&self, reader: &mut DataReader) -> Tag {
+        match self {
+            ValueReader::Explicit(explicitReader) => explicitReader.read_tag(reader),
+            ValueReader::Implicit(implicitReader) => implicitReader.read_tag(reader),
+        }
+    }
+
     pub fn  read_value_representation(&self, reader: &mut DataReader) -> ValueRepresentation {
         match self {
             ValueReader::Explicit(explicitReader) => explicitReader.read_value_representation(reader),
@@ -104,6 +289,19 @@ impl ValueReader {
         match self {
             ValueReader::Explicit(explicitReader) => explicitReader.read_value_length(value_representation, reader),
             ValueReader::Implicit(implicitReader) => implicitReader.read_value_length(value_representation, reader),
+        }
+    }
+
+    pub fn read_value(&self,
+                      value_representation: Option<ValueRepresentation>,
+                      value_length : u32,
+                      reader: &mut DataReader) -> ValueField {
+        match self {
+            ValueReader::Explicit(explicitReader) =>
+                explicitReader.read_value(value_representation.unwrap(), value_length, reader),
+
+            ValueReader::Implicit(implicitReader) =>
+                implicitReader.read_value(value_representation, value_length, reader),
         }
     }
 }

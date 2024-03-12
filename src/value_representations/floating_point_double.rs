@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FloatingPointDouble {
     pub value: f64,
 }
