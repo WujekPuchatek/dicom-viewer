@@ -1,5 +1,6 @@
 use crate::dataset::tag::Tag;
 use crate::data_reader::data_reader::{DataReader, Whence};
+use crate::dataset::data_element::DataElement;
 use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
 use crate::value_representations::other_type::OtherType;
@@ -19,10 +20,10 @@ pub trait ValueReaderBase {
         Tag { group, element }
     }
 
-    fn read_value_representation(&self, reader: &mut DataReader) -> ValueRepresentation {
+    fn read_value_representation(&self, reader: &mut DataReader) -> Option<ValueRepresentation>  {
         let mut vr = [0; 2];
         reader.read_exact(&mut vr);
-        ValueRepresentation {value: vr }
+        Some(ValueRepresentation {value: vr })
     }
 
     fn read_value_length(&self, value_representation: &ValueRepresentation, reader: &mut DataReader) -> u32 {
@@ -229,24 +230,63 @@ pub trait ValueReaderBase {
             std::slice::from_raw_parts(vec.as_ptr() as *const u8, vec.len() * std::mem::size_of::<VR::Type>())
         }
     }
+
+    fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement;
+    fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader);
 }
 
 pub struct ExplicitValueReader {}
-impl ValueReaderBase for ExplicitValueReader {}
+impl ValueReaderBase for ExplicitValueReader {
+    fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
+        let tag = *tag;
+        let value_representation = self.read_value_representation(reader);
+        let value_length = self.read_value_length(&value_representation.unwrap(), reader);
+        let value = self.read_value(value_representation.unwrap(), value_length, reader);
+
+        DataElement { tag, value_representation, value_length, value }
+    }
+
+    fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader) {
+        let value_representation = self.read_value_representation(reader);
+        let value_length = self.read_value_length(&value_representation.unwrap(), reader);
+        reader.seek(Whence::Current, value_length as usize);
+    }
+
+}
 
 pub struct ImplicitValueReader {}
-impl ValueReaderBase for ImplicitValueReader {}
+impl ValueReaderBase for ImplicitValueReader {
+    fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
+        let tag = self.read_tag(reader);
+        let value_length = self.read_value_length(reader);
+        let value = self.read_value(value_length, reader);
+
+        DataElement { tag, value_length, value, value_representation: None }
+    }
+
+    fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader) {
+        let value_length = self.read_value_length(reader);
+        reader.seek(Whence::Current, value_length as usize);
+    }
+}
 
 impl ImplicitValueReader {
     pub fn read_value(&self,
-                  value_representation: Option<ValueRepresentation>,
-                  value_length : u32,
-                  reader: &mut DataReader) -> ValueField {
+                      value_length : u32,
+                      reader: &mut DataReader) -> ValueField {
         if self.find_element_in_dict() {
             panic!("Not implemented")
         }
 
         panic!("Not implemented")
+    }
+
+    pub fn read_value_length(&self, reader: &mut DataReader) -> u32 {
+        reader.read_u32()
+    }
+
+    pub fn read_value_representation(&self, reader: &mut DataReader) -> Option<ValueRepresentation> {
+        None
     }
 
     fn find_element_in_dict(&self) -> bool {
@@ -278,17 +318,17 @@ impl ValueReader {
         }
     }
 
-    pub fn  read_value_representation(&self, reader: &mut DataReader) -> ValueRepresentation {
+    pub fn read_value_representation(&self, reader: &mut DataReader) -> Option<ValueRepresentation> {
         match self {
             ValueReader::Explicit(explicit_reader) => explicit_reader.read_value_representation(reader),
             ValueReader::Implicit(implicit_reader) => implicit_reader.read_value_representation(reader),
         }
     }
 
-    pub fn read_value_length(&self, value_representation: &ValueRepresentation, reader: &mut DataReader) -> u32 {
+    pub fn read_value_length(&self, value_representation: Option<ValueRepresentation>, reader: &mut DataReader) -> u32 {
         match self {
-            ValueReader::Explicit(explicit_reader) => explicit_reader.read_value_length(value_representation, reader),
-            ValueReader::Implicit(implicit_reader) => implicit_reader.read_value_length(value_representation, reader),
+            ValueReader::Explicit(explicit_reader) => explicit_reader.read_value_length(&value_representation.unwrap(), reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.read_value_length(reader),
         }
     }
 
@@ -297,11 +337,18 @@ impl ValueReader {
                       value_length : u32,
                       reader: &mut DataReader) -> ValueField {
         match self {
-            ValueReader::Explicit(explicitReader) =>
-                explicitReader.read_value(value_representation.unwrap(), value_length, reader),
+            ValueReader::Explicit(explicit_reader) =>
+                explicit_reader.read_value(value_representation.unwrap(), value_length, reader),
 
-            ValueReader::Implicit(implicitReader) =>
-                implicitReader.read_value(value_representation, value_length, reader),
+            ValueReader::Implicit(implicit_reader) =>
+                implicit_reader.read_value(value_length, reader),
+        }
+    }
+
+    pub fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
+        match self {
+            ValueReader::Explicit(explicit_reader) => explicit_reader.read_data_element(tag, reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.read_data_element(tag, reader),
         }
     }
 }

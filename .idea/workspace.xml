@@ -9,9 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Small refactoring - continuation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/value_representation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_representation.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +66,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Run",
+    "Cargo.Run.executor": "Debug",
     "Cargo.Test validator::tests.executor": "Debug",
     "Cargo.Tests.executor": "Run",
     "Cargo.add.executor": "Run",
@@ -180,7 +180,7 @@
       <workItem from="1709944269823" duration="1208000" />
       <workItem from="1710103914456" duration="21213000" />
       <workItem from="1710247192952" duration="628000" />
-      <workItem from="1710368544700" duration="316000" />
+      <workItem from="1710368544700" duration="4662000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -254,7 +254,23 @@
       <option name="project" value="LOCAL" />
       <updated>1710281013131</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Small refactoring - continuation">
+      <option name="closed" value="true" />
+      <created>1710368870702</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1710368870702</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Small refactoring - continuation">
+      <option name="closed" value="true" />
+      <created>1710368976194</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1710368976194</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -286,29 +302,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>14</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/dataset/value.rs</url>
           <line>40</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>12</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>10</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs</url>
-          <line>41</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/dicom_file_parser/validator.rs</url>
@@ -316,9 +312,9 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>8</line>
-          <option name="timeStamp" value="7" />
+          <url>file://$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs</url>
+          <line>81</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

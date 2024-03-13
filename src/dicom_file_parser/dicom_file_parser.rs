@@ -70,14 +70,9 @@ impl DicomFileParser {
             return Ok(())
         }
 
-        let value_representation = self.dicom_dataset_reader.read_value_representation(reader);
-        let value_length = self.dicom_dataset_reader.read_value_length(&value_representation, reader);
-
         if self.read_all_tags || self.tags_to_read.contains(tag) {
-            let data = reader.read_bytes(value_length as usize);
         }
         else {
-            reader.seek(Whence::Current, value_length as usize);
         }
 
         Ok(())
@@ -85,6 +80,6 @@ impl DicomFileParser {
 
     fn read_meta_data(&self, reader: &mut DataReader) {
         let tag = self.dicom_dataset_reader.read_tag(reader);
-        self.dicom_dataset_reader.
+        let file_meta_information_group_length = self.dicom_dataset_reader.read_data_element(&tag, reader);
     }
 }
