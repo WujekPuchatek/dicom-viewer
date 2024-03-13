@@ -7,51 +7,11 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Small refactoring">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Small refactoring - continuation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/data_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/value.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/value_field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/value_representation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_representation.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_constants/value_representation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/value_representation.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/age_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/age_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/application_entity.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/application_entity.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/code_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/code_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/date.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/date.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/date_time.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/date_time.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/integer_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/integer_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/long_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/long_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/long_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/long_text.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_byte.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_byte.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_double.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_double.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_float.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_float.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/other_word.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_word.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/person_name.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/person_name.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/short_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/short_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_text.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_64bit_very_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_short.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/signed_short.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/time.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/time.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unknown.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +66,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Debug",
+    "Cargo.Run.executor": "Run",
     "Cargo.Test validator::tests.executor": "Debug",
     "Cargo.Tests.executor": "Run",
     "Cargo.add.executor": "Run",
@@ -219,6 +179,8 @@
       <workItem from="1709937425404" duration="1781000" />
       <workItem from="1709944269823" duration="1208000" />
       <workItem from="1710103914456" duration="21213000" />
+      <workItem from="1710247192952" duration="628000" />
+      <workItem from="1710368544700" duration="316000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -284,7 +246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710187316027</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Small refactoring - continuation">
+      <option name="closed" value="true" />
+      <created>1710281013131</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1710281013131</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,7 +279,8 @@
     <MESSAGE value="Continue implementation of dicom_file_parser.rs" />
     <MESSAGE value="Extract value_reader.rs." />
     <MESSAGE value="Small refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small refactoring" />
+    <MESSAGE value="Small refactoring - continuation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small refactoring - continuation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

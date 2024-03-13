@@ -85,6 +85,6 @@ impl DicomFileParser {
 
     fn read_meta_data(&self, reader: &mut DataReader) {
         let tag = self.dicom_dataset_reader.read_tag(reader);
-
+        self.dicom_dataset_reader.
     }
 }

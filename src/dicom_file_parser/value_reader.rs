@@ -273,22 +273,22 @@ impl ValueReader {
 
     pub fn read_tag(&self, reader: &mut DataReader) -> Tag {
         match self {
-            ValueReader::Explicit(explicitReader) => explicitReader.read_tag(reader),
-            ValueReader::Implicit(implicitReader) => implicitReader.read_tag(reader),
+            ValueReader::Explicit(explicit_reader) => explicit_reader.read_tag(reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.read_tag(reader),
         }
     }
 
     pub fn  read_value_representation(&self, reader: &mut DataReader) -> ValueRepresentation {
         match self {
-            ValueReader::Explicit(explicitReader) => explicitReader.read_value_representation(reader),
-            ValueReader::Implicit(implicitReader) => implicitReader.read_value_representation(reader),
+            ValueReader::Explicit(explicit_reader) => explicit_reader.read_value_representation(reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.read_value_representation(reader),
         }
     }
 
     pub fn read_value_length(&self, value_representation: &ValueRepresentation, reader: &mut DataReader) -> u32 {
         match self {
-            ValueReader::Explicit(explicitReader) => explicitReader.read_value_length(value_representation, reader),
-            ValueReader::Implicit(implicitReader) => implicitReader.read_value_length(value_representation, reader),
+            ValueReader::Explicit(explicit_reader) => explicit_reader.read_value_length(value_representation, reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.read_value_length(value_representation, reader),
         }
     }
 
