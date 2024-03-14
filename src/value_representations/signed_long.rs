@@ -1,10 +1,14 @@
+use crate::value_representations::numeric_type::NumericType;
+
 #[derive(Debug, Clone)]
 pub struct SignedLong {
-    pub value: i32,
+    pub value: std::vec::Vec<i32>,
 }
 
-impl SignedLong {
-    pub fn new(value: i32) -> Self {
+impl NumericType for SignedLong {
+    type Type = i32;
+
+    fn new(value: std::vec::Vec<i32>) -> Self {
         Self { value }
     }
 }

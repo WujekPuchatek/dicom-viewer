@@ -35,3 +35,4 @@ pub mod unsigned_64bit_very_long;
 
 pub mod string_alike;
 pub(crate) mod other_type;
+pub(crate) mod numeric_type;

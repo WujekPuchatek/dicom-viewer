@@ -1,10 +1,14 @@
+use crate::value_representations::numeric_type::NumericType;
+
 #[derive(Debug, Clone)]
 pub struct UnsignedShort {
-    pub value: u16,
+    pub value: std::vec::Vec<u16>,
 }
 
-impl UnsignedShort {
-    pub fn new(value: u16) -> Self {
+impl NumericType for UnsignedShort {
+    type Type = u16;
+
+    fn new(value: std::vec::Vec<u16>) -> Self {
         Self { value }
     }
 }

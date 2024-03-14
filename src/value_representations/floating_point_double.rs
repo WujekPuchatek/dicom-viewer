@@ -1,10 +1,14 @@
+use crate::value_representations::numeric_type::NumericType;
+
 #[derive(Debug, Clone)]
 pub struct FloatingPointDouble {
-    pub value: f64,
+    pub value: std::vec::Vec<f64>,
 }
 
-impl FloatingPointDouble {
-    pub fn new(value: f64) -> Self {
+impl NumericType for FloatingPointDouble {
+    type Type = f64;
+
+    fn new(value: std::vec::Vec<f64>) -> Self {
         Self { value }
     }
 }

@@ -5,6 +5,7 @@ use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
 use crate::value_representations::other_type::OtherType;
 use crate::value_representations::string_alike::StringAlike;
+use crate::value_representations::numeric_type::NumericType;
 
 mod private {
     pub struct Local {}
@@ -69,11 +70,13 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"FL" {
-            // return ValueField::FloatingPointSingle(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::FloatingPointSingle(
+                self.read_numeric_types(DataReader::read_f32, reader, value_length, private::LOCAL));
         }
 
         if value_representation.value == *b"FD" {
-            // return ValueField::FloatingPointDouble(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::FloatingPointDouble(
+                self.read_numeric_types(DataReader::read_f64, reader, value_length, private::LOCAL));
         }
 
         if value_representation.value == *b"IS" {
@@ -121,7 +124,8 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"SL" {
-            //return ValueField::SignedLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::SignedLong(
+                self.read_numeric_types(DataReader::read_i32, reader, value_length, private::LOCAL));
         }
 
         if value_representation.value == *b"SQ" {
@@ -129,7 +133,11 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"SS" {
-            //return ValueField::SignedShort(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::SignedShort(
+                self.read_numeric_types(
+                    || -> i16 { reader.read_i16() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"ST" {
@@ -137,7 +145,11 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"SV" {
-            //return ValueField::Signed64bitVeryLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::Signed64bitVeryLong(
+                self.read_numeric_types(
+                    || -> i64 { reader.read_ui64() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"TM" {
@@ -153,7 +165,11 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"UL" {
-            //return ValueField::UnsignedLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::UnsignedLong(
+                self.read_numeric_types(
+                    || -> u32 { reader.read_u32() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"UN" {
@@ -165,7 +181,11 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"US" {
-            //return ValueField::UnsignedShort(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::UnsignedShort(
+                self.read_numeric_types(
+                    || -> u16 { reader.read_u16() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"UT" {
@@ -173,7 +193,11 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"UV" {
-            //return ValueField::Unsigned64bitVeryLong(self.read_other_bytes(reader, value_length, private::LOCAL));
+            return ValueField::Unsigned64bitVeryLong(
+                self.read_numeric_types(
+                    || -> u64 { reader.read_u64() },
+                    value_length,
+                    private::LOCAL));
         }
 
         panic!("Unknown value representation: {:?}", value_representation);
@@ -222,6 +246,22 @@ pub trait ValueReaderBase {
         };
 
         reader.read_exact(slice);
+        VR::new(vec)
+    }
+
+    fn read_numeric_types<VR: NumericType>(&self,
+                                           read_function: fn() -> VR::Type,
+                                           length: u32, _ : private::Local) -> VR
+        where
+            VR::Type: Default + Copy
+    {
+        let length = length as usize / std::mem::size_of::<VR::Type>();
+        let mut vec = Vec::<VR::Type>::with_capacity(length as usize);
+
+        for _ in 0..length {
+            vec.push(read_function());
+        }
+
         VR::new(vec)
     }
 
