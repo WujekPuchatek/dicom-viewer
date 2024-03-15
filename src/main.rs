@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
 
 mod data_reader;

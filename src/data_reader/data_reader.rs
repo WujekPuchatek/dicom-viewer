@@ -108,6 +108,10 @@ impl<'a> DataReader<'a> {
         self.cursor.read_exact(buffer).unwrap();
     }
 
+    pub fn unconsumed(&self) -> usize {
+        self.data.len() - self.cursor.position() as usize
+    }
+
     pub fn seek(&mut self, whence: Whence, pos: usize) {
         match whence {
             Whence::Start => self.cursor.set_position(pos as u64),
@@ -304,5 +308,18 @@ mod tests {
         let data = b"test string";
         let mut reader = DataReader::new(data, Endianness::Big);
         assert_eq!(reader.read_string(11), "test string".to_string());
+    }
+
+    #[test]
+    fn test_unconsumed() {
+        let data = [0x01, 0x02, 0x03, 0x04];
+        let mut reader = DataReader::new(&data, Endianness::Little);
+        assert_eq!(reader.unconsumed(), 4);
+
+        reader.read_u8();
+        assert_eq!(reader.unconsumed(), 3);
+
+        reader.read_u16();
+        assert_eq!(reader.unconsumed(), 1);
     }
 }

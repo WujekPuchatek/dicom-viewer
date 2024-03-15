@@ -71,12 +71,18 @@ pub trait ValueReaderBase {
 
         if value_representation.value == *b"FL" {
             return ValueField::FloatingPointSingle(
-                self.read_numeric_types(DataReader::read_f32, reader, value_length, private::LOCAL));
+                self.read_numeric_types(
+                    || -> f32 { reader.read_f32() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"FD" {
             return ValueField::FloatingPointDouble(
-                self.read_numeric_types(DataReader::read_f64, reader, value_length, private::LOCAL));
+                self.read_numeric_types(
+                    || -> f64 { reader.read_f64() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"IS" {
@@ -125,7 +131,10 @@ pub trait ValueReaderBase {
 
         if value_representation.value == *b"SL" {
             return ValueField::SignedLong(
-                self.read_numeric_types(DataReader::read_i32, reader, value_length, private::LOCAL));
+                self.read_numeric_types(
+                    || -> i32 { reader.read_i32() },
+                    value_length,
+                    private::LOCAL));
         }
 
         if value_representation.value == *b"SQ" {
@@ -147,7 +156,7 @@ pub trait ValueReaderBase {
         if value_representation.value == *b"SV" {
             return ValueField::Signed64bitVeryLong(
                 self.read_numeric_types(
-                    || -> i64 { reader.read_ui64() },
+                    || -> i64 { reader.read_i64() },
                     value_length,
                     private::LOCAL));
         }
@@ -249,9 +258,10 @@ pub trait ValueReaderBase {
         VR::new(vec)
     }
 
-    fn read_numeric_types<VR: NumericType>(&self,
-                                           read_function: fn() -> VR::Type,
-                                           length: u32, _ : private::Local) -> VR
+    fn read_numeric_types<VR: NumericType, F: FnMut() -> VR::Type>(
+        &self,
+        mut read_function: F,
+        length: u32, _ : private::Local) -> VR
         where
             VR::Type: Default + Copy
     {
@@ -286,7 +296,7 @@ impl ValueReaderBase for ExplicitValueReader {
         DataElement { tag, value_representation, value_length, value }
     }
 
-    fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader) {
+    fn skip_data_element(&self, _tag: &Tag, reader: &mut DataReader) {
         let value_representation = self.read_value_representation(reader);
         let value_length = self.read_value_length(&value_representation.unwrap(), reader);
         reader.seek(Whence::Current, value_length as usize);
@@ -296,7 +306,7 @@ impl ValueReaderBase for ExplicitValueReader {
 
 pub struct ImplicitValueReader {}
 impl ValueReaderBase for ImplicitValueReader {
-    fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
+    fn read_data_element(&self, _tag: &Tag, reader: &mut DataReader) -> DataElement {
         let tag = self.read_tag(reader);
         let value_length = self.read_value_length(reader);
         let value = self.read_value(value_length, reader);
@@ -304,7 +314,7 @@ impl ValueReaderBase for ImplicitValueReader {
         DataElement { tag, value_length, value, value_representation: None }
     }
 
-    fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader) {
+    fn skip_data_element(&self, _tag: &Tag, reader: &mut DataReader) {
         let value_length = self.read_value_length(reader);
         reader.seek(Whence::Current, value_length as usize);
     }
@@ -312,8 +322,8 @@ impl ValueReaderBase for ImplicitValueReader {
 
 impl ImplicitValueReader {
     pub fn read_value(&self,
-                      value_length : u32,
-                      reader: &mut DataReader) -> ValueField {
+                      _value_length : u32,
+                      _reader: &mut DataReader) -> ValueField {
         if self.find_element_in_dict() {
             panic!("Not implemented")
         }
@@ -325,7 +335,7 @@ impl ImplicitValueReader {
         reader.read_u32()
     }
 
-    pub fn read_value_representation(&self, reader: &mut DataReader) -> Option<ValueRepresentation> {
+    pub fn read_value_representation(&self, _reader: &mut DataReader) -> Option<ValueRepresentation> {
         None
     }
 
