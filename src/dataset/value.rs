@@ -38,14 +38,15 @@ impl DataLocation {
     }
 }
 
-enum Value {
+#[derive(Debug)]
+pub enum Value<DicomRepr> {
     DataLocation(DataLocation),
-    ValueField(Rc<ValueField>)
+    ValueField(Rc<DicomRepr>)
 }
 
-impl Value
+impl<DicomRepr> Value<DicomRepr>
 {
-    pub fn from_value_field(value_field: ValueField) -> Self
+    pub fn from_value_field(value_field: DicomRepr) -> Self
     {
         Self::ValueField(Rc::new(value_field))
     }
@@ -59,7 +60,7 @@ impl Value
         Self::DataLocation(DataLocation { file, offset, length, tag, value_representation })
     }
 
-    pub fn get_value_field(&mut self) -> Rc<ValueField>
+    pub fn get_value_field(&mut self) -> Rc<DicomRepr>
     {
         match &self
         {

@@ -40,7 +40,7 @@ impl DicomFileParser {
         self
     }
 
-    pub fn parse(&self) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn parse(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         let content = self.open_file()?;
 
         if Validator::new(&content).validate() == ValidationResult::NotDicom {
@@ -50,7 +50,26 @@ impl DicomFileParser {
         let mut reader = DataReader::new(&content, Endianness::Little);
         reader.seek(Whence::Start, HEADER_END);
 
+        let old_value_read_all_tags = self.read_all_tags;
+        self.read_all_tags = true;
+
         let meta_data = self.read_meta_data(&mut reader);
+
+        self.read_all_tags = old_value_read_all_tags;
+
+        if let Err(e) = meta_data {
+            return Err(e);
+        }
+
+        while reader.unconsumed() > 0 {
+            let tag = self.dicom_dataset_reader.read_tag(&mut reader);
+            let data_element = self.read_data_element(&tag, &mut reader);
+
+            if let Some(data_element) = data_element {
+                println!("{:?}", data_element);
+            }
+        }
+
 
 
         Ok(())
@@ -66,18 +85,22 @@ impl DicomFileParser {
         tag == &ITEM || tag == &ITEM_DELIMITATION || tag == &SEQUENCE_DELIMITATION
     }
 
-    fn read_data_element_with_explicit_vr(&self, tag: &Tag, reader: &mut DataReader) -> Result<(), Box<dyn std::error::Error>> {
+    fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> Option<DataElement> {
         if self.sequence_of_item_special_tag(tag) {
             reader.seek(Whence::Current, 4);
-            return Ok(())
+
         }
 
-        if self.read_all_tags || self.tags_to_read.contains(tag) {
+        if self.read_all_tags || self.tags_to_read.contains(tag)
+        {
+            return Some(self.dicom_dataset_reader.read_data_element(&tag, reader));
         }
-        else {
+        else
+        {
+            self.dicom_dataset_reader.skip_value(&tag, reader);
+            return None;
         }
 
-        Ok(())
     }
 
     fn read_meta_data(&self, reader: &mut DataReader) -> Result<std::vec::Vec<DataElement>,
@@ -97,13 +120,13 @@ impl DicomFileParser {
 
         const EXPECTED_MAX_NUM_OF_ELEMENTS: usize = 20;
         let mut elems = Vec::with_capacity(EXPECTED_MAX_NUM_OF_ELEMENTS);
-        let end_of_file_meta = reader.unconsumed() - filemeta_length.unwrap() as usize;
+        let end_of_file_meta = reader.unconsumed() - filemeta_length.unwrap() as isize;
 
         while reader.unconsumed() > end_of_file_meta {
             let tag = self.dicom_dataset_reader.read_tag(reader);
 
             elems.push(
-                self.dicom_dataset_reader.read_data_element(&tag, reader));
+                self.read_data_element(&tag, reader).unwrap());
         }
 
         Ok(elems)

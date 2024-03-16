@@ -108,8 +108,8 @@ impl<'a> DataReader<'a> {
         self.cursor.read_exact(buffer).unwrap();
     }
 
-    pub fn unconsumed(&self) -> usize {
-        self.data.len() - self.cursor.position() as usize
+    pub fn unconsumed(&self) -> isize {
+        self.data.len() as isize - self.cursor.position() as isize
     }
 
     pub fn seek(&mut self, whence: Whence, pos: usize) {

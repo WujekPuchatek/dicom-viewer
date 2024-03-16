@@ -395,6 +395,13 @@ impl ValueReader {
         }
     }
 
+    pub fn skip_value(&self, tag: &Tag, reader: &mut DataReader) {
+        match self {
+            ValueReader::Explicit(explicit_reader) => explicit_reader.skip_data_element(tag, reader),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.skip_data_element(tag, reader),
+        }
+    }
+
     pub fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
         match self {
             ValueReader::Explicit(explicit_reader) => explicit_reader.read_data_element(tag, reader),

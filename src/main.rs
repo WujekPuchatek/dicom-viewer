@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use crate::dicom_constants::tags::{PIXEL_DATA, SERIES_INSTANCE_UID, STUDY_INSTANCE_UID};
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
 
 mod data_reader;
@@ -10,11 +11,11 @@ mod value_representations;
 
 fn main()  -> std::io::Result<()>
 {
-    let path = "C:/Users/medapp/Desktop/CT/im001.dcm";
+    let path = "C:/Users/medapp/Desktop/CT/0015.dcm";
 
     let parser = DicomFileParser::new()
                  .file_path(path)
-                 .read_all_tags()
+                 .read_tags([STUDY_INSTANCE_UID, SERIES_INSTANCE_UID, PIXEL_DATA].as_ref())
                  .parse();
     Ok(())
 }
