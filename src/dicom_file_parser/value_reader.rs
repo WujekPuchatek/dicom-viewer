@@ -3,8 +3,8 @@ use crate::data_reader::data_reader::{DataReader, Whence};
 use crate::dataset::data_element::DataElement;
 use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
+use crate::value_representations::attribute_tag::AttributeTag;
 use crate::value_representations::other_type::OtherType;
-use crate::value_representations::string_alike::StringAlike;
 use crate::value_representations::numeric_type::NumericType;
 
 mod private {
@@ -50,7 +50,7 @@ pub trait ValueReaderBase {
         }
 
         if value_representation.value == *b"AT" {
-            return ValueField::AttributeTag(self.read_string(reader, value_length, private::LOCAL));
+            return ValueField::AttributeTag(self.read_attribute_tag(reader, value_length, private::LOCAL));
         }
 
         if value_representation.value == *b"CS" {
@@ -237,9 +237,14 @@ pub trait ValueReaderBase {
         vr == *b"US"
     }
 
-    fn read_string<VR: StringAlike>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+    fn read_string<VR: From<String>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
         let str = reader.read_string(length as usize);
-        VR::from_string(str)
+        VR::from(str)
+    }
+
+    fn read_attribute_tag(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> AttributeTag {
+        let val = [reader.read_u16(), reader.read_u16()];
+        AttributeTag::new(val)
     }
 
     fn read_other_bytes<VR: OtherType>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR

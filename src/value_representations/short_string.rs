@@ -1,4 +1,4 @@
-use crate::value_representations::string_alike::StringAlike;
+use crate::value_representations::standard_string::StringAlike;
 
 #[derive(Debug, Clone)]
 pub struct ShortString {

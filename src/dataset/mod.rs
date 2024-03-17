@@ -2,4 +2,4 @@ pub mod tag;
 pub mod data_element;
 pub(crate) mod value_representation;
 pub mod value_field;
-mod value;
+pub mod data_element_location;

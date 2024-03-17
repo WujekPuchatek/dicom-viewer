@@ -1,12 +1,19 @@
-use crate::value_representations::string_alike::StringAlike;
+use std::fmt;
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Copy)]
 pub struct AttributeTag {
-    pub value: String,
+    pub value: [u16;2],
 }
 
-impl StringAlike for AttributeTag {
-    fn from_string(s: String) -> Self {
-        Self { value: s }
+impl AttributeTag {
+    pub fn new(value: [u16;2]) -> Self {
+        Self { value }
     }
 }
+
+impl fmt::Debug for AttributeTag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{{ value: [{:04x}, {:04x}] }}", self.value[0], self.value[1])
+    }
+}
+
