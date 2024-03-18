@@ -7,6 +7,7 @@ use crate::dataset::value_field::ValueField;
 use crate::dicom_constants::numeric::HEADER_END;
 use crate::dicom_constants::tags::{ITEM, ITEM_DELIMITATION, SEQUENCE_DELIMITATION};
 use crate::dicom_file_parser::value_reader::{ExplicitValueReader, ValueReader};
+use crate::value_representations::numeric_type::Numeric;
 use super::validator::{Validator, ValidationResult};
 
 
@@ -110,7 +111,7 @@ impl DicomFileParser {
         let file_meta_information_group_length = self.dicom_dataset_reader.read_data_element(&tag, reader);
 
         let filemeta_length = match file_meta_information_group_length.value {
-            ValueField::UnsignedLong(u32) => u32.value.first().copied(),
+            ValueField::UnsignedLong(u32) => u32.Value().first().copied(),
             _ => return Err("File meta information group length should be kept as unsigned long".into())
         };
 

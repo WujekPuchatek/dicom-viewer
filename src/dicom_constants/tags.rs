@@ -14,6 +14,7 @@ pub const IMPLEMENTATION_VERSION_NAME_TAG: Tag = Tag { group: 0x0002, element: 0
 pub const ITEM: Tag = Tag { group: 0xFFFE, element: 0xE000 };
 pub const ITEM_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE00D };
 pub const SEQUENCE_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE0DD };
+pub const STUDY_DATE: Tag = Tag { group: 0x0008, element: 0x0020 };
 pub const STUDY_INSTANCE_UID: Tag = Tag { group: 0x0020, element: 0x000D };
 pub const SERIES_INSTANCE_UID: Tag = Tag { group: 0x0020, element: 0x000E };
 pub const PIXEL_DATA: Tag = Tag { group: 0x7FE0, element: 0x0010 };

@@ -7,37 +7,30 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Explicit VR Little Endian without SQ and UN read">
-      <change afterPath="$PROJECT_DIR$/src/dataset/data_element_location.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/extended_string.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/value_representations/standard_string.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Extract standard_string.rs and extended_string.rs">
+      <change afterPath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/value_representations/dicom_string.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dataset/value.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_reader/data_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/data_reader.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_reader/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/data_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/data_element_location.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element_location.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/tag.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dataset/value_field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_constants/tags.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/tags.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/age_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/age_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/application_entity.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/code_string.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/date.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/date_time.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/decimal_string.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/integer_string.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/long_string.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/long_text.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/age_string.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/extended_string.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/value_representations/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/person_name.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/person_name.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/short_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_string.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/short_text.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/short_text.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/string_alike.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/time.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unique_identifier.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/universal_resource_identifier.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_characters.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/unlimited_text.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/person_name.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/short_string.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/short_text.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/standard_string.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unknown.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,31 +83,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Run",
-    "Cargo.Test validator::tests.executor": "Debug",
-    "Cargo.Tests.executor": "Run",
-    "Cargo.add.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\dataset" />
@@ -218,6 +211,8 @@
       <workItem from="1710586727842" duration="2141000" />
       <workItem from="1710627595917" duration="2683000" />
       <workItem from="1710667485988" duration="1489000" />
+      <workItem from="1710713460822" duration="6300000" />
+      <workItem from="1710789427906" duration="5743000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -331,7 +326,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710587789251</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Extract standard_string.rs and extended_string.rs">
+      <option name="closed" value="true" />
+      <created>1710713506488</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1710713506488</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -359,7 +362,8 @@
     <MESSAGE value="Small refactoring - continuation" />
     <MESSAGE value="Start reading of numeric types" />
     <MESSAGE value="Explicit VR Little Endian without SQ and UN read" />
-    <option name="LAST_COMMIT_MESSAGE" value="Explicit VR Little Endian without SQ and UN read" />
+    <MESSAGE value="Extract standard_string.rs and extended_string.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Extract standard_string.rs and extended_string.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -368,6 +372,11 @@
           <url>file://$PROJECT_DIR$/src/value_representations/attribute_tag.rs</url>
           <line>5</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/value_representations/numeric_type.rs</url>
+          <line>5</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

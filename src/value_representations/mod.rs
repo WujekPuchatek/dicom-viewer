@@ -1,22 +1,12 @@
 pub mod attribute_tag;
-pub mod floating_point_single;
-pub mod floating_point_double;
 pub mod other_byte;
 pub mod other_double;
 pub mod other_float;
 pub mod other_long;
 pub mod other_64bit_very_long;
 pub mod other_word;
-pub mod signed_long;
 pub mod sequence_of_items;
-pub mod signed_short;
-pub mod signed_64bit_very_long;
-pub mod unsigned_long;
 pub mod unknown;
-pub mod unsigned_short;
-pub mod unsigned_64bit_very_long;
-
-pub mod standard_string;
+pub mod dicom_string;
 pub mod other_type;
 pub mod numeric_type;
-pub mod extended_string;

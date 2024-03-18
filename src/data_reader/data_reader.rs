@@ -2,12 +2,15 @@ extern crate byteorder;
 
 use std::io::Read;
 use std::io::Cursor;
+use encoding::EncodingRef;
+use crate::data_reader::string_decoder::StringDecoder;
 use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
 
 pub struct DataReader<'a>  {
     data: &'a [u8],
     cursor: Cursor<&'a [u8]>,
     endianness: Endianness,
+    string_decoder: StringDecoder,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -27,7 +30,8 @@ impl<'a> DataReader<'a> {
         Self {
             data,
             cursor: std::io::Cursor::new(data),
-            endianness
+            endianness,
+            string_decoder: StringDecoder::new(),
         }
     }
 
@@ -37,6 +41,10 @@ impl<'a> DataReader<'a> {
 
     pub fn change_byte_order(&mut self, endianness : Endianness) {
         self.endianness = endianness;
+    }
+
+    pub fn change_decoder(&mut self, decoder: EncodingRef) {
+        self.string_decoder.change_decoder(decoder);
     }
     pub fn read_u8(&mut self) -> u8
     {
@@ -122,7 +130,7 @@ impl<'a> DataReader<'a> {
 
     pub fn read_string(&mut self, size: usize) -> String {
         let buffer = self.read_bytes(size);
-        String::from_utf8(buffer).unwrap()
+        self.string_decoder.decode(buffer)
     }
 }
 

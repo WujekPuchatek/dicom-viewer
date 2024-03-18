@@ -5,7 +5,7 @@ use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
 use crate::value_representations::attribute_tag::AttributeTag;
 use crate::value_representations::other_type::OtherType;
-use crate::value_representations::numeric_type::NumericType;
+use crate::value_representations::numeric_type::Numeric;
 
 mod private {
     pub struct Local {}
@@ -263,7 +263,7 @@ pub trait ValueReaderBase {
         VR::new(vec)
     }
 
-    fn read_numeric_types<VR: NumericType, F: FnMut() -> VR::Type>(
+    fn read_numeric_types<VR: Numeric, F: FnMut() -> VR::Type>(
         &self,
         mut read_function: F,
         length: u32, _ : private::Local) -> VR
@@ -277,7 +277,7 @@ pub trait ValueReaderBase {
             vec.push(read_function());
         }
 
-        VR::new(vec)
+        VR::from(vec)
     }
 
     fn cast_to_u8_slice<'a, VR: OtherType>(&self, vec: &mut Vec<VR::Type>, _ : private::Local) -> &'a [u8] {

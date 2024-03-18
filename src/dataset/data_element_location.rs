@@ -3,7 +3,7 @@ use memmap2::Mmap;
 use crate::dataset::tag::Tag;
 use crate::data_reader::data_reader::Endianness;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataElementLocation
 {
     pub file: Rc<Mmap>,
