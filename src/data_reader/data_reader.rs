@@ -43,8 +43,8 @@ impl<'a> DataReader<'a> {
         self.endianness = endianness;
     }
 
-    pub fn change_decoder(&mut self, decoder: EncodingRef) {
-        self.string_decoder.change_decoder(decoder);
+    pub fn change_decoder(&mut self, character_set : String) {
+        self.string_decoder.change_decoder(character_set);
     }
     pub fn read_u8(&mut self) -> u8
     {
