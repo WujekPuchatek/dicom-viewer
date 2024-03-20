@@ -7,10 +7,16 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="standard_string.rs and extended_string.rs changed to dicom_string.rs. Create numeric_type.rs">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add string_decoder.rs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_reader/data_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/data_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/data_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/data_element_location.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element_location.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/dicom_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/dicom_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unknown.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -196,6 +202,7 @@
       <workItem from="1710795430136" duration="264000" />
       <workItem from="1710847439497" duration="4021000" />
       <workItem from="1710880025508" duration="477000" />
+      <workItem from="1710971173655" duration="2151000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />

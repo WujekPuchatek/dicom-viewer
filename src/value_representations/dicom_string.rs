@@ -20,15 +20,13 @@ impl Into<String> for DicomString
 {
     fn into(self) -> String {
         self.data.get_or_init(|| {
-            let location = self.location.unwrap();
-            let data = &location.file[location.offset as usize..(location.offset + location.length) as usize];
-            let mut reader = DataReader::new(data, location.endianness);
-            reader.read_string(location.length as usize)
+            let mut location = self.location.unwrap();
+            location.reader.read_string(location.reader.unconsumed() as usize)
         }).clone()
     }
 }
 
-impl From<DataElementLocation> for DicomString
+impl From<DataElementLocation<'_>> for DicomString
 {
     fn from(v: DataElementLocation) -> Self {
         Self {
@@ -38,19 +36,17 @@ impl From<DataElementLocation> for DicomString
     }
 }
 
-impl<'a> Into<String> for &'a DicomString
+impl Into<String> for &DicomString
 {
     fn into(self) -> String {
         self.data.get_or_init(|| {
             let location = self.location.as_ref().unwrap();
-            let data = &location.file[location.offset as usize..(location.offset + location.length) as usize];
-            let mut reader = DataReader::new(data, location.endianness);
-            reader.read_string(location.length as usize)
+            location.reader.read_string(location.reader.unconsumed() as usize)
         }).clone()
     }
 }
 
-impl From<&DataElementLocation> for DicomString
+impl From<&DataElementLocation<'_>> for DicomString
 {
     fn from(v: &DataElementLocation) -> Self {
         Self {

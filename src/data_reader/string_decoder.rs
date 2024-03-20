@@ -1,6 +1,7 @@
 use encoding::all::*;
 use encoding::{Encoding, EncodingRef, DecoderTrap};
 
+#[derive(Clone)]
 pub struct StringDecoder {
     decoder: EncodingRef,
 }

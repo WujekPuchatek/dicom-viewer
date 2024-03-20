@@ -1,14 +1,9 @@
-use std::rc::Rc;
-use memmap2::Mmap;
 use crate::dataset::tag::Tag;
-use crate::data_reader::data_reader::Endianness;
+use crate::data_reader::data_reader::{DataReader, Endianness};
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct DataElementLocation
 {
-    pub file: Rc<Mmap>,
-    pub offset: u32,
-    pub length: u32,
     pub tag: Tag,
-    pub endianness: Endianness
+    pub reader: DataReader,
 }

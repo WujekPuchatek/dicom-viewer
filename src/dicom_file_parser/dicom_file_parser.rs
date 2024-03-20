@@ -1,3 +1,4 @@
+use std::cell::Cell;
 use std::rc::Rc;
 use memmap2::Mmap;
 use crate::dataset::tag::Tag;
@@ -14,7 +15,7 @@ use super::validator::{Validator, ValidationResult};
 pub struct DicomFileParser {
     file_path: String,
     tags_to_read : std::collections::HashSet<Tag>,
-    read_all_tags : bool,
+    read_all_tags : Cell<bool>,
     dicom_dataset_reader: ValueReader
 }
 
@@ -22,12 +23,12 @@ impl DicomFileParser {
     pub fn new() -> Self {
         Self { file_path: "".parse().unwrap(),
                tags_to_read: std::collections::HashSet::new(),
-               read_all_tags: false,
+               read_all_tags: Cell::new(false),
                dicom_dataset_reader: ValueReader::Explicit(ExplicitValueReader{}) }
     }
 
     pub fn read_all_tags(mut self) -> Self {
-        self.read_all_tags = true;
+        self.read_all_tags.set(true);
         self
     }
 
@@ -41,22 +42,22 @@ impl DicomFileParser {
         self
     }
 
-    pub fn parse(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn parse(&self) -> Result<(), Box<dyn std::error::Error>> {
         let content = self.open_file()?;
 
         if Validator::new(&content).validate() == ValidationResult::NotDicom {
             return Err("Not a DICOM file".into());
         }
 
-        let mut reader = DataReader::new(&content, Endianness::Little);
+        let mut reader = DataReader::new(content, Endianness::Little);
         reader.seek(Whence::Start, HEADER_END);
 
-        let old_value_read_all_tags = self.read_all_tags;
-        self.read_all_tags = true;
+        let old_value_read_all_tags = self.read_all_tags.get();
+        self.read_all_tags.set(true);
 
         let meta_data = self.read_meta_data(&mut reader);
 
-        self.read_all_tags = old_value_read_all_tags;
+        self.read_all_tags.set(old_value_read_all_tags);
 
         if let Err(e) = meta_data {
             return Err(e);
@@ -92,7 +93,7 @@ impl DicomFileParser {
 
         }
 
-        if self.read_all_tags || self.tags_to_read.contains(tag)
+        if self.read_all_tags.get() || self.tags_to_read.contains(tag)
         {
             return Some(self.dicom_dataset_reader.read_data_element(&tag, reader));
         }
