@@ -1,7 +1,7 @@
 pub trait Numeric : From<Vec<Self::Type>> {
     type Type;
 
-    fn Value(&self) -> &Vec<Self::Type>;
+    fn value(&self) -> &Vec<Self::Type>;
 }
 
 #[derive(Debug, Clone)]
@@ -18,7 +18,7 @@ impl<T> From<Vec<T>> for NumericType<T> {
 impl<T> Numeric for NumericType<T> {
     type Type = T;
 
-    fn Value(&self) -> &Vec<T> {
+    fn value(&self) -> &Vec<T> {
         &self.value
     }
 }

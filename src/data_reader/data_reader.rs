@@ -6,19 +6,34 @@ use std::rc::Rc;
 use crate::data_reader::string_decoder::StringDecoder;
 use byteorder::{LittleEndian, BigEndian, ReadBytesExt};
 use memmap2::Mmap;
+use crate::utils::submap::Submap;
+use crate::utils::endianness::Endianness;
 
-#[derive(Clone)]
-pub struct DataReader  {
-    file: Rc<Mmap>,
-    cursor: Cursor<&[u8]>,
-    endianness: Endianness,
-    string_decoder: StringDecoder,
+#[derive(Debug, Clone)]
+pub struct SubreaderDesc {
+    pub submap: Submap,
+    pub string_decoder : StringDecoder
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub enum Endianness {
-    Little,
-    Big,
+impl SubreaderDesc {
+    pub fn new(submap: Submap, string_decoder: StringDecoder) -> Self {
+        Self {
+            submap,
+            string_decoder
+        }
+    }
+
+    pub fn as_slice(&self) -> &[u8] {
+        &self.submap.file[self.submap.start..self.submap.end]
+    }
+}
+
+#[derive(Clone)]
+pub struct DataReader<'a>  {
+    file: Rc<Mmap>,
+    cursor: Cursor<&'a [u8]>,
+    endianness: Endianness,
+    string_decoder: StringDecoder,
 }
 
 pub enum Whence {
@@ -27,14 +42,28 @@ pub enum Whence {
     Current,
 }
 
-impl DataReader {
+impl DataReader<'_> {
     pub fn new(file: Rc<Mmap>, endianness: Endianness) -> Self {
         let mmap_as_slice = unsafe { std::slice::from_raw_parts(file.as_ptr(), file.len()) };
         Self {
-            file: file.clone(),
+            file,
             cursor: Cursor::new(mmap_as_slice),
             endianness,
             string_decoder: StringDecoder::new(),
+        }
+    }
+
+    pub fn from_subreader_desc(desc: SubreaderDesc) -> Self {
+        let submap = desc.submap;
+        let length = submap.end - submap.start;
+        let mmap_as_slice = unsafe { std::slice::from_raw_parts(
+            submap.file.as_ptr().offset(submap.start as isize), length) };
+
+        Self {
+            file: submap.file.clone(),
+            cursor: Cursor::new(mmap_as_slice),
+            endianness: submap.endianness,
+            string_decoder: desc.string_decoder,
         }
     }
 
@@ -134,6 +163,11 @@ impl DataReader {
     pub fn read_string(&mut self, size: usize) -> String {
         let buffer = self.read_bytes(size);
         self.string_decoder.decode(buffer)
+    }
+
+    pub fn get_subreader_desc(&self, length: usize) -> SubreaderDesc {
+        let submap = Submap::new(self.file.clone(), self.cursor.position() as usize, self.cursor.position() as usize + length, self.endianness);
+        SubreaderDesc::new(submap, self.string_decoder.clone())
     }
 }
 

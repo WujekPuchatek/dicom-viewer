@@ -1,14 +1,9 @@
 
 use crate::value_representations::attribute_tag::AttributeTag;
-use crate::value_representations::other_64bit_very_long::Other64bitVeryLong;
-use crate::value_representations::other_byte::OtherByte;
-use crate::value_representations::other_double::OtherDouble;
-use crate::value_representations::other_float::OtherFloat;
-use crate::value_representations::other_long::OtherLong;
-use crate::value_representations::other_word::OtherWord;
 use crate::value_representations::sequence_of_items::SequenceOfItems;
 use crate::value_representations::dicom_string::DicomString;
 use crate::value_representations::numeric_type::NumericType;
+use crate::value_representations::other_type::OtherType;
 use crate::value_representations::unknown::Unknown;
 
 #[derive(Debug)]
@@ -25,12 +20,12 @@ pub enum ValueField {
     IntegerString(DicomString),
     LongString(DicomString),
     LongText(DicomString),
-    OtherByte(OtherByte),
-    OtherDouble(OtherDouble),
-    OtherFloat(OtherFloat),
-    OtherLong(OtherLong),
-    Other64bitVeryLong(Other64bitVeryLong),
-    OtherWord(OtherWord),
+    OtherByte(OtherType<u8>),
+    OtherDouble(OtherType<f64>),
+    OtherFloat(OtherType<f32>),
+    OtherLong(OtherType<i32>),
+    Other64bitVeryLong(OtherType<i64>),
+    OtherWord(OtherType<u16>),
     PersonName(DicomString),
     ShortString(DicomString),
     SignedLong(NumericType<i32>),

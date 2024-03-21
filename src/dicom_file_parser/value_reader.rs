@@ -1,10 +1,12 @@
+use once_cell::sync::OnceCell;
 use crate::dataset::tag::Tag;
 use crate::data_reader::data_reader::{DataReader, Whence};
 use crate::dataset::data_element::DataElement;
+use crate::dataset::data_element_location::DataElementLocation;
 use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
+use crate::utils::submap::Submap;
 use crate::value_representations::attribute_tag::AttributeTag;
-use crate::value_representations::other_type::OtherType;
 use crate::value_representations::numeric_type::Numeric;
 
 mod private {
@@ -237,30 +239,36 @@ pub trait ValueReaderBase {
         vr == *b"US"
     }
 
-    fn read_string<VR: From<String>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+    fn read_string<VR: From<String> + From<DataElementLocation<String>>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+        let lazy_read = self.get_size_of_lazy_read_element();
+
+        if lazy_read.is_some() && lazy_read.unwrap()  >= length {
+            return self.read_lazy_dicom_string::<VR>(reader, length, private::LOCAL);
+        }
+
         let str = reader.read_string(length as usize);
         VR::from(str)
     }
 
     fn read_attribute_tag(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> AttributeTag {
-        let val = [reader.read_u16(), reader.read_u16()];
+        let num_of_elems = length as usize / (2 * std::mem::size_of::<u16>());
+
+        let mut val = Vec::with_capacity(num_of_elems);
+
+        for _ in 0..num_of_elems {
+            val.push([reader.read_u16(), reader.read_u16()]);
+        }
         AttributeTag::new(val)
     }
 
-    fn read_other_bytes<VR: OtherType>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR
-        where
-            VR::Type: Default + Copy
-    {
-        let length = length as usize / std::mem::size_of::<VR::Type>();
-        let mut vec = vec![VR::Type::default(); length as usize];
-
-        let slice = unsafe {
-            std::slice::from_raw_parts_mut(vec.as_mut_ptr() as *mut u8,
-                                           vec.len() * std::mem::size_of::<VR::Type>())
+    fn read_other_bytes<VR: From<Submap>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+        let vr = {
+            let desc = reader.get_subreader_desc(length as usize);
+            VR::from(desc.submap)
         };
 
-        reader.read_exact(slice);
-        VR::new(vec)
+        reader.seek(Whence::Current, length as usize);
+        vr
     }
 
     fn read_numeric_types<VR: Numeric, F: FnMut() -> VR::Type>(
@@ -280,17 +288,44 @@ pub trait ValueReaderBase {
         VR::from(vec)
     }
 
-    fn cast_to_u8_slice<'a, VR: OtherType>(&self, vec: &mut Vec<VR::Type>, _ : private::Local) -> &'a [u8] {
-        unsafe {
-            std::slice::from_raw_parts(vec.as_ptr() as *const u8, vec.len() * std::mem::size_of::<VR::Type>())
-        }
+    fn read_lazy_dicom_string<VR: From<DataElementLocation<String>>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+        let vr = {
+            let desc = reader.get_subreader_desc(length as usize);
+            let reader_clone = reader.clone();
+
+            let read_func = Box::new(move || -> String {
+                let value: OnceCell<String> = OnceCell::new();
+                let mut reader = DataReader::from_subreader_desc(desc.clone());
+
+                value.get_or_init(|| {
+                    reader.read_string(length as usize)
+                }).to_string()
+            });
+
+            VR::from(DataElementLocation::new(read_func))
+        };
+
+        reader.seek(Whence::Current, length as usize);
+        vr
     }
 
     fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement;
     fn skip_data_element(&self, tag: &Tag, reader: &mut DataReader);
+
+    fn set_size_of_lazy_read_element(&mut self, _size: Option<u32>);
+
+    fn get_size_of_lazy_read_element(&self) -> Option<u32>;
 }
 
-pub struct ExplicitValueReader {}
+pub struct ExplicitValueReader {
+    size_of_lazy_read_element: Option<u32>
+}
+
+impl ExplicitValueReader {
+    pub fn new() -> Self {
+        ExplicitValueReader { size_of_lazy_read_element: None }
+    }
+}
 impl ValueReaderBase for ExplicitValueReader {
     fn read_data_element(&self, tag: &Tag, reader: &mut DataReader) -> DataElement {
         let tag = *tag;
@@ -306,10 +341,25 @@ impl ValueReaderBase for ExplicitValueReader {
         let value_length = self.read_value_length(&value_representation.unwrap(), reader);
         reader.seek(Whence::Current, value_length as usize);
     }
+    fn set_size_of_lazy_read_element(&mut self, size: Option<u32>) {
+        self.size_of_lazy_read_element = size;
+    }
+
+    fn get_size_of_lazy_read_element(&self) -> Option<u32> {
+        self.size_of_lazy_read_element
+    }
 
 }
 
-pub struct ImplicitValueReader {}
+pub struct ImplicitValueReader {
+    size_of_lazy_read_element: Option<u32>
+}
+
+impl ImplicitValueReader {
+    pub fn new() -> Self {
+        ImplicitValueReader { size_of_lazy_read_element: None }
+    }
+}
 impl ValueReaderBase for ImplicitValueReader {
     fn read_data_element(&self, _tag: &Tag, reader: &mut DataReader) -> DataElement {
         let tag = self.read_tag(reader);
@@ -322,6 +372,13 @@ impl ValueReaderBase for ImplicitValueReader {
     fn skip_data_element(&self, _tag: &Tag, reader: &mut DataReader) {
         let value_length = self.read_value_length(reader);
         reader.seek(Whence::Current, value_length as usize);
+    }
+    fn set_size_of_lazy_read_element(&mut self, size: Option<u32>) {
+        self.size_of_lazy_read_element = size;
+    }
+
+    fn get_size_of_lazy_read_element(&self) -> Option<u32> {
+        self.size_of_lazy_read_element
     }
 }
 
@@ -359,11 +416,11 @@ pub enum ValueReader
 
 impl ValueReader {
     pub fn new_explicit() -> Self {
-        ValueReader::Explicit(ExplicitValueReader{})
+        ValueReader::Explicit(ExplicitValueReader::new())
     }
 
     pub fn new_implicit() -> Self {
-        ValueReader::Implicit(ImplicitValueReader{})
+        ValueReader::Implicit(ImplicitValueReader::new())
     }
 
     pub fn read_tag(&self, reader: &mut DataReader) -> Tag {
@@ -411,6 +468,13 @@ impl ValueReader {
         match self {
             ValueReader::Explicit(explicit_reader) => explicit_reader.read_data_element(tag, reader),
             ValueReader::Implicit(implicit_reader) => implicit_reader.read_data_element(tag, reader),
+        }
+    }
+
+    pub fn set_size_of_lazy_read_element(&mut self, size: Option<u32>) {
+        match self {
+            ValueReader::Explicit(explicit_reader) => explicit_reader.set_size_of_lazy_read_element(size),
+            ValueReader::Implicit(implicit_reader) => implicit_reader.set_size_of_lazy_read_element(size),
         }
     }
 }

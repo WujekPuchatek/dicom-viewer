@@ -1,10 +1,4 @@
 pub mod attribute_tag;
-pub mod other_byte;
-pub mod other_double;
-pub mod other_float;
-pub mod other_long;
-pub mod other_64bit_very_long;
-pub mod other_word;
 pub mod sequence_of_items;
 pub mod unknown;
 pub mod dicom_string;

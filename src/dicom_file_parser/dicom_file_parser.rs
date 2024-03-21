@@ -1,13 +1,14 @@
 use std::cell::Cell;
 use std::rc::Rc;
 use memmap2::Mmap;
+use crate::data_reader::data_reader::{DataReader, Whence};
 use crate::dataset::tag::Tag;
-use crate::data_reader::data_reader::{DataReader, Endianness, Whence};
 use crate::dataset::data_element::DataElement;
 use crate::dataset::value_field::ValueField;
 use crate::dicom_constants::numeric::HEADER_END;
 use crate::dicom_constants::tags::{ITEM, ITEM_DELIMITATION, SEQUENCE_DELIMITATION};
 use crate::dicom_file_parser::value_reader::{ExplicitValueReader, ValueReader};
+use crate::utils::endianness::Endianness;
 use crate::value_representations::numeric_type::Numeric;
 use super::validator::{Validator, ValidationResult};
 
@@ -21,13 +22,15 @@ pub struct DicomFileParser {
 
 impl DicomFileParser {
     pub fn new() -> Self {
-        Self { file_path: "".parse().unwrap(),
-               tags_to_read: std::collections::HashSet::new(),
-               read_all_tags: Cell::new(false),
-               dicom_dataset_reader: ValueReader::Explicit(ExplicitValueReader{}) }
+        Self {
+            file_path: "".parse().unwrap(),
+            tags_to_read: std::collections::HashSet::new(),
+            read_all_tags: Cell::new(false),
+            dicom_dataset_reader: ValueReader::Explicit(ExplicitValueReader::new())
+        }
     }
 
-    pub fn read_all_tags(mut self) -> Self {
+    pub fn read_all_tags(self) -> Self {
         self.read_all_tags.set(true);
         self
     }
@@ -39,6 +42,11 @@ impl DicomFileParser {
 
     pub fn file_path(mut self, file_path: &str) -> Self {
         self.file_path = file_path.parse().unwrap();
+        self
+    }
+
+    pub fn with_lazy_read_element(mut self, start: Option<u32>) -> Self {
+        self.dicom_dataset_reader.set_size_of_lazy_read_element(start);
         self
     }
 
@@ -65,6 +73,8 @@ impl DicomFileParser {
 
         while reader.unconsumed() > 0 {
             let tag = self.dicom_dataset_reader.read_tag(&mut reader);
+            println!("{:?}", tag);
+
             let data_element = self.read_data_element(&tag, &mut reader);
 
             if let Some(data_element) = data_element {
@@ -112,7 +122,7 @@ impl DicomFileParser {
         let file_meta_information_group_length = self.dicom_dataset_reader.read_data_element(&tag, reader);
 
         let filemeta_length = match file_meta_information_group_length.value {
-            ValueField::UnsignedLong(u32) => u32.Value().first().copied(),
+            ValueField::UnsignedLong(u32) => u32.value().first().copied(),
             _ => return Err("File meta information group length should be kept as unsigned long".into())
         };
 

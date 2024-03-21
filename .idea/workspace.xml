@@ -7,17 +7,39 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add string_decoder.rs">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Try to implement lazy reading of element">
+      <change afterPath="$PROJECT_DIR$/src/utils/endianness.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/submap.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_reader/data_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/data_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dataset/data_element.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dataset/data_element_location.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/data_element_location.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/value_field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/dicom_file_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/value_representations/dicom_string.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/dicom_string.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_double.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/floating_point_single.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_64bit_very_long.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_byte.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_double.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_float.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_long.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_type.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/other_type.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/other_word.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/sequence_of_items.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_long.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/signed_short.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/value_representations/unknown.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/unknown.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_64bit_very_long.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_long.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/unsigned_short.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +224,9 @@
       <workItem from="1710795430136" duration="264000" />
       <workItem from="1710847439497" duration="4021000" />
       <workItem from="1710880025508" duration="477000" />
-      <workItem from="1710971173655" duration="2151000" />
+      <workItem from="1710971173655" duration="11109000" />
+      <workItem from="1711013361121" duration="8251000" />
+      <workItem from="1711042165712" duration="4928000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -332,7 +356,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710795469215</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Try to implement lazy reading of element">
+      <option name="closed" value="true" />
+      <created>1710973351693</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1710973351693</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -362,7 +394,8 @@
     <MESSAGE value="Explicit VR Little Endian without SQ and UN read" />
     <MESSAGE value="Extract standard_string.rs and extended_string.rs" />
     <MESSAGE value="standard_string.rs and extended_string.rs changed to dicom_string.rs. Create numeric_type.rs" />
-    <option name="LAST_COMMIT_MESSAGE" value="standard_string.rs and extended_string.rs changed to dicom_string.rs. Create numeric_type.rs" />
+    <MESSAGE value="Try to implement lazy reading of element" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try to implement lazy reading of element" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -376,6 +409,11 @@
           <url>file://$PROJECT_DIR$/src/value_representations/numeric_type.rs</url>
           <line>5</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/dataset/value_field.rs</url>
+          <line>1</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

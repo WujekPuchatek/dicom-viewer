@@ -8,6 +8,7 @@ mod dicom_file_parser;
 mod dicom_constants;
 mod dataset;
 mod value_representations;
+mod utils;
 
 fn main()  -> std::io::Result<()>
 {
@@ -15,7 +16,8 @@ fn main()  -> std::io::Result<()>
 
     let parser = DicomFileParser::new()
                  .file_path(path)
-                 .read_tags([STUDY_DATE, STUDY_INSTANCE_UID, SERIES_INSTANCE_UID].as_ref())
+                 .read_tags([STUDY_DATE, STUDY_INSTANCE_UID, SERIES_INSTANCE_UID, PIXEL_DATA].as_ref())
+                 .with_lazy_read_element(Some(10))
                  .parse();
     Ok(())
 }

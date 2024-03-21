@@ -1,9 +1,16 @@
+use std::fmt;
 use encoding::all::*;
-use encoding::{Encoding, EncodingRef, DecoderTrap};
+use encoding::{EncodingRef, DecoderTrap};
 
 #[derive(Clone)]
 pub struct StringDecoder {
     decoder: EncodingRef,
+}
+
+impl fmt::Debug for StringDecoder {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.decoder.name())
+    }
 }
 
 impl StringDecoder {
