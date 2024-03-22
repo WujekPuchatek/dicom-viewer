@@ -4,7 +4,7 @@ pub trait Numeric : From<Vec<Self::Type>> {
     fn value(&self) -> &Vec<Self::Type>;
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct NumericType<T> {
     value: Vec<T>,
 }
@@ -20,5 +20,11 @@ impl<T> Numeric for NumericType<T> {
 
     fn value(&self) -> &Vec<T> {
         &self.value
+    }
+}
+
+impl<T: std::fmt::Debug> std::fmt::Debug for NumericType<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self.value)
     }
 }

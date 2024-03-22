@@ -50,7 +50,7 @@ impl DicomFileParser {
         self
     }
 
-    pub fn parse(&self) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn parse(&self) -> Result<Vec<DataElement>, Box<dyn std::error::Error>> {
         let content = self.open_file()?;
 
         if Validator::new(&content).validate() == ValidationResult::NotDicom {
@@ -63,28 +63,26 @@ impl DicomFileParser {
         let old_value_read_all_tags = self.read_all_tags.get();
         self.read_all_tags.set(true);
 
-        let meta_data = self.read_meta_data(&mut reader);
+        let data_elems = self.read_meta_data(&mut reader);
 
         self.read_all_tags.set(old_value_read_all_tags);
 
-        if let Err(e) = meta_data {
+        if let Err(e) = data_elems {
             return Err(e);
         }
 
+        let mut data_elems = data_elems.unwrap();
+
         while reader.unconsumed() > 0 {
             let tag = self.dicom_dataset_reader.read_tag(&mut reader);
-            println!("{:?}", tag);
-
             let data_element = self.read_data_element(&tag, &mut reader);
 
             if let Some(data_element) = data_element {
-                println!("{:?}", data_element);
+                data_elems.push(data_element);
             }
         }
 
-
-
-        Ok(())
+        Ok(data_elems)
     }
 
     fn open_file(&self) -> Result<Rc<Mmap>, std::io::Error> {
@@ -115,7 +113,7 @@ impl DicomFileParser {
 
     }
 
-    fn read_meta_data(&self, reader: &mut DataReader) -> Result<std::vec::Vec<DataElement>,
+    fn read_meta_data(&self, reader: &mut DataReader) -> Result<Vec<DataElement>,
                                                                 Box<dyn std::error::Error>>
     {
         let tag = self.dicom_dataset_reader.read_tag(reader);
