@@ -17,3 +17,6 @@ env_logger = "0.11.3"
 pollster = "0.3.0"
 png = "0.17.13"
 winit = "0.29.15"
+cfg-if = "1.0.0"
+web-sys = "0.3.69"
+bytemuck = { version = "1.15", features = [ "derive" ] }

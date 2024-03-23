@@ -7,11 +7,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Read single dicom file without SQ and UN">
-      <change afterPath="$PROJECT_DIR$/please_don't_git_push_me.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shader.wgsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xtask/Cargo.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xtask/src/main.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start rendering data">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
@@ -208,6 +204,7 @@
       <workItem from="1711104903587" duration="4822000" />
       <workItem from="1711129235932" duration="2182000" />
       <workItem from="1711147948499" duration="3404000" />
+      <workItem from="1711201787590" duration="9450000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -353,7 +350,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711122841133</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Start rendering data">
+      <option name="closed" value="true" />
+      <created>1711201804798</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1711201804798</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -385,7 +390,8 @@
     <MESSAGE value="standard_string.rs and extended_string.rs changed to dicom_string.rs. Create numeric_type.rs" />
     <MESSAGE value="Try to implement lazy reading of element" />
     <MESSAGE value="Read single dicom file without SQ and UN" />
-    <option name="LAST_COMMIT_MESSAGE" value="Read single dicom file without SQ and UN" />
+    <MESSAGE value="Start rendering data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start rendering data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
