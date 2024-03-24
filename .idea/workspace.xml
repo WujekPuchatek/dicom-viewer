@@ -8,11 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start rendering data">
+      <change afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/compute.wgsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/draw.wgsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,6 +208,8 @@
       <workItem from="1711129235932" duration="2182000" />
       <workItem from="1711147948499" duration="3404000" />
       <workItem from="1711201787590" duration="9450000" />
+      <workItem from="1711223345504" duration="490000" />
+      <workItem from="1711235119509" duration="2584000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
