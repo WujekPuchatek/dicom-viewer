@@ -7,13 +7,9 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Mix compute and fragment / vertex shader">
-      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add cube example. Start of work on rendering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +64,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
     &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
@@ -210,7 +206,7 @@
       <workItem from="1711235119509" duration="2584000" />
       <workItem from="1711306093406" duration="1304000" />
       <workItem from="1711358082928" duration="1324000" />
-      <workItem from="1711399471653" duration="844000" />
+      <workItem from="1711399471653" duration="1547000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -372,7 +368,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711307041828</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Add cube example. Start of work on rendering">
+      <option name="closed" value="true" />
+      <created>1711400441841</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1711400441841</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -406,7 +410,8 @@
     <MESSAGE value="Read single dicom file without SQ and UN" />
     <MESSAGE value="Start rendering data" />
     <MESSAGE value="Mix compute and fragment / vertex shader" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mix compute and fragment / vertex shader" />
+    <MESSAGE value="Add cube example. Start of work on rendering" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add cube example. Start of work on rendering" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

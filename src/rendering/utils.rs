@@ -8,6 +8,7 @@ use winit::{
     keyboard::{Key, NamedKey},
     window::Window,
 };
+use winit::event::MouseScrollDelta;
 
 pub trait Example: 'static + Sized {
     const SRGB: bool = true;
@@ -373,6 +374,18 @@ async fn start<E: Example>(title: &str) {
                         );
 
                         window_loop.window.request_redraw();
+                    }
+                    WindowEvent::MouseWheel {
+                        delta,
+                        ..
+                    } => {
+                        if let MouseScrollDelta::LineDelta(x, y) = delta
+                        {
+                            println!("{:?} {:?}", x, y);
+                        }
+                    }
+                    WindowEvent::CursorMoved { position, .. } => {
+                        println!("Cursor moved to position {:?}", position);
                     }
                     WindowEvent::KeyboardInput {
                         event:
