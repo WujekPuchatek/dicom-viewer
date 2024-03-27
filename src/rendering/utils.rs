@@ -50,6 +50,7 @@ pub trait Example: 'static + Sized {
     fn update(&mut self, event: WindowEvent);
 
     fn render(&mut self, view: &wgpu::TextureView, device: &wgpu::Device, queue: &wgpu::Queue);
+    fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue);
 }
 
 // Initialize logging in platform dependant ways.
@@ -379,9 +380,9 @@ async fn start<E: Example>(title: &str) {
                         delta,
                         ..
                     } => {
-                        if let MouseScrollDelta::LineDelta(x, y) = delta
+                        if let MouseScrollDelta::LineDelta(dx, dy) = delta
                         {
-                            println!("{:?} {:?}", x, y);
+                            example.as_mut().unwrap().update_zoom(dy, &context.queue);
                         }
                     }
                     WindowEvent::CursorMoved { position, .. } => {

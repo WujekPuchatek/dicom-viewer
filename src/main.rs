@@ -108,7 +108,28 @@ fn create_texels(size: usize) -> Vec<u8> {
         .collect()
 }
 
+pub struct Projection {
+    pub aspect_ratio: f32,
+    pub fov: f32,
+    pub near: f32,
+    pub far: f32,
+}
+
+pub struct View {
+    pub eye: glam::Vec3,
+    pub target: glam::Vec3,
+    pub up: glam::Vec3,
+}
+
+pub struct ModelViewProjection {
+    pub model: glam::Mat4,
+    pub view: View,
+    pub projection: Projection
+}
+
 struct Renderer {
+    model_view_projection: ModelViewProjection,
+
     vertex_buf: wgpu::Buffer,
     index_buf: wgpu::Buffer,
     index_count: usize,
@@ -119,14 +140,28 @@ struct Renderer {
 }
 
 impl Renderer {
-    fn generate_matrix(aspect_ratio: f32) -> glam::Mat4 {
-        let projection = glam::Mat4::perspective_rh(consts::FRAC_PI_4 as f32, aspect_ratio, 1.0, 10.0);
-        let view = glam::Mat4::look_at_rh(
-            glam::Vec3::new(1.5f32, -5.0, 3.0),
-            glam::Vec3::ZERO,
-            glam::Vec3::Z,
-        );
-        projection * view
+    fn generate_projection_matrix(projection: &Projection) -> glam::Mat4 {
+        glam::Mat4::perspective_rh(projection.fov, projection.aspect_ratio, projection.near, projection.far)
+    }
+
+    fn generate_view_matrix(view: &View) -> glam::Mat4 {
+        glam::Mat4::look_at_rh(view.eye, view.target, view.up)
+    }
+
+    fn generate_model_matrix(model: &glam::Mat4) -> glam::Mat4 {
+        model.clone()
+    }
+
+    fn generate_matrix(model: &glam::Mat4, view: &View, projection: &Projection) -> glam::Mat4 {
+        let projection = Self::generate_projection_matrix(&projection);
+        let view = Self::generate_view_matrix(&view);
+        let model = Self::generate_model_matrix(&model);
+
+        projection * view * model
+    }
+
+    fn generate_mvp_matrix(&self) -> glam::Mat4 {
+        Self::generate_matrix(&self.model_view_projection.model, &self.model_view_projection.view, &self.model_view_projection.projection)
     }
 }
 
@@ -219,8 +254,23 @@ impl Example for Renderer {
             texture_extent,
         );
 
+        let model_view_projection = ModelViewProjection {
+            model: glam::Mat4::IDENTITY,
+            view: View {
+                eye: glam::Vec3::new(1.5f32, -5.0, 3.0),
+                target: glam::Vec3::ZERO,
+                up: glam::Vec3::Z,
+            },
+            projection: Projection {
+                aspect_ratio: config.width as f32 / config.height as f32,
+                fov: consts::FRAC_PI_4 as f32,
+                near: 1.0,
+                far: 10.0,
+            }
+        };
+
         // Create other resources
-        let mx_total = Self::generate_matrix(config.width as f32 / config.height as f32);
+        let mx_total = Self::generate_matrix(&model_view_projection.model, &model_view_projection.view, &model_view_projection.projection);
         let mx_ref: &[f32; 16] = mx_total.as_ref();
         let uniform_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Uniform Buffer"),
@@ -331,8 +381,8 @@ impl Example for Renderer {
             None
         };
 
-        // Done
         Renderer {
+            model_view_projection,
             vertex_buf,
             index_buf,
             index_count: index_data.len(),
@@ -343,15 +393,29 @@ impl Example for Renderer {
         }
     }
 
+    fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {
+        const ZOOM_SPEED: f32 = 0.08;
+
+        let zoom_delta = -zoom_delta * ZOOM_SPEED;
+        self.model_view_projection.projection.fov += zoom_delta;
+        self.model_view_projection.projection.fov = self.model_view_projection.projection.fov.min(1.0).max(0.25);
+
+        println!("Zoom delta: {}", self.model_view_projection.projection.fov);
+
+        let mvp = self.generate_mvp_matrix();
+        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+    }
+
     fn resize(
         &mut self,
         config: &wgpu::SurfaceConfiguration,
         _device: &wgpu::Device,
         queue: &wgpu::Queue,
     ) {
-        let mx_total = Self::generate_matrix(config.width as f32 / config.height as f32);
-        let mx_ref: &[f32; 16] = mx_total.as_ref();
-        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mx_ref));
+        self.model_view_projection.projection.aspect_ratio = config.width as f32 / config.height as f32;
+
+        let mvp = self.generate_mvp_matrix();
+        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
     }
 
     fn update(&mut self, _event: winit::event::WindowEvent) {
