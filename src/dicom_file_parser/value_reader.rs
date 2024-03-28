@@ -291,7 +291,6 @@ pub trait ValueReaderBase {
     fn read_lazy_dicom_string<VR: From<DataElementLocation<String>>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
         let vr = {
             let desc = reader.get_subreader_desc(length as usize);
-            let reader_clone = reader.clone();
 
             let read_func = Box::new(move || -> String {
                 let value: OnceCell<String> = OnceCell::new();

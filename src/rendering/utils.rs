@@ -51,6 +51,7 @@ pub trait Example: 'static + Sized {
 
     fn render(&mut self, view: &wgpu::TextureView, device: &wgpu::Device, queue: &wgpu::Queue);
     fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue);
+    fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue);
 }
 
 // Initialize logging in platform dependant ways.
@@ -218,11 +219,28 @@ impl SurfaceWrapper {
     }
 }
 
+struct MouseState {
+    left_pressed: bool,
+    right_pressed: bool,
+    position: (f32, f32),
+}
+
+impl MouseState {
+    fn new() -> Self {
+        Self {
+            left_pressed: false,
+            right_pressed: false,
+            position: (0.0, 0.0),
+        }
+    }
+}
+
 struct Context {
     instance: wgpu::Instance,
     adapter: wgpu::Adapter,
     device: wgpu::Device,
     queue: wgpu::Queue,
+    mouse: MouseState,
 }
 impl Context {
     /// Initializes the example context.
@@ -293,6 +311,7 @@ impl Context {
             adapter,
             device,
             queue,
+            mouse: MouseState::new(),
         }
     }
 }
@@ -334,7 +353,7 @@ async fn start<E: Example>(title: &str) {
     let window_loop = EventLoopWrapper::new(title);
     let mut surface = SurfaceWrapper::new();
 
-    let context = Context::init_async::<E>(&mut surface, window_loop.window.clone()).await;
+    let mut context = Context::init_async::<E>(&mut surface, window_loop.window.clone()).await;
     let mut frame_counter = FrameCounter::new();
 
     // We wait to create the example until we have a valid surface.
@@ -376,17 +395,40 @@ async fn start<E: Example>(title: &str) {
 
                         window_loop.window.request_redraw();
                     }
+                    WindowEvent::MouseInput {
+                        state,
+                        button,
+                        ..
+                    } => {
+                        let mouse = &mut context.mouse;
+                        match button {
+                            winit::event::MouseButton::Left => {
+                                mouse.left_pressed = state == winit::event::ElementState::Pressed;
+                            }
+                            winit::event::MouseButton::Right => {
+                                mouse.right_pressed = state == winit::event::ElementState::Pressed;
+                            }
+                            _ => {}
+                        }
+                    }
                     WindowEvent::MouseWheel {
                         delta,
                         ..
                     } => {
-                        if let MouseScrollDelta::LineDelta(dx, dy) = delta
+                        if let MouseScrollDelta::LineDelta(_dx, dy) = delta
                         {
                             example.as_mut().unwrap().update_zoom(dy, &context.queue);
                         }
                     }
                     WindowEvent::CursorMoved { position, .. } => {
-                        println!("Cursor moved to position {:?}", position);
+                        let old_position = context.mouse.position;
+                        context.mouse.position = <(f32, f32)>::from(position);
+
+                        let delta_x = old_position.0 - context.mouse.position.0;
+                        let delta_y = old_position.1 - context.mouse.position.1;
+                        if context.mouse.left_pressed {
+                            example.as_mut().unwrap().rotate(delta_x, delta_y, &context.queue);
+                        }
                     }
                     WindowEvent::KeyboardInput {
                         event:

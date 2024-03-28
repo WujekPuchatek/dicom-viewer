@@ -1,5 +1,3 @@
-use std::fmt;
-
 #[derive(Clone, Debug)]
 pub struct AttributeTag {
     pub value: Vec<[u16;2]>,

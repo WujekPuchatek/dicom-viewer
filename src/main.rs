@@ -1,26 +1,22 @@
 #![allow(dead_code)]
 
 use std::borrow::Cow;
-use std::io::{Error as OtherError, ErrorKind, Write};
-use std::{iter, mem};
+use std::io::{ErrorKind};
+use std::{mem};
+use std::cmp::max;
 use std::f64::consts;
-use std::rc::Rc;
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
 use crate::dataset::tag::Tag;
-use crate::dicom_constants::tags::{PIXEL_DATA, SERIES_INSTANCE_UID, STUDY_DATE, STUDY_INSTANCE_UID};
+use crate::dicom_constants::tags::{PIXEL_DATA, STUDY_DATE, STUDY_INSTANCE_UID};
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
 
 use winit::{
     event::*,
-    event_loop::{ControlFlow, EventLoop},
-    window::WindowBuilder,
 };
-use winit::event::WindowEvent::KeyboardInput;
 use winit::keyboard::{KeyCode, PhysicalKey};
-use winit::window::Window;
+use crate::rendering::data_dimensions::DataDimensions;
 use crate::rendering::utils::{Example, run};
-use nanorand::{Rng, WyRand};
 
 mod data_reader;
 mod dicom_file_parser;
@@ -33,19 +29,19 @@ mod rendering;
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
 struct Vertex {
-    _pos: [f32; 4],
-    _tex_coord: [f32; 2],
+    pub pos: [f32; 4],
+    pub tex_coord: [f32; 2],
 }
 
 fn vertex(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
     Vertex {
-        _pos: [pos[0] as f32, pos[1] as f32, pos[2] as f32, 1.0],
-        _tex_coord: [tc[0] as f32, tc[1] as f32],
+        pos: [pos[0] as f32, pos[1] as f32, pos[2] as f32, 1.0],
+        tex_coord: [tc[0] as f32, tc[1] as f32],
     }
 }
 
-fn create_vertices() -> (Vec<Vertex>, Vec<u16>) {
-    let vertex_data = [
+fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
+    let mut vertex_data = [
         // top (0, 0, 1)
         vertex([-1, -1, 1], [0, 0]),
         vertex([1, -1, 1], [1, 0]),
@@ -77,6 +73,14 @@ fn create_vertices() -> (Vec<Vertex>, Vec<u16>) {
         vertex([-1, -1, -1], [1, 1]),
         vertex([1, -1, -1], [0, 1]),
     ];
+
+    vertex_data.
+        iter_mut().
+        for_each(|v| {
+            v.pos[0] *= normalized_dims[0];
+            v.pos[1] *= normalized_dims[1];
+            v.pos[2] *= normalized_dims[2];
+    });
 
     let index_data: &[u16] = &[
         0, 1, 2, 2, 3, 0, // top
@@ -115,20 +119,29 @@ pub struct Projection {
     pub far: f32,
 }
 
+//https://www.3dgep.com/understanding-the-view-matrix/#The_View_Matrix
 pub struct View {
     pub eye: glam::Vec3,
     pub target: glam::Vec3,
     pub up: glam::Vec3,
 }
 
+pub struct Model {
+    pub rotation: glam::Quat,
+    pub scale: glam::Vec3,
+    pub translation: glam::Vec3,
+}
+
 pub struct ModelViewProjection {
-    pub model: glam::Mat4,
+    pub dicom_rotation: glam::Quat,
+    pub model: Model,
     pub view: View,
     pub projection: Projection
 }
 
 struct Renderer {
     model_view_projection: ModelViewProjection,
+    data_dims: DataDimensions,
 
     vertex_buf: wgpu::Buffer,
     index_buf: wgpu::Buffer,
@@ -141,27 +154,38 @@ struct Renderer {
 
 impl Renderer {
     fn generate_projection_matrix(projection: &Projection) -> glam::Mat4 {
-        glam::Mat4::perspective_rh(projection.fov, projection.aspect_ratio, projection.near, projection.far)
+        glam::Mat4::perspective_rh(projection.fov,
+                                   projection.aspect_ratio,
+                                   projection.near,
+                                   projection.far)
     }
 
     fn generate_view_matrix(view: &View) -> glam::Mat4 {
-        glam::Mat4::look_at_rh(view.eye, view.target, view.up)
+        glam::Mat4::look_at_rh(view.eye,
+                               view.target,
+                               view.up)
     }
 
-    fn generate_model_matrix(model: &glam::Mat4) -> glam::Mat4 {
-        model.clone()
+    fn generate_model_matrix(model: &Model) -> glam::Mat4 {
+        glam::Mat4::from_scale_rotation_translation(model.scale,
+                                                    model.rotation,
+                                                    model.translation)
     }
 
-    fn generate_matrix(model: &glam::Mat4, view: &View, projection: &Projection) -> glam::Mat4 {
+    fn generate_matrix(patient_rotation: &glam::Quat, model: &Model, view: &View, projection: &Projection) -> glam::Mat4 {
         let projection = Self::generate_projection_matrix(&projection);
         let view = Self::generate_view_matrix(&view);
         let model = Self::generate_model_matrix(&model);
+        let rotation = glam::Mat4::from_quat(patient_rotation.clone());
 
-        projection * view * model
+        rotation * projection * view * model
     }
 
     fn generate_mvp_matrix(&self) -> glam::Mat4 {
-        Self::generate_matrix(&self.model_view_projection.model, &self.model_view_projection.view, &self.model_view_projection.projection)
+        Self::generate_matrix(&self.model_view_projection.dicom_rotation,
+                              &self.model_view_projection.model,
+                              &self.model_view_projection.view,
+                              &self.model_view_projection.projection)
     }
 }
 
@@ -176,9 +200,18 @@ impl Example for Renderer {
         device: &wgpu::Device,
         queue: &wgpu::Queue,
     ) -> Self {
+        // Create the data dimensions
+        let data_dims = DataDimensions::builder()
+            .width(512)
+            .height(512)
+            .depth(230)
+            .pixel_spacing((0.8, 0.8))
+            .distance_between_slices(1.0)
+            .build();
+
         // Create the vertex and index buffers
         let vertex_size = mem::size_of::<Vertex>();
-        let (vertex_data, index_data) = create_vertices();
+        let (vertex_data, index_data) = create_vertices(data_dims.get_normalized_dimensions());
 
         let vertex_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
@@ -255,9 +288,14 @@ impl Example for Renderer {
         );
 
         let model_view_projection = ModelViewProjection {
-            model: glam::Mat4::IDENTITY,
+            dicom_rotation: glam::Quat::IDENTITY,
+            model: Model {
+                rotation: glam::Quat::IDENTITY,
+                scale: glam::Vec3::ONE,
+                translation: glam::Vec3::ZERO,
+            },
             view: View {
-                eye: glam::Vec3::new(1.5f32, -5.0, 3.0),
+                eye: glam::Vec3::new(0.0, -5.0, 0.0),
                 target: glam::Vec3::ZERO,
                 up: glam::Vec3::Z,
             },
@@ -270,7 +308,11 @@ impl Example for Renderer {
         };
 
         // Create other resources
-        let mx_total = Self::generate_matrix(&model_view_projection.model, &model_view_projection.view, &model_view_projection.projection);
+        let mx_total = Self::generate_matrix(&model_view_projection.dicom_rotation,
+                                                   &model_view_projection.model,
+                                                   &model_view_projection.view,
+                                                   &model_view_projection.projection);
+
         let mx_ref: &[f32; 16] = mx_total.as_ref();
         let uniform_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Uniform Buffer"),
@@ -340,7 +382,7 @@ impl Example for Renderer {
 
         let pipeline_wire = if device
             .features()
-            .contains(wgpu::Features::POLYGON_MODE_LINE)
+            .contains(wgpu::Features::POLYGON_MODE_POINT)
         {
             let pipeline_wire = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: None,
@@ -383,6 +425,7 @@ impl Example for Renderer {
 
         Renderer {
             model_view_projection,
+            data_dims,
             vertex_buf,
             index_buf,
             index_count: index_data.len(),
@@ -391,19 +434,6 @@ impl Example for Renderer {
             pipeline,
             pipeline_wire,
         }
-    }
-
-    fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {
-        const ZOOM_SPEED: f32 = 0.08;
-
-        let zoom_delta = -zoom_delta * ZOOM_SPEED;
-        self.model_view_projection.projection.fov += zoom_delta;
-        self.model_view_projection.projection.fov = self.model_view_projection.projection.fov.min(1.0).max(0.25);
-
-        println!("Zoom delta: {}", self.model_view_projection.projection.fov);
-
-        let mvp = self.generate_mvp_matrix();
-        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
     }
 
     fn resize(
@@ -460,6 +490,37 @@ impl Example for Renderer {
         }
 
         queue.submit(Some(encoder.finish()));
+    }
+
+    fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {
+        const ZOOM_SPEED: f32 = 0.08;
+
+        let zoom_delta = -zoom_delta * ZOOM_SPEED;
+        self.model_view_projection.projection.fov += zoom_delta;
+        self.model_view_projection.projection.fov = self.model_view_projection.projection.fov.min(1.0).max(0.25);
+
+        println!("Zoom delta: {}", self.model_view_projection.projection.fov);
+
+        let mvp = self.generate_mvp_matrix();
+        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+    }
+
+    fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue) {
+        let sensitivity = 0.005; // Adjust this value to your liking
+
+        let dx = -dx * sensitivity;
+        let dy = dy * sensitivity;
+
+        let right = self.model_view_projection.view.eye.cross(self.model_view_projection.view.up).normalize();
+        let up = right.cross(self.model_view_projection.view.eye).normalize();
+
+        self.model_view_projection.model.rotation =
+            glam::Quat::from_axis_angle(right, dy) *
+            glam::Quat::from_axis_angle(up, dx) *
+            self.model_view_projection.model.rotation;
+
+        let mvp = self.generate_mvp_matrix();
+        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
     }
 }
 

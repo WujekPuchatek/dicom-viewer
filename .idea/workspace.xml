@@ -7,10 +7,14 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add cube example. Start of work on rendering">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add zoom">
+      <change afterPath="$PROJECT_DIR$/src/rendering/data_dimensions.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +70,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Run",
+    "Cargo.Run.executor": "Debug",
     "Cargo.Test validator::tests.executor": "Debug",
     "Cargo.Tests.executor": "Run",
     "Cargo.add.executor": "Run",
@@ -85,6 +89,7 @@
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs": "true",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
+    "org.rust.first.attach.projects.stats": "true",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
@@ -209,6 +214,9 @@
       <workItem from="1711306093406" duration="1304000" />
       <workItem from="1711358082928" duration="1324000" />
       <workItem from="1711399471653" duration="1547000" />
+      <workItem from="1711575735411" duration="7033000" />
+      <workItem from="1711637774749" duration="120000" />
+      <workItem from="1711637929280" duration="7300000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -378,7 +386,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711400441841</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Add zoom">
+      <option name="closed" value="true" />
+      <created>1711572282037</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1711572282037</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -413,14 +429,15 @@
     <MESSAGE value="Start rendering data" />
     <MESSAGE value="Mix compute and fragment / vertex shader" />
     <MESSAGE value="Add cube example. Start of work on rendering" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add cube example. Start of work on rendering" />
+    <MESSAGE value="Add zoom" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add zoom" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/value_representations/attribute_tag.rs</url>
-          <line>5</line>
+          <line>3</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
