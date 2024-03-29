@@ -25,6 +25,8 @@ mod dataset;
 mod value_representations;
 mod utils;
 mod rendering;
+mod Examination;
+mod examination;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]

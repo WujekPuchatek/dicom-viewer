@@ -1,1 +1,1 @@
-mod pixel_data_processor;
+pub mod pixel_data_processor;

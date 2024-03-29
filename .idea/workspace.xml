@@ -7,14 +7,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add zoom">
-      <change afterPath="$PROJECT_DIR$/src/rendering/data_dimensions.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add rotate + data dimensions class">
+      <change afterPath="$PROJECT_DIR$/src/examination/examination.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/examination/image_pixel.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/examination/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/attribute_tag.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +88,7 @@
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs": "true",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
+    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs": "true",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs": "true",
     "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
     "org.rust.first.attach.projects.stats": "true",
@@ -216,7 +218,10 @@
       <workItem from="1711399471653" duration="1547000" />
       <workItem from="1711575735411" duration="7033000" />
       <workItem from="1711637774749" duration="120000" />
-      <workItem from="1711637929280" duration="7300000" />
+      <workItem from="1711637929280" duration="7968000" />
+      <workItem from="1711666624865" duration="1208000" />
+      <workItem from="1711707865054" duration="704000" />
+      <workItem from="1711718840103" duration="1654000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -394,7 +399,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711572282037</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Add rotate + data dimensions class">
+      <option name="closed" value="true" />
+      <created>1711647151794</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1711647151794</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -430,7 +443,8 @@
     <MESSAGE value="Mix compute and fragment / vertex shader" />
     <MESSAGE value="Add cube example. Start of work on rendering" />
     <MESSAGE value="Add zoom" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add zoom" />
+    <MESSAGE value="Add rotate + data dimensions class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add rotate + data dimensions class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
