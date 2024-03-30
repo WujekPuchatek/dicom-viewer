@@ -27,6 +27,8 @@ mod utils;
 mod rendering;
 mod Examination;
 mod examination;
+mod dicom_file;
+mod information_object_definitions;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -1101,7 +1103,7 @@ fn main()  -> std::io::Result<()>
     let dicom_data_elems = DicomFileParser::new()
                  .file_path(path)
                  .read_tags(tags_to_read)
-                 .with_lazy_read_element(Some(10))
+                 .with_lazy_read_element(Some(256))
                  .parse();
 
     if let Err(e) = dicom_data_elems {

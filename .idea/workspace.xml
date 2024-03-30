@@ -8,14 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add rotate + data dimensions class">
-      <change afterPath="$PROJECT_DIR$/src/examination/examination.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/examination/image_pixel.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/examination/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/dicom_file/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/general_series.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/general_study.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/image_plane.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examination/image_pixel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examination/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,36 +71,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Debug",
-    "Cargo.Test validator::tests.executor": "Debug",
-    "Cargo.Tests.executor": "Run",
-    "Cargo.add.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
-    "org.rust.first.attach.projects.stats": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects.stats&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\information_object_definitions" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\dataset" />
     </key>
   </component>
@@ -222,6 +226,9 @@
       <workItem from="1711666624865" duration="1208000" />
       <workItem from="1711707865054" duration="704000" />
       <workItem from="1711718840103" duration="1654000" />
+      <workItem from="1711725418769" duration="4646000" />
+      <workItem from="1711745224050" duration="545000" />
+      <workItem from="1711755662413" duration="1792000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
