@@ -1,13 +1,13 @@
 use crate::information_object_definitions::inconsistency::DicomFileInconsistency;
 
-const DEFAULT_PIXEL_SPACING: (f32, f32) = (1.0, 1.0);
-const DEFAULT_IMAGE_ORIENTATION: (f32, f32, f32, f32, f32, f32) = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-const DEFAULT_IMAGE_POSITION: (f32, f32, f32) = (0.0, 0.0, 0.0);
+const DEFAULT_PIXEL_SPACING: [f32; 2] = [1.0, 1.0];
+const DEFAULT_IMAGE_ORIENTATION: [f32; 6]  = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0];
+const DEFAULT_IMAGE_POSITION: [f32; 3] = [0.0, 0.0, 0.0];
 
 pub struct ImagePlane {
-    pub pixel_spacing: (f32, f32),
-    pub image_orientation: (f32, f32, f32, f32, f32, f32),
-    pub image_position: (f32, f32, f32),
+    pub pixel_spacing: [f32; 2],
+    pub image_orientation: [f32; 6],
+    pub image_position: [f32; 3],
     pub slice_location: Option<f32>,
     pub spacing_between_slices: Option<f32>,
 }
@@ -25,25 +25,25 @@ impl ImagePlane {
 }
 
 pub struct ImagePlaneBuilder {
-    pixel_spacing: Option<(f32, f32)>,
-    image_orientation: Option<(f32, f32, f32, f32, f32, f32)>,
-    image_position: Option<(f32, f32, f32)>,
+    pixel_spacing: Option<[f32; 2]>,
+    image_orientation: Option<[f32; 6]>,
+    image_position: Option<[f32; 3]>,
     slice_location: Option<f32>,
     spacing_between_slices: Option<f32>,
 }
 
 impl ImagePlaneBuilder {
-    pub fn pixel_spacing(&mut self, pixel_spacing: (f32, f32)) -> &mut Self {
+    pub fn pixel_spacing(&mut self, pixel_spacing: [f32; 2]) -> &mut Self {
         self.pixel_spacing = Some(pixel_spacing);
         self
     }
 
-    pub fn image_orientation(&mut self, image_orientation: (f32, f32, f32, f32, f32, f32)) -> &mut Self {
+    pub fn image_orientation(&mut self, image_orientation: [f32; 6]) -> &mut Self {
         self.image_orientation = Some(image_orientation);
         self
     }
 
-    pub fn image_position(&mut self, image_position: (f32, f32, f32)) -> &mut Self {
+    pub fn image_position(&mut self, image_position: [f32; 3]) -> &mut Self {
         self.image_position = Some(image_position);
         self
     }

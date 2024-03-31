@@ -7,18 +7,20 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add rotate + data dimensions class">
-      <change afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dicom_file/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/general_series.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/general_study.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/image_plane.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add dicom_file.rs">
+      <change afterPath="$PROJECT_DIR$/src/Traits/cast.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Traits/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/value_representations/numeric_string.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examination/image_pixel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examination/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/value_field.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/value_field.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_constants/tags.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/tags.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/value_representations/numeric_type.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -228,7 +230,9 @@
       <workItem from="1711718840103" duration="1654000" />
       <workItem from="1711725418769" duration="4646000" />
       <workItem from="1711745224050" duration="545000" />
-      <workItem from="1711755662413" duration="1792000" />
+      <workItem from="1711755662413" duration="2487000" />
+      <workItem from="1711815178757" duration="6462000" />
+      <workItem from="1711839631828" duration="768000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -414,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711647151794</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Add dicom_file.rs">
+      <option name="closed" value="true" />
+      <created>1711757618809</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1711757618809</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -451,7 +463,8 @@
     <MESSAGE value="Add cube example. Start of work on rendering" />
     <MESSAGE value="Add zoom" />
     <MESSAGE value="Add rotate + data dimensions class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add rotate + data dimensions class" />
+    <MESSAGE value="Add dicom_file.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add dicom_file.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

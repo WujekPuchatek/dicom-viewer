@@ -14,7 +14,6 @@ pub const MODALITY: Tag = Tag { group: 0x0008, element: 0x0060 };
 pub const SERIES_NUMBER: Tag = Tag { group: 0x0020, element: 0x0011 };
 pub const INSTANCE_NUMBER: Tag = Tag { group: 0x0020, element: 0x0013 };
 
-
 pub const ITEM: Tag = Tag { group: 0xFFFE, element: 0xE000 };
 pub const ITEM_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE00D };
 pub const SEQUENCE_DELIMITATION: Tag = Tag { group: 0xFFFE, element: 0xE0DD };

@@ -3,7 +3,6 @@
 use std::borrow::Cow;
 use std::io::{ErrorKind};
 use std::{mem};
-use std::cmp::max;
 use std::f64::consts;
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
@@ -29,6 +28,7 @@ mod Examination;
 mod examination;
 mod dicom_file;
 mod information_object_definitions;
+mod Traits;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]

@@ -2,6 +2,7 @@
 use crate::value_representations::attribute_tag::AttributeTag;
 use crate::value_representations::sequence_of_items::SequenceOfItems;
 use crate::value_representations::dicom_string::DicomString;
+use crate::value_representations::numeric_string::NumericString;
 use crate::value_representations::numeric_type::NumericType;
 use crate::value_representations::other_type::OtherType;
 use crate::value_representations::unknown::Unknown;
@@ -14,10 +15,10 @@ pub enum ValueField {
     CodeString(DicomString),
     Date(DicomString),
     DateTime(DicomString),
-    DecimalString(DicomString),
+    DecimalString(NumericString),
     FloatingPointSingle(NumericType<f32>),
     FloatingPointDouble(NumericType<f64>),
-    IntegerString(DicomString),
+    IntegerString(NumericString),
     LongString(DicomString),
     LongText(DicomString),
     OtherByte(OtherType<u8>),

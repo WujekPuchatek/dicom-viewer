@@ -45,52 +45,52 @@ pub struct ImagePixelBuilder {
 }
 
 impl ImagePixelBuilder {
-    pub fn samples_per_pixel(mut self, samples_per_pixel: u16) -> Self {
+    pub fn samples_per_pixel(&mut self, samples_per_pixel: u16) -> &Self {
         self.samples_per_pixel = Some(samples_per_pixel);
         self
     }
 
-    pub fn photometric_interpretation(mut self, photometric_interpretation: String) -> Self {
+    pub fn photometric_interpretation(&mut self, photometric_interpretation: String) -> &Self {
         self.photometric_interpretation = Some(photometric_interpretation);
         self
     }
 
-    pub fn rows(mut self, rows: u16) -> Self {
+    pub fn rows(&mut self, rows: u16) -> &Self {
         self.rows = Some(rows);
         self
     }
 
-    pub fn columns(mut self, columns: u16) -> Self {
+    pub fn columns(&mut self, columns: u16) -> &Self {
         self.columns = Some(columns);
         self
     }
 
-    pub fn bits_allocated(mut self, bits_allocated: u16) -> Self {
+    pub fn bits_allocated(&mut self, bits_allocated: u16) -> &Self {
         self.bits_allocated = Some(bits_allocated);
         self
     }
 
-    pub fn bits_stored(mut self, bits_stored: u16) -> Self {
+    pub fn bits_stored(&mut self, bits_stored: u16) -> &Self {
         self.bits_stored = Some(bits_stored);
         self
     }
 
-    pub fn high_bit(mut self, high_bit: u16) -> Self {
+    pub fn high_bit(&mut self, high_bit: u16) -> &Self {
         self.high_bit = Some(high_bit);
         self
     }
 
-    pub fn pixel_representation(mut self, pixel_representation: u16) -> Self {
+    pub fn pixel_representation(&mut self, pixel_representation: u16) -> &Self {
         self.pixel_representation = Some(pixel_representation);
         self
     }
 
-    pub fn planar_configuration(mut self, planar_configuration: Option<u16>) -> Self {
+    pub fn planar_configuration(&mut self, planar_configuration: Option<u16>) -> &Self {
         self.planar_configuration = Some(planar_configuration);
         self
     }
 
-    pub fn pixel_data(mut self, pixel_data: DataElement) -> Self {
+    pub fn pixel_data(&mut self, pixel_data: DataElement) -> &Self {
         self.pixel_data = Some(pixel_data);
         self
     }
