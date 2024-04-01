@@ -1,1 +1,1 @@
-mod dicom_file;
+pub mod dicom_file;

@@ -2,7 +2,7 @@ use std::fmt;
 use std::str::FromStr;
 use num_traits::Num;
 use crate::dataset::data_element_location::DataElementLocation;
-use crate::Traits::cast::{Cast, CastArray};
+use crate::Traits::cast::{Cast, CastArray, CastArrayError, CastError};
 use crate::value_representations::dicom_string::DicomString;
 pub struct NumericString {
     data: DicomString
@@ -31,25 +31,27 @@ impl From<DataElementLocation<String>> for NumericString {
     }
 }
 
+
+
 impl<T: Num + FromStr> Cast<T> for NumericString {
-    fn cast(&self) -> Result<T, String> {
+    fn cast(&self) -> Result<T, CastError<T>> {
         let str: String = self.into();
 
         match str.parse::<T>() {
             Ok(val) => Ok(val),
-            Err(_) => Err(format!("Failed to cast {} to {}", str, stringify!(T)))
+            Err(_) => Err(CastError::<T>::default())
         }
     }
 }
 
 impl<T: Num + FromStr + Copy + Default, const N: usize> CastArray<T, N> for NumericString
     where <T as FromStr>::Err: std::fmt::Debug {
-    fn cast(&self) -> Result<[T; N], String> {
+    fn cast(&self) -> Result<[T; N], CastArrayError<T, N>> {
         let str: String = self.into();
         let values: Vec<T> = str.split("\\").map(|s| s.parse::<T>().unwrap()).collect();
 
         if values.len() != N {
-            return Err(format!("Expected {} values but got {}", N, values.len()));
+            return Err(CastArrayError::<T, N>::default());
         }
 
         let mut arr: [T; N] = [Default::default(); N];

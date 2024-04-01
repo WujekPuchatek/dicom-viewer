@@ -58,7 +58,7 @@ impl ImagePlaneBuilder {
         self
     }
 
-    pub fn build(&self) -> (ImagePlane, Vec<DicomFileInconsistency>) {
+    pub fn build(&self) -> Result<ImagePlane, Vec<DicomFileInconsistency>> {
         let mut inconsistencies = Vec::new();
 
         if self.pixel_spacing.is_none() {
@@ -73,15 +73,17 @@ impl ImagePlaneBuilder {
             inconsistencies.push(DicomFileInconsistency::MissingAttribute("Image Position"));
         }
 
-        let image_plane = ImagePlane {
-            pixel_spacing: self.pixel_spacing.unwrap_or(DEFAULT_PIXEL_SPACING),
-            image_orientation: self.image_orientation.unwrap_or(DEFAULT_IMAGE_ORIENTATION),
-            image_position: self.image_position.unwrap_or(DEFAULT_IMAGE_POSITION),
+        if (inconsistencies.is_empty()) {
+            return Err(inconsistencies);
+        }
+
+        Ok(ImagePlane {
+            pixel_spacing: self.pixel_spacing.unwrap(),
+            image_orientation: self.image_orientation.unwrap(),
+            image_position: self.image_position.unwrap(),
             slice_location: self.slice_location,
             spacing_between_slices: self.spacing_between_slices,
-        };
-
-        (image_plane, inconsistencies)
+        })
     }
 }
 

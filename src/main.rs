@@ -14,6 +14,7 @@ use winit::{
     event::*,
 };
 use winit::keyboard::{KeyCode, PhysicalKey};
+use crate::dicom_file::dicom_file::DicomFile;
 use crate::rendering::data_dimensions::DataDimensions;
 use crate::rendering::utils::{Example, run};
 
@@ -1112,9 +1113,12 @@ fn main()  -> std::io::Result<()>
     }
 
     let data_elems = dicom_data_elems.unwrap();
-    for elem in data_elems {
+    for elem in &data_elems {
         println!("{:?}", elem);
     }
+
+    let factory = DicomFile::factory();
+    let dicom_file = factory.create(path, data_elems);
 
     run::<Renderer>("Dicom Viewer");
 

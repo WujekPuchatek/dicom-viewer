@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use num_traits::Num;
-use crate::Traits::cast::Cast;
+use crate::Traits::cast::{Cast, CastError};
 
 pub trait Numeric : From<Vec<Self::Type>> {
     type Type;
@@ -35,11 +35,11 @@ impl<T: std::fmt::Debug> std::fmt::Debug for NumericType<T> {
 
 impl<T: Num + FromStr + Copy> Cast<T> for NumericType<T>
 {
-    fn cast(&self) -> Result<T, String> {
+    fn cast(&self) -> Result<T, CastError<T>> {
         let value: &Vec<T> = self.value();
 
         if value.is_empty() {
-            return Err("No value found".to_string());
+            return Err(CastError::<T>::default());
         }
 
         Ok(*value.first().unwrap())
