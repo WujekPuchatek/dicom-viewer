@@ -9,9 +9,12 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add casting numeric string">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Traits/cast.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Traits/cast.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Traits/cast.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/traits/cast.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Traits/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/traits/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/string_decoder.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/general_series.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/general_series.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/image_pixel.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/information_object_definitions/image_plane.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/image_plane.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
@@ -230,6 +233,7 @@
       <workItem from="1711839631828" duration="768000" />
       <workItem from="1711887042151" duration="828000" />
       <workItem from="1711971022166" duration="7864000" />
+      <workItem from="1712044867277" duration="13961000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -482,7 +486,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>1122</line>
+          <line>1116</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>

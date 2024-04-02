@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use num_traits::Num;
-use crate::Traits::cast::{Cast, CastError};
+use crate::traits::cast::{Cast, CastError};
 
 pub trait Numeric : From<Vec<Self::Type>> {
     type Type;

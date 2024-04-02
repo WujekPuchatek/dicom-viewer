@@ -85,6 +85,10 @@ impl GeneralSeriesBuilder {
             inconsistencies.push(DicomFileInconsistency::MissingAttribute("Series Instance UID"));
         }
 
+        if !inconsistencies.is_empty() {
+            return Err(inconsistencies);
+        }
+
         Ok(())
     }
 }

@@ -1,6 +1,6 @@
-use crate::Traits::cast::{CastArrayError, CastError};
+use crate::traits::cast::{CastArrayError, CastError};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum DicomFileInconsistency {
     MissingAttribute(&'static str),
     UnexpectedValueRepresentation(String),

@@ -40,7 +40,7 @@ pub struct ImagePixelBuilder {
     bits_stored: Option<u16>,
     high_bit: Option<u16>,
     pixel_representation: Option<u16>,
-    planar_configuration: Option<Option<u16>>,
+    planar_configuration: Option<u16>,
     pixel_data: Option<DataElement>,
 }
 
@@ -85,7 +85,7 @@ impl ImagePixelBuilder {
         self
     }
 
-    pub fn planar_configuration(&mut self, planar_configuration: Option<u16>) -> &Self {
+    pub fn planar_configuration(&mut self, planar_configuration: u16) -> &Self {
         self.planar_configuration = Some(planar_configuration);
         self
     }
@@ -107,7 +107,7 @@ impl ImagePixelBuilder {
             bits_stored: self.bits_stored.unwrap(),
             high_bit: self.high_bit.unwrap(),
             pixel_representation: self.pixel_representation.unwrap(),
-            planar_configuration: self.planar_configuration.unwrap(),
+            planar_configuration: self.planar_configuration,
             pixel_data: self.pixel_data.unwrap(),
         })
     }
@@ -151,10 +151,10 @@ impl ImagePixelBuilder {
             inconsistencies.push(DicomFileInconsistency::MissingAttribute("Pixel data"));
         }
 
-        if inconsistencies.is_empty() {
-            Ok(())
-        } else {
-            Err(inconsistencies)
+        if !inconsistencies.is_empty() {
+            return Err(inconsistencies)
         }
+
+        Ok(())
     }
 }

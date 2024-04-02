@@ -18,7 +18,10 @@ impl StringDecoder {
         Self { decoder: UTF_8 }
     }
     pub fn decode(&self, value: Vec<u8>) -> String {
-        self.decoder.decode(&*value, DecoderTrap::Ignore).unwrap()
+        let mut str = self.decoder.decode(&*value, DecoderTrap::Ignore).unwrap();
+        str = str.trim_end_matches('\0').to_string();
+
+        str
     }
 
     pub fn change_decoder(&mut self, character_set : String) {

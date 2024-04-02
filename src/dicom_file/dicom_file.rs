@@ -1,8 +1,7 @@
-use itertools::Itertools;
 use crate::dataset::data_element::DataElement;
 use crate::dataset::value_field::ValueField;
-use crate::Traits::cast::{Cast, CastArray};
-use crate::dicom_constants::tags::{PIXEL_DATA, STUDY_DATE, STUDY_INSTANCE_UID};
+use crate::traits::cast::{Cast, CastArray};
+use crate::dicom_constants::tags::*;
 use crate::information_object_definitions::general_series::GeneralSeries;
 use crate::information_object_definitions::general_study::GeneralStudy;
 use crate::information_object_definitions::image_pixel::ImagePixel;
@@ -84,30 +83,28 @@ impl DicomFileFactory {
         let mut image_plane = ImagePlane::builder();
 
         for data_elem in data_elems {
-            match data_elem.tag {
-                STUDY_INSTANCE_UID => {
-                    let uid = &get!(ValueField::UniqueIdentifier, data_elem, inconsistencies);
-                    general_study.study_instance_uid(uid.into());
-                }
-                STUDY_DATE => {
-                    let date = &get!(ValueField::Date, data_elem, inconsistencies);
-                    general_study.study_date(date.into());
-                }
+            let tag = data_elem.tag;
+
+            match tag {
                 MODALITY => {
                     let modality = &get!(ValueField::CodeString, data_elem, inconsistencies);
                     general_series.modality(modality.into());
+                }
+                STUDY_INSTANCE_UID => {
+                    let study_instance_uid = &get!(ValueField::UniqueIdentifier, data_elem, inconsistencies);
+                    general_study.study_instance_uid(study_instance_uid.into());
+                }
+                STUDY_DATE => {
+                    let study_date = &get!(ValueField::Date, data_elem, inconsistencies);
+                    general_study.study_date(study_date.into());
                 }
                 SERIES_NUMBER => {
                     let number = &get!(ValueField::IntegerString, data_elem, inconsistencies);
                     general_series.series_number(cast!(u32, number, inconsistencies));
                 }
                 SERIES_INSTANCE_UID => {
-                    let uid = &get!(ValueField::UniqueIdentifier, data_elem, inconsistencies);
-                    general_series.series_instance_uid(uid.into());
-                }
-                SERIES_DATE => {
-                    let date = &get!(ValueField::Date, data_elem, inconsistencies);
-                    general_series.series_date(date.into());
+                    let series_instance_uid = &get!(ValueField::UniqueIdentifier, data_elem, inconsistencies);
+                    general_series.series_instance_uid(series_instance_uid.into());
                 }
                 SAMPLES_PER_PIXEL => {
                     let samples_per_pixel = &get!(ValueField::UnsignedShort, data_elem, inconsistencies);
@@ -141,14 +138,9 @@ impl DicomFileFactory {
                     let pixel_representation = &get!(ValueField::UnsignedShort, data_elem, inconsistencies);
                     image_pixel.pixel_representation(cast!(u16, pixel_representation, inconsistencies));
                 }
-                PLANAR_CONFIGURATION => {
-                    let planar_configuration = &get!(ValueField::UnsignedShort, data_elem, inconsistencies);
-                    image_pixel.planar_configuration(Some(cast!(u16, planar_configuration, inconsistencies)));
-                }
                 PIXEL_DATA => {
                     image_pixel.pixel_data(data_elem);
                 }
-
                 PIXEL_SPACING => {
                     let pixel_spacing = &get!(ValueField::DecimalString, data_elem, inconsistencies);
                     image_plane.pixel_spacing(cast_array!(f32, 2, pixel_spacing, inconsistencies));
@@ -160,14 +152,6 @@ impl DicomFileFactory {
                 IMAGE_POSITION => {
                     let image_position = &get!(ValueField::DecimalString, data_elem, inconsistencies);
                     image_plane.image_position(cast_array!(f32, 3, image_position, inconsistencies));
-                }
-                SLICE_LOCATION => {
-                    let slice_location = &get!(ValueField::FloatingPointSingle, data_elem, inconsistencies);
-                    image_plane.slice_location(cast!(f32, slice_location, inconsistencies));
-                }
-                SPACING_BETWEEN_SLICES => {
-                    let spacing_between_slices = &get!(ValueField::FloatingPointSingle, data_elem, inconsistencies);
-                    image_plane.spacing_between_slices(cast!(f32, spacing_between_slices, inconsistencies));
                 }
                 _ => {}
             }

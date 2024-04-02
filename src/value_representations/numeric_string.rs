@@ -2,7 +2,7 @@ use std::fmt;
 use std::str::FromStr;
 use num_traits::Num;
 use crate::dataset::data_element_location::DataElementLocation;
-use crate::Traits::cast::{Cast, CastArray, CastArrayError, CastError};
+use crate::traits::cast::{Cast, CastArray, CastArrayError, CastError};
 use crate::value_representations::dicom_string::DicomString;
 pub struct NumericString {
     data: DicomString
@@ -48,6 +48,7 @@ impl<T: Num + FromStr + Copy + Default, const N: usize> CastArray<T, N> for Nume
     where <T as FromStr>::Err: std::fmt::Debug {
     fn cast(&self) -> Result<[T; N], CastArrayError<T, N>> {
         let str: String = self.into();
+        println!("str: {:?}", str);
         let values: Vec<T> = str.split("\\").map(|s| s.parse::<T>().unwrap()).collect();
 
         if values.len() != N {

@@ -6,8 +6,7 @@ use std::{mem};
 use std::f64::consts;
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
-use crate::dataset::tag::Tag;
-use crate::dicom_constants::tags::{PIXEL_DATA, STUDY_DATE, STUDY_INSTANCE_UID};
+use crate::dicom_constants::tags::*;
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
 
 use winit::{
@@ -25,11 +24,10 @@ mod dataset;
 mod value_representations;
 mod utils;
 mod rendering;
-mod Examination;
 mod examination;
 mod dicom_file;
 mod information_object_definitions;
-mod Traits;
+mod traits;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -1063,27 +1061,13 @@ fn is_close_window_requested(event: &Event<()>) -> bool {
 
 fn main()  -> std::io::Result<()>
 {
-    let path = "C:/Users/medapp/Desktop/CT/0015.dcm";
-
-    pub const IMAGE_POSITION: Tag = Tag { group: 0x0020, element: 0x0032 };
-    pub const IMAGE_ORIENTATION: Tag = Tag { group: 0x0020, element: 0x0037 };
-    pub const SAMPLES_PER_PIXEL: Tag = Tag { group: 0x0028, element: 0x0002 };
-    pub const PHOTOMETRIC_INTERPRETATION: Tag = Tag { group: 0x0028, element: 0x0004 };
-    pub const ROWS: Tag = Tag { group: 0x0028, element: 0x0010 };
-    pub const COLUMNS: Tag = Tag { group: 0x0028, element: 0x0011 };
-    pub const PIXEL_SPACING: Tag = Tag { group: 0x0028, element: 0x0030 };
-    pub const BITS_ALLOCATED: Tag = Tag { group: 0x0028, element: 0x0100 };
-    pub const BITS_STORED: Tag = Tag { group: 0x0028, element: 0x0101 };
-    pub const HIGH_BIT: Tag = Tag { group: 0x0028, element: 0x0102 };
-    pub const PIXEL_REPRESENTATION: Tag = Tag { group: 0x0028, element: 0x0103 };
-    pub const WINDOW_CENTER: Tag = Tag { group: 0x0028, element: 0x1050 };
-    pub const WINDOW_WIDTH: Tag = Tag { group: 0x0028, element: 0x1051 };
-    pub const RESCALE_INTERCEPT: Tag = Tag { group: 0x0028, element: 0x1052 };
-    pub const RESCALE_SLOPE: Tag = Tag { group: 0x0028, element: 0x1053 };
+    let path = "C:/Users/medapp/Desktop/CT/im001.dcm";
 
     let tags_to_read = [
+        MODALITY,
         STUDY_DATE,
         STUDY_INSTANCE_UID,
+        SERIES_INSTANCE_UID,
         IMAGE_POSITION,
         IMAGE_ORIENTATION,
         SAMPLES_PER_PIXEL,
@@ -1098,8 +1082,7 @@ fn main()  -> std::io::Result<()>
         WINDOW_CENTER,
         WINDOW_WIDTH,
         RESCALE_INTERCEPT,
-        RESCALE_SLOPE,
-        PIXEL_DATA].as_ref();
+        RESCALE_SLOPE].as_ref();
 
     let dicom_data_elems = DicomFileParser::new()
                  .file_path(path)
@@ -1119,6 +1102,17 @@ fn main()  -> std::io::Result<()>
 
     let factory = DicomFile::factory();
     let dicom_file = factory.create(path, data_elems);
+
+    if let Err(e) = dicom_file {
+        let as_str = e.into_iter().fold(String::new(),
+                                        |acc, e|
+                                            acc + format!("{:?}", e).as_str() + "\n");
+
+        println!("{}", as_str);
+        return Err(std::io::Error::new(ErrorKind::Other, "An error occurred"));
+    }
+
+    let dicom_file = dicom_file.ok().unwrap();
 
     run::<Renderer>("Dicom Viewer");
 

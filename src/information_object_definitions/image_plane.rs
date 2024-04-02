@@ -73,7 +73,7 @@ impl ImagePlaneBuilder {
             inconsistencies.push(DicomFileInconsistency::MissingAttribute("Image Position"));
         }
 
-        if (inconsistencies.is_empty()) {
+        if !inconsistencies.is_empty() {
             return Err(inconsistencies);
         }
 
