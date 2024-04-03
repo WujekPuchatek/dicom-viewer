@@ -4,6 +4,7 @@ use std::borrow::Cow;
 use std::io::{ErrorKind};
 use std::{mem};
 use std::f64::consts;
+use std::time::Instant;
 use bytemuck::{Pod, Zeroable};
 use wgpu::util::DeviceExt;
 use crate::dicom_constants::tags::*;
@@ -14,6 +15,8 @@ use winit::{
 };
 use winit::keyboard::{KeyCode, PhysicalKey};
 use crate::dicom_file::dicom_file::DicomFile;
+use crate::examinations::examinations::Examinations;
+use crate::files_finder::files_finder::{FilesFinder, FindFiles};
 use crate::rendering::data_dimensions::DataDimensions;
 use crate::rendering::utils::{Example, run};
 
@@ -28,6 +31,8 @@ mod examination;
 mod dicom_file;
 mod information_object_definitions;
 mod traits;
+mod examinations;
+mod files_finder;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -1061,58 +1066,69 @@ fn is_close_window_requested(event: &Event<()>) -> bool {
 
 fn main()  -> std::io::Result<()>
 {
-    let path = "C:/Users/medapp/Desktop/CT/im001.dcm";
+    let exam_path = "C://Dane//OneDrive_2023-09-13//70 % 1.0  B30f";
+    let files = FilesFinder::new().find_files(exam_path);
+    let mut exams = Examinations::new();
 
-    let tags_to_read = [
-        MODALITY,
-        STUDY_DATE,
-        STUDY_INSTANCE_UID,
-        SERIES_INSTANCE_UID,
-        IMAGE_POSITION,
-        IMAGE_ORIENTATION,
-        SAMPLES_PER_PIXEL,
-        PHOTOMETRIC_INTERPRETATION,
-        ROWS,
-        COLUMNS,
-        PIXEL_SPACING,
-        BITS_ALLOCATED,
-        BITS_STORED,
-        HIGH_BIT,
-        PIXEL_REPRESENTATION,
-        WINDOW_CENTER,
-        WINDOW_WIDTH,
-        RESCALE_INTERCEPT,
-        RESCALE_SLOPE].as_ref();
+    let start = Instant::now();
+    for file in files {
+        let tags_to_read = [
+            MODALITY,
+            STUDY_DATE,
+            STUDY_INSTANCE_UID,
+            SERIES_INSTANCE_UID,
+            IMAGE_POSITION,
+            IMAGE_ORIENTATION,
+            SAMPLES_PER_PIXEL,
+            PHOTOMETRIC_INTERPRETATION,
+            ROWS,
+            COLUMNS,
+            PIXEL_SPACING,
+            BITS_ALLOCATED,
+            BITS_STORED,
+            HIGH_BIT,
+            PIXEL_REPRESENTATION,
+            WINDOW_CENTER,
+            WINDOW_WIDTH,
+            RESCALE_INTERCEPT,
+            RESCALE_SLOPE,
+            PIXEL_DATA].as_ref();
 
-    let dicom_data_elems = DicomFileParser::new()
-                 .file_path(path)
-                 .read_tags(tags_to_read)
-                 .with_lazy_read_element(Some(256))
-                 .parse();
+        let dicom_data_elems = DicomFileParser::new()
+            .file_path(file.as_str())
+            .read_tags(tags_to_read)
+            .with_lazy_read_element(Some(256))
+            .parse();
 
-    if let Err(e) = dicom_data_elems {
-        println!("Error: {}", e);
-        return Err(std::io::Error::new(ErrorKind::Other, "An error occurred"));
+        if let Err(e) = dicom_data_elems {
+            println!("Error: {}", e);
+            return Err(std::io::Error::new(ErrorKind::Other, "An error occurred"));
+        }
+
+        let data_elems = dicom_data_elems.unwrap();
+
+        let factory = DicomFile::factory();
+        let dicom_file = factory.create(file.as_str(), data_elems);
+
+        if let Err(e) = dicom_file {
+            let as_str = e.into_iter().fold(String::new(),
+                                            |acc, e|
+                                                acc + format!("{:?}", e).as_str() + "\n");
+
+            println!("{}", as_str);
+            return Err(std::io::Error::new(ErrorKind::Other, "An error occurred"));
+        }
+
+        let dicom_file = dicom_file.ok().unwrap();
+        exams.add_dicom_file(dicom_file);
     }
 
-    let data_elems = dicom_data_elems.unwrap();
-    for elem in &data_elems {
-        println!("{:?}", elem);
-    }
+    let duration = start.elapsed();
+    println!("Time elapsed in expensive_function() is: {:?}", duration);
 
-    let factory = DicomFile::factory();
-    let dicom_file = factory.create(path, data_elems);
-
-    if let Err(e) = dicom_file {
-        let as_str = e.into_iter().fold(String::new(),
-                                        |acc, e|
-                                            acc + format!("{:?}", e).as_str() + "\n");
-
-        println!("{}", as_str);
-        return Err(std::io::Error::new(ErrorKind::Other, "An error occurred"));
-    }
-
-    let dicom_file = dicom_file.ok().unwrap();
+    // exams.add_dicom_file(dicom_file);
+    //
+    // let all_exams = exams.get_examinations();
 
     run::<Renderer>("Dicom Viewer");
 

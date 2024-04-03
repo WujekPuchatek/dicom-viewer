@@ -1,13 +1,14 @@
 use crate::information_object_definitions::inconsistency::DicomFileInconsistency;
 
+#[derive(Clone)]
 pub struct GeneralStudy {
-    study_instance_uid: String,
-    study_date: Option<String>,
-    study_time: Option<String>,
-    study_description: Option<String>,
-    patient_name: Option<String>,
-    patient_id: Option<String>,
-    patient_birth_date: Option<String>,
+    pub study_instance_uid: String,
+    pub study_date: Option<String>,
+    pub study_time: Option<String>,
+    pub study_description: Option<String>,
+    pub patient_name: Option<String>,
+    pub patient_id: Option<String>,
+    pub patient_birth_date: Option<String>,
 }
 
 impl GeneralStudy {

@@ -1,12 +1,13 @@
 use crate::information_object_definitions::inconsistency::DicomFileInconsistency;
 
+#[derive(Clone)]
 pub struct GeneralSeries {
-    modality: String,
-    series_instance_uid: String,
-    series_date: Option<String>,
-    series_time: Option<String>,
-    series_description: Option<String>,
-    series_number: Option<u32>,
+    pub modality: String,
+    pub series_instance_uid: String,
+    pub series_date: Option<String>,
+    pub series_time: Option<String>,
+    pub series_description: Option<String>,
+    pub series_number: Option<u32>,
 }
 
 impl GeneralSeries {

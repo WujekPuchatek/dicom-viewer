@@ -4,6 +4,7 @@ const DEFAULT_PIXEL_SPACING: [f32; 2] = [1.0, 1.0];
 const DEFAULT_IMAGE_ORIENTATION: [f32; 6]  = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0];
 const DEFAULT_IMAGE_POSITION: [f32; 3] = [0.0, 0.0, 0.0];
 
+#[derive(Clone)]
 pub struct ImagePlane {
     pub pixel_spacing: [f32; 2],
     pub image_orientation: [f32; 6],

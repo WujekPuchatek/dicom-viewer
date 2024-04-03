@@ -58,11 +58,11 @@ macro_rules! cast_array {
 
 
 pub struct DicomFile {
-    file_path: String,
-    general_study: GeneralStudy,
-    general_series: GeneralSeries,
-    image_pixel: ImagePixel,
-    image_plane: ImagePlane,
+    pub file_path: String,
+    pub general_study: GeneralStudy,
+    pub general_series: GeneralSeries,
+    pub image_pixel: ImagePixel,
+    pub image_plane: ImagePlane,
 }
 
 impl DicomFile {
