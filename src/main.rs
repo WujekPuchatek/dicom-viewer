@@ -33,6 +33,7 @@ mod information_object_definitions;
 mod traits;
 mod examinations;
 mod files_finder;
+mod pixel_data_processor;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -1125,6 +1126,9 @@ fn main()  -> std::io::Result<()>
 
     let duration = start.elapsed();
     println!("Time elapsed in expensive_function() is: {:?}", duration);
+
+    let exam = exams.get_examinations()[0];
+    let image = exam.get_image_data();
 
     // exams.add_dicom_file(dicom_file);
     //

@@ -152,6 +152,10 @@ impl DataReader<'_> {
         self.cursor.get_ref().len() as isize - self.cursor.position() as isize
     }
 
+    pub fn position(&self) -> usize {
+        self.cursor.position() as usize
+    }
+
     pub fn seek(&mut self, whence: Whence, pos: usize) {
         match whence {
             Whence::Start => self.cursor.set_position(pos as u64),

@@ -5,6 +5,8 @@ use crate::dataset::data_element::DataElement;
 use crate::dataset::data_element_location::DataElementLocation;
 use crate::dataset::value_field::ValueField;
 use crate::dataset::value_representation::ValueRepresentation;
+use crate::dicom_constants::numeric::UNDEFINED_LENGTH;
+use crate::dicom_constants::tags::SEQUENCE_DELIMITATION;
 use crate::utils::submap::Submap;
 use crate::value_representations::attribute_tag::AttributeTag;
 use crate::value_representations::numeric_type::Numeric;
@@ -262,12 +264,52 @@ pub trait ValueReaderBase {
     }
 
     fn read_other_bytes<VR: From<Submap>>(&self, reader: &mut DataReader, length: u32, _ : private::Local) -> VR {
+        let mut real_length = length as usize;
+
+        // TODO Refactor it - it should be realized by object specialized to read JPEG data
+        if length == UNDEFINED_LENGTH {
+            let start_pos = reader.position();
+
+            reader.seek(Whence::Current, 4); // read offsetTable item tag
+            let offset_table_length = reader.read_u32() as usize;
+            reader.seek(Whence::Current, offset_table_length);
+
+            if offset_table_length != 0 {
+                let num_of_entries = offset_table_length / std::mem::size_of::<u32>();
+                let num_of_slices = if num_of_entries == 0 { 1 } else { num_of_entries };
+
+                for _ in 0..num_of_slices {
+                    reader.seek(Whence::Current, 4); // read item tag
+                    let item_length = reader.read_u32() as usize;
+                    reader.seek(Whence::Current, item_length);
+                }
+
+                reader.seek(Whence::Current, 4); //Sequence Delimitation Item Tag
+                reader.seek(Whence::Current, 4); //Sequence Delimitation Item Length - equal to 0
+            }
+            else {
+                while {
+                    let tag = self.read_tag(reader);
+                    let length = reader.read_u32();
+                    reader.seek(Whence::Current, length as usize);
+                    tag != SEQUENCE_DELIMITATION
+                } {}
+
+                reader.seek(Whence::Current, 4); //Sequence Delimitation Item Length - equal to 0
+            }
+
+            let end_pos = reader.position();
+            real_length = end_pos - start_pos;
+
+            reader.seek(Whence::Start, start_pos);
+        }
+
         let vr = {
-            let desc = reader.get_subreader_desc(length as usize);
+            let desc = reader.get_subreader_desc(real_length);
             VR::from(desc.submap)
         };
 
-        reader.seek(Whence::Current, length as usize);
+        reader.seek(Whence::Current, real_length);
         vr
     }
 

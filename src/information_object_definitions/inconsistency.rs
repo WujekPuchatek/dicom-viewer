@@ -5,6 +5,8 @@ pub enum DicomFileInconsistency {
     MissingAttribute(&'static str),
     UnexpectedValueRepresentation(String),
     CastError(String),
+    CannotDecodeJpeg2000,
+    NotSupported(&'static str),
 }
 
 impl<T: std::fmt::Debug> From<CastError<T>> for DicomFileInconsistency {
