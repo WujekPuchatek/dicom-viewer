@@ -8,19 +8,20 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Modification of examination">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="start pixel_data_processor.rs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_reader/data_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_reader/data_reader.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_constants/numeric.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_constants/numeric.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/value_reader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/examination/examination.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/examination.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/inconsistency.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examination/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/data_dimensions.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/data_dimensions.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,38 +74,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Debug",
-    "Cargo.Test validator::tests.executor": "Debug",
-    "Cargo.Tests.executor": "Run",
-    "Cargo.add.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/medapp/source/jpeg2k/Cargo.toml",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
-    "org.rust.first.attach.projects.stats": "true",
-    "org.rust.hideNoCargoProjectNotificationsC:/Users/medapp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/medapp/source/jpeg2k/Cargo.toml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects.stats&quot;: &quot;true&quot;,
+    &quot;org.rust.hideNoCargoProjectNotificationsC:/Users/medapp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\utils" />
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\examination" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\information_object_definitions" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\dataset" />
     </key>
@@ -243,6 +246,14 @@
       <workItem from="1712141410921" duration="4923000" />
       <workItem from="1712152519945" duration="9244000" />
       <workItem from="1712219355865" duration="19849000" />
+      <workItem from="1712246053111" duration="27000" />
+      <workItem from="1712259363057" duration="832000" />
+      <workItem from="1712260207828" duration="522000" />
+      <workItem from="1712265094422" duration="3981000" />
+      <workItem from="1712300234101" duration="1017000" />
+      <workItem from="1712313635355" duration="6828000" />
+      <workItem from="1712322014748" duration="8133000" />
+      <workItem from="1712343090141" duration="4003000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -460,7 +471,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712149811503</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="start pixel_data_processor.rs">
+      <option name="closed" value="true" />
+      <created>1712246073326</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1712246073326</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -501,7 +520,8 @@
     <MESSAGE value="Add casting numeric string" />
     <MESSAGE value="add remove trailing whitespaces" />
     <MESSAGE value="Modification of examination" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modification of examination" />
+    <MESSAGE value="start pixel_data_processor.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="start pixel_data_processor.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -512,34 +532,9 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs</url>
-          <line>264</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs</url>
-          <line>178</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs</url>
-          <line>125</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs</url>
-          <line>289</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$USER_HOME$/.cargo/git/checkouts/jpeg2k-1577084468b1992b/eda0f35/src/j2k_image.rs</url>
           <line>288</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs</url>
-          <line>65</line>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$USER_HOME$/.cargo/git/checkouts/jpeg2k-1577084468b1992b/2fb49a6/src/j2k_image.rs</url>
@@ -547,9 +542,19 @@
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs</url>
-          <line>81</line>
-          <option name="timeStamp" value="30" />
+          <url>file://$PROJECT_DIR$/src/main.rs</url>
+          <line>68</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/main.rs</url>
+          <line>211</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/examination/examination.rs</url>
+          <line>46</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

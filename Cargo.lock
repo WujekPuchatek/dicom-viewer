@@ -619,6 +619,7 @@ dependencies = [
  "once_cell",
  "png",
  "pollster",
+ "rayon",
  "walkdir",
  "wasm-bindgen",
  "web-sys",

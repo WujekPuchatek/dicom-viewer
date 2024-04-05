@@ -1,11 +1,12 @@
 #![allow(dead_code)]
+#![feature(test)]
 
 use std::borrow::Cow;
-use std::io::{ErrorKind};
-use std::{mem};
+use std::io::{ErrorKind, Read, Write};
+use std::{io, mem};
 use std::f64::consts;
 use std::time::Instant;
-use bytemuck::{Pod, Zeroable};
+use bytemuck::{cast_slice, Pod, Zeroable};
 use wgpu::util::DeviceExt;
 use crate::dicom_constants::tags::*;
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
@@ -15,10 +16,11 @@ use winit::{
 };
 use winit::keyboard::{KeyCode, PhysicalKey};
 use crate::dicom_file::dicom_file::DicomFile;
+use crate::examination::examination::Examination;
 use crate::examinations::examinations::Examinations;
 use crate::files_finder::files_finder::{FilesFinder, FindFiles};
-use crate::rendering::data_dimensions::DataDimensions;
 use crate::rendering::utils::{Example, run};
+use crate::utils::data_dimensions::Dimensions;
 
 mod data_reader;
 mod dicom_file_parser;
@@ -35,52 +37,64 @@ mod examinations;
 mod files_finder;
 mod pixel_data_processor;
 
+fn pause() {
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
+
+    // We want the cursor to stay at the end of the line, so we print without a newline and flush manually.
+    write!(stdout, "Press any key to continue...").unwrap();
+    stdout.flush().unwrap();
+
+    // Read a single byte and discard
+    let _ = stdin.read(&mut [0u8]).unwrap();
+}
+
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
 struct Vertex {
     pub pos: [f32; 4],
-    pub tex_coord: [f32; 2],
+    pub tex_coord: [f32; 3],
 }
 
-fn vertex(pos: [i8; 3], tc: [i8; 2]) -> Vertex {
+fn vertex(pos: [i8; 3], tc: [i8; 3]) -> Vertex {
     Vertex {
         pos: [pos[0] as f32, pos[1] as f32, pos[2] as f32, 1.0],
-        tex_coord: [tc[0] as f32, tc[1] as f32],
+        tex_coord: [tc[0] as f32, tc[1] as f32, tc[2] as f32],
     }
 }
 
 fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
     let mut vertex_data = [
         // top (0, 0, 1)
-        vertex([-1, -1, 1], [0, 0]),
-        vertex([1, -1, 1], [1, 0]),
-        vertex([1, 1, 1], [1, 1]),
-        vertex([-1, 1, 1], [0, 1]),
+        vertex([-1, -1, 1], [0, 0, 0]),
+        vertex([1, -1, 1], [1, 0, 1]),
+        vertex([1, 1, 1], [1, 1, 1]),
+        vertex([-1, 1, 1], [0, 1, 1]),
         // bottom (0, 0, -1)
-        vertex([-1, 1, -1], [1, 0]),
-        vertex([1, 1, -1], [0, 0]),
-        vertex([1, -1, -1], [0, 1]),
-        vertex([-1, -1, -1], [1, 1]),
+        vertex([-1, 1, -1], [1, 0, 0]),
+        vertex([1, 1, -1], [0, 0, 0]),
+        vertex([1, -1, -1], [0, 1, 0]),
+        vertex([-1, -1, -1], [1, 1, 0]),
         // right (1, 0, 0)
-        vertex([1, -1, -1], [0, 0]),
-        vertex([1, 1, -1], [1, 0]),
-        vertex([1, 1, 1], [1, 1]),
-        vertex([1, -1, 1], [0, 1]),
+        vertex([1, -1, -1], [0, 0, 0]),
+        vertex([1, 1, -1], [1, 0, 0]),
+        vertex([1, 1, 1], [1, 1, 1]),
+        vertex([1, -1, 1], [0, 1, 1]),
         // left (-1, 0, 0)
-        vertex([-1, -1, 1], [1, 0]),
-        vertex([-1, 1, 1], [0, 0]),
-        vertex([-1, 1, -1], [0, 1]),
-        vertex([-1, -1, -1], [1, 1]),
+        vertex([-1, -1, 1], [1, 0, 1]),
+        vertex([-1, 1, 1], [0, 0, 1]),
+        vertex([-1, 1, -1], [0, 1, 0]),
+        vertex([-1, -1, -1], [1, 1, 0]),
         // front (0, 1, 0)
-        vertex([1, 1, -1], [1, 0]),
-        vertex([-1, 1, -1], [0, 0]),
-        vertex([-1, 1, 1], [0, 1]),
-        vertex([1, 1, 1], [1, 1]),
+        vertex([1, 1, -1], [1, 0, 0]),
+        vertex([-1, 1, -1], [0, 0, 0]),
+        vertex([-1, 1, 1], [0, 1, 1]),
+        vertex([1, 1, 1], [1, 1, 1]),
         // back (0, -1, 0)
-        vertex([1, -1, 1], [0, 0]),
-        vertex([-1, -1, 1], [1, 0]),
-        vertex([-1, -1, -1], [1, 1]),
-        vertex([1, -1, -1], [0, 1]),
+        vertex([1, -1, 1], [0, 0, 1]),
+        vertex([-1, -1, 1], [1, 0, 1]),
+        vertex([-1, -1, -1], [1, 1, 0]),
+        vertex([1, -1, -1], [0, 1, 0]),
     ];
 
     vertex_data.
@@ -102,25 +116,6 @@ fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
 
     (vertex_data.to_vec(), index_data.to_vec())
 }
-
-fn create_texels(size: usize) -> Vec<u8> {
-    (0..size * size)
-        .map(|id| {
-            // get high five for recognizing this ;)
-            let cx = 3.0 * (id % size) as f32 / (size - 1) as f32 - 2.0;
-            let cy = 2.0 * (id / size) as f32 / (size - 1) as f32 - 1.0;
-            let (mut x, mut y, mut count) = (cx, cy, 0);
-            while count < 0xFF && x * x + y * y < 4.0 {
-                let old_x = x;
-                x = x * x - y * y + cx;
-                y = 2.0 * old_x * y + cy;
-                count += 1;
-            }
-            count
-        })
-        .collect()
-}
-
 pub struct Projection {
     pub aspect_ratio: f32,
     pub fov: f32,
@@ -150,7 +145,7 @@ pub struct ModelViewProjection {
 
 struct Renderer {
     model_view_projection: ModelViewProjection,
-    data_dims: DataDimensions,
+    data_dims: Dimensions,
 
     vertex_buf: wgpu::Buffer,
     index_buf: wgpu::Buffer,
@@ -208,15 +203,10 @@ impl Example for Renderer {
         _adapter: &wgpu::Adapter,
         device: &wgpu::Device,
         queue: &wgpu::Queue,
+        exam: &Examination
     ) -> Self {
-        // Create the data dimensions
-        let data_dims = DataDimensions::builder()
-            .width(512)
-            .height(512)
-            .depth(230)
-            .pixel_spacing((0.8, 0.8))
-            .distance_between_slices(1.0)
-            .build();
+        let data_dims = exam.get_dimensions();
+        let data = exam.get_image_data();
 
         // Create the vertex and index buffers
         let vertex_size = mem::size_of::<Vertex>();
@@ -253,45 +243,47 @@ impl Example for Renderer {
                     visibility: wgpu::ShaderStages::FRAGMENT,
                     ty: wgpu::BindingType::Texture {
                         multisampled: false,
-                        sample_type: wgpu::TextureSampleType::Uint,
-                        view_dimension: wgpu::TextureViewDimension::D2,
+                        sample_type: wgpu::TextureSampleType::Float { filterable: false },
+                        view_dimension: wgpu::TextureViewDimension::D3,
                     },
                     count: None,
                 },
             ],
         });
+
         let pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
             label: None,
             bind_group_layouts: &[&bind_group_layout],
             push_constant_ranges: &[],
         });
 
-        // Create the texture
-        let size = 256u32;
-        let texels = create_texels(size as usize);
+
         let texture_extent = wgpu::Extent3d {
-            width: size,
-            height: size,
-            depth_or_array_layers: 1,
+            width: data_dims.width,
+            height: data_dims.height,
+            depth_or_array_layers: data_dims.depth,
         };
+
         let texture = device.create_texture(&wgpu::TextureDescriptor {
             label: None,
             size: texture_extent,
             mip_level_count: 1,
             sample_count: 1,
-            dimension: wgpu::TextureDimension::D2,
-            format: wgpu::TextureFormat::R8Uint,
+            dimension: wgpu::TextureDimension::D3,
+            format: wgpu::TextureFormat::R32Float,
             usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
             view_formats: &[],
         });
+
+
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
         queue.write_texture(
             texture.as_image_copy(),
-            &texels,
+            cast_slice(&data),
             wgpu::ImageDataLayout {
                 offset: 0,
-                bytes_per_row: Some(size),
-                rows_per_image: None,
+                bytes_per_row: Some(data_dims.width * mem::size_of::<f32>() as u32),
+                rows_per_image: Some(data_dims.height),
             },
             texture_extent,
         );
@@ -1072,6 +1064,7 @@ fn main()  -> std::io::Result<()>
     let mut exams = Examinations::new();
 
     let start = Instant::now();
+
     for file in files {
         let tags_to_read = [
             MODALITY,
@@ -1124,17 +1117,12 @@ fn main()  -> std::io::Result<()>
         exams.add_dicom_file(dicom_file);
     }
 
+    let exam = exams.get_examinations()[0];
+
     let duration = start.elapsed();
     println!("Time elapsed in expensive_function() is: {:?}", duration);
 
-    let exam = exams.get_examinations()[0];
-    let image = exam.get_image_data();
-
-    // exams.add_dicom_file(dicom_file);
-    //
-    // let all_exams = exams.get_examinations();
-
-    run::<Renderer>("Dicom Viewer");
+    run::<Renderer>("Dicom Viewer", exam);
 
     Ok(())
 }

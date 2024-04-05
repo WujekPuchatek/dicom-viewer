@@ -1,3 +1,4 @@
+use std::rc::Rc;
 use std::sync::Arc;
 
 use wgpu::{Instance, Surface};
@@ -9,6 +10,7 @@ use winit::{
     window::Window,
 };
 use winit::event::MouseScrollDelta;
+use crate::examination::examination::Examination;
 
 pub trait Example: 'static + Sized {
     const SRGB: bool = true;
@@ -38,6 +40,7 @@ pub trait Example: 'static + Sized {
         adapter: &wgpu::Adapter,
         device: &wgpu::Device,
         queue: &wgpu::Queue,
+        exam: &Examination
     ) -> Self;
 
     fn resize(
@@ -54,10 +57,10 @@ pub trait Example: 'static + Sized {
     fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue);
 }
 
-// Initialize logging in platform dependant ways.
 fn init_logger() {
     env_logger::builder()
         .filter_level(log::LevelFilter::Info)
+        .filter_module("jpeg2k::codec", log::LevelFilter::Warn)
         .filter_module("wgpu_core", log::LevelFilter::Info)
         .filter_module("wgpu_hal", log::LevelFilter::Error)
         .filter_module("naga", log::LevelFilter::Error)
@@ -347,7 +350,7 @@ impl FrameCounter {
     }
 }
 
-async fn start<E: Example>(title: &str) {
+async fn start<E: Example>(title: &str, exam: &Examination) {
     init_logger();
 
     let window_loop = EventLoopWrapper::new(title);
@@ -378,6 +381,7 @@ async fn start<E: Example>(title: &str) {
                             &context.adapter,
                             &context.device,
                             &context.queue,
+                            &exam
                         ));
                     }
                 }
@@ -485,8 +489,8 @@ async fn start<E: Example>(title: &str) {
     );
 }
 
-pub fn run<E: Example>(title: &'static str) {
-    pollster::block_on(start::<E>(title));
+pub fn run<E: Example>(title: &'static str, exam: &Examination) {
+    pollster::block_on(start::<E>(title, exam));
 }
 
 
