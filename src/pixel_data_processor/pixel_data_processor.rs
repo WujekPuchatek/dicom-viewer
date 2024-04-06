@@ -60,10 +60,10 @@ impl PixelDataProcessor {
             .map(|file| self.get_pixel_data(&file.image_pixel.pixel_data.value))
             .collect::<Vec<_>>();
 
-        (&mut raw_data_chunks, &encoded_pixels, &mut voxels_chunks).into_par_iter()
-            .for_each(|(slice, pixels, voxels)| {
+        raw_data_chunks.iter_mut().zip(encoded_pixels.iter()).zip(voxels_chunks.iter_mut())
+            .for_each(|((slice, pixels), voxels)| {
                 let slices = self.get_jpeg_encoded_data(pixels);
-                self.decode_jpeg(slices, slice, bits_allocated).expect("Failed to decode JPEG2000");
+                self.decode_jpeg(slices, slice, bytes_per_pixel).unwrap();
 
                 self.process_raw_values(voxels, bytes_per_pixel, slice, pixel_representation, bits_allocated);
             });
@@ -71,13 +71,13 @@ impl PixelDataProcessor {
         Ok(voxels)
     }
 
-    fn decode_jpeg(&self, slices: Vec<&[u8]>, voxels: &mut [u8], bits_allocated: u16) -> Result<(), DicomFileInconsistency> {
+    fn decode_jpeg(&self, slices: Vec<&[u8]>, voxels: &mut [u8], bytes_per_pixel: usize) -> Result<(), DicomFileInconsistency> {
         if slices.len() != 1 {
             return Err(DicomFileInconsistency::NotSupported("Multiple JPEG2000 frames into one slice"));
         }
 
         let mut decoder = JpegFileDecoder::new();
-        decoder.decode(slices[0], voxels, bits_allocated);
+        decoder.decode(slices[0], voxels, bytes_per_pixel)?;
 
         Ok(())
     }

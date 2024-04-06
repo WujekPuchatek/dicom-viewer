@@ -1,4 +1,6 @@
 use jpeg2k::*;
+use crate::information_object_definitions::inconsistency::DicomFileInconsistency;
+use crate::information_object_definitions::inconsistency::DicomFileInconsistency::CannotDecodeJpeg2000;
 
 pub struct JpegFileDecoder {}
 
@@ -7,16 +9,15 @@ impl JpegFileDecoder {
         Self {}
     }
 
-    pub fn decode(&self, encoded: &[u8], output: &mut [u8], bits_allocated: u16) {
-        let bytes_per_pixel = bits_allocated as usize / 8;
-
-        let image = Image::from_bytes(&encoded).unwrap();
+    pub fn decode(&self, encoded: &[u8], output: &mut [u8], bytes_per_pixel: usize) -> Result<(), DicomFileInconsistency> {
+        let image = Image::from_bytes(&encoded).map_err(|_| CannotDecodeJpeg2000)?;
 
         let components = image.components();
-
         let pixels = components[0].data();
 
         Self::save_to_output(output, pixels, bytes_per_pixel);
+
+        Ok(())
     }
 
     fn save_to_output(output: &mut [u8], pixels: &[i32], bytes_per_pixel: usize) {

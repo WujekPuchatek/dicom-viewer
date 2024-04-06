@@ -24,9 +24,21 @@ var r_color: texture_3d<f32>;
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
-    let tex = textureLoad(r_color, vec3<i32>(vertex.tex_coord), 0);
-    let v = f32(tex.x) / 255.0;
-    return vec4<f32>(v, v, v, 1.0);
+    let x = i32(vertex.tex_coord.x * 511);
+    let y = i32(vertex.tex_coord.y * 511);
+    let z = i32(vertex.tex_coord.z * 219);
+
+    let tex = textureLoad(r_color, vec3<i32>(x, y, z), 0);
+    let v = f32(tex.x) - 1024.0;
+
+    let center = 40.0;
+    let width = 400.0;
+    let min = center - width / 2.0;
+
+    let normalized = (v - min) / width;
+    let saturated = saturate(normalized);
+
+    return vec4<f32>(saturated, saturated, saturated, 1.0);
 }
 
 @fragment

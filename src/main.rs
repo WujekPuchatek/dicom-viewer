@@ -65,36 +65,15 @@ fn vertex(pos: [i8; 3], tc: [i8; 3]) -> Vertex {
 
 fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
     let mut vertex_data = [
-        // top (0, 0, 1)
-        vertex([-1, -1, 1], [0, 0, 0]),
-        vertex([1, -1, 1], [1, 0, 1]),
-        vertex([1, 1, 1], [1, 1, 1]),
-        vertex([-1, 1, 1], [0, 1, 1]),
-        // bottom (0, 0, -1)
-        vertex([-1, 1, -1], [1, 0, 0]),
-        vertex([1, 1, -1], [0, 0, 0]),
-        vertex([1, -1, -1], [0, 1, 0]),
-        vertex([-1, -1, -1], [1, 1, 0]),
-        // right (1, 0, 0)
-        vertex([1, -1, -1], [0, 0, 0]),
-        vertex([1, 1, -1], [1, 0, 0]),
-        vertex([1, 1, 1], [1, 1, 1]),
-        vertex([1, -1, 1], [0, 1, 1]),
-        // left (-1, 0, 0)
-        vertex([-1, -1, 1], [1, 0, 1]),
-        vertex([-1, 1, 1], [0, 0, 1]),
-        vertex([-1, 1, -1], [0, 1, 0]),
-        vertex([-1, -1, -1], [1, 1, 0]),
-        // front (0, 1, 0)
-        vertex([1, 1, -1], [1, 0, 0]),
-        vertex([-1, 1, -1], [0, 0, 0]),
-        vertex([-1, 1, 1], [0, 1, 1]),
-        vertex([1, 1, 1], [1, 1, 1]),
-        // back (0, -1, 0)
-        vertex([1, -1, 1], [0, 0, 1]),
-        vertex([-1, -1, 1], [1, 0, 1]),
-        vertex([-1, -1, -1], [1, 1, 0]),
-        vertex([1, -1, -1], [0, 1, 0]),
+        vertex([-1,-1, 1], [0, 0, 0]), // 0
+        vertex([ 1,-1, 1], [1, 0, 0]), // 1
+        vertex([-1,-1,-1], [0, 0, 1]), // 2
+        vertex([ 1,-1,-1], [1, 0, 1]), // 3
+        vertex([-1, 1, 1], [0, 1, 0]), // 4
+        vertex([ 1, 1, 1], [1, 1, 0]), // 5
+        vertex([-1, 1,-1], [0, 1, 1]), // 6
+        vertex([ 1, 1,-1], [1, 1, 1]), // 7
+
     ];
 
     vertex_data.
@@ -103,15 +82,16 @@ fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
             v.pos[0] *= normalized_dims[0];
             v.pos[1] *= normalized_dims[1];
             v.pos[2] *= normalized_dims[2];
-    });
+        });
 
     let index_data: &[u16] = &[
-        0, 1, 2, 2, 3, 0, // top
-        4, 5, 6, 6, 7, 4, // bottom
-        8, 9, 10, 10, 11, 8, // right
-        12, 13, 14, 14, 15, 12, // left
-        16, 17, 18, 18, 19, 16, // front
-        20, 21, 22, 22, 23, 20, // back
+        2, 1, 0, 2, 3, 1, // front
+        0, 5, 4, 0, 1, 5, // top
+        2, 6, 7, 2, 7, 3, // bottom
+        4, 5, 6, 6, 5, 7, // back
+        0, 4, 6, 0, 6, 2, // left
+        5, 1, 3, 7, 5, 3, // right
+
     ];
 
     (vertex_data.to_vec(), index_data.to_vec())
@@ -276,6 +256,7 @@ impl Example for Renderer {
         });
 
 
+
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
         queue.write_texture(
             texture.as_image_copy(),
@@ -284,6 +265,7 @@ impl Example for Renderer {
                 offset: 0,
                 bytes_per_row: Some(data_dims.width * mem::size_of::<f32>() as u32),
                 rows_per_image: Some(data_dims.height),
+
             },
             texture_extent,
         );
@@ -352,7 +334,7 @@ impl Example for Renderer {
                     shader_location: 0,
                 },
                 wgpu::VertexAttribute {
-                    format: wgpu::VertexFormat::Float32x2,
+                    format: wgpu::VertexFormat::Float32x3,
                     offset: 4 * 4,
                     shader_location: 1,
                 },
@@ -381,49 +363,6 @@ impl Example for Renderer {
             multiview: None,
         });
 
-        let pipeline_wire = if device
-            .features()
-            .contains(wgpu::Features::POLYGON_MODE_POINT)
-        {
-            let pipeline_wire = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
-                label: None,
-                layout: Some(&pipeline_layout),
-                vertex: wgpu::VertexState {
-                    module: &shader,
-                    entry_point: "vs_main",
-                    buffers: &vertex_buffers,
-                },
-                fragment: Some(wgpu::FragmentState {
-                    module: &shader,
-                    entry_point: "fs_wire",
-                    targets: &[Some(wgpu::ColorTargetState {
-                        format: config.view_formats[0],
-                        blend: Some(wgpu::BlendState {
-                            color: wgpu::BlendComponent {
-                                operation: wgpu::BlendOperation::Add,
-                                src_factor: wgpu::BlendFactor::SrcAlpha,
-                                dst_factor: wgpu::BlendFactor::OneMinusSrcAlpha,
-                            },
-                            alpha: wgpu::BlendComponent::REPLACE,
-                        }),
-                        write_mask: wgpu::ColorWrites::ALL,
-                    })],
-                }),
-                primitive: wgpu::PrimitiveState {
-                    front_face: wgpu::FrontFace::Ccw,
-                    cull_mode: Some(wgpu::Face::Back),
-                    polygon_mode: wgpu::PolygonMode::Line,
-                    ..Default::default()
-                },
-                depth_stencil: None,
-                multisample: wgpu::MultisampleState::default(),
-                multiview: None,
-            });
-            Some(pipeline_wire)
-        } else {
-            None
-        };
-
         Renderer {
             model_view_projection,
             data_dims,
@@ -433,7 +372,7 @@ impl Example for Renderer {
             bind_group,
             uniform_buf,
             pipeline,
-            pipeline_wire,
+            pipeline_wire: None,
         }
     }
 
@@ -464,10 +403,10 @@ impl Example for Renderer {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
+                            r: 0.0,
+                            g: 0.0,
+                            b: 0.0,
+                            a: 0.0,
                         }),
                         store: wgpu::StoreOp::Store,
                     },

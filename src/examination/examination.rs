@@ -44,7 +44,12 @@ impl Examination {
         let image_pixel = &first_file.image_pixel;
         let num_files = self.dicom_files.len();
 
-        let dst_between_slices = (last_slice_pos - first_slice_pos).abs() as f32 / (num_files - 1) as f32 / 1000.0;
+        let dst_between_slices =
+            if self.dicom_files.len() != 1 {
+            (last_slice_pos - first_slice_pos).abs() as f32 / (num_files - 1) as f32 / 1000.0
+        } else {
+            1.0
+        };
 
         let mut builder = Dimensions::builder();
         builder.width(image_pixel.columns as u32)
