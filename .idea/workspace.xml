@@ -10,12 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Modify rendering pipeline to render 3D">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examination/examination.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/examination.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/jpeg_decoder.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +65,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Debug",
+    "Cargo.Run.executor": "Run",
     "Cargo.Test validator::tests.executor": "Debug",
     "Cargo.Tests.executor": "Run",
     "Cargo.add.executor": "Run",
@@ -249,6 +244,7 @@
       <workItem from="1712343090141" duration="11011000" />
       <workItem from="1712403522528" duration="2706000" />
       <workItem from="1712423527217" duration="4000000" />
+      <workItem from="1712443640281" duration="1945000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
