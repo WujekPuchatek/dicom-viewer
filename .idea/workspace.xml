@@ -8,8 +8,10 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Attempt to add multisampling">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Examine possibility of flutter - rust interoperability">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,6 +88,7 @@
     &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs&quot;: &quot;true&quot;,
     &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs&quot;: &quot;true&quot;,
     &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
     &quot;org.rust.first.attach.projects.stats&quot;: &quot;true&quot;,
     &quot;org.rust.hideNoCargoProjectNotificationsC:/Users/medapp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
@@ -246,7 +249,9 @@
       <workItem from="1712423527217" duration="4000000" />
       <workItem from="1712443640281" duration="1945000" />
       <workItem from="1712523323703" duration="776000" />
-      <workItem from="1712575316578" duration="629000" />
+      <workItem from="1712575316578" duration="831000" />
+      <workItem from="1712649464822" duration="61000" />
+      <workItem from="1712649560901" duration="7596000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -488,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712523491495</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Examine possibility of flutter - rust interoperability">
+      <option name="closed" value="true" />
+      <created>1712596515016</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1712596515016</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -507,7 +520,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Complete implementation of data_reader" />
     <MESSAGE value="Complete implementation of data_reader and add tests" />
     <MESSAGE value="Start implementation of dicom_file_parser.rs" />
     <MESSAGE value="Continue implementation of dicom_file_parser.rs" />
@@ -532,7 +544,8 @@
     <MESSAGE value="start pixel_data_processor.rs" />
     <MESSAGE value="Modify rendering pipeline to render 3D" />
     <MESSAGE value="Attempt to add multisampling" />
-    <option name="LAST_COMMIT_MESSAGE" value="Attempt to add multisampling" />
+    <MESSAGE value="Examine possibility of flutter - rust interoperability" />
+    <option name="LAST_COMMIT_MESSAGE" value="Examine possibility of flutter - rust interoperability" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
