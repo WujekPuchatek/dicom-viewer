@@ -8,10 +8,9 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Examine possibility of flutter - rust interoperability">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start of volume rendering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/draw.wgsl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +66,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Cargo.Run.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
     &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
     &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
@@ -252,6 +251,8 @@
       <workItem from="1712575316578" duration="831000" />
       <workItem from="1712649464822" duration="61000" />
       <workItem from="1712649560901" duration="7596000" />
+      <workItem from="1712697296928" duration="2537000" />
+      <workItem from="1712780589358" duration="698000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -501,7 +502,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712596515016</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Start of volume rendering">
+      <option name="closed" value="true" />
+      <created>1712698133922</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1712698133922</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -520,7 +529,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Complete implementation of data_reader and add tests" />
     <MESSAGE value="Start implementation of dicom_file_parser.rs" />
     <MESSAGE value="Continue implementation of dicom_file_parser.rs" />
     <MESSAGE value="Extract value_reader.rs." />
@@ -545,7 +553,8 @@
     <MESSAGE value="Modify rendering pipeline to render 3D" />
     <MESSAGE value="Attempt to add multisampling" />
     <MESSAGE value="Examine possibility of flutter - rust interoperability" />
-    <option name="LAST_COMMIT_MESSAGE" value="Examine possibility of flutter - rust interoperability" />
+    <MESSAGE value="Start of volume rendering" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start of volume rendering" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
