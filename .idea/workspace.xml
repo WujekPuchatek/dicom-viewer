@@ -8,9 +8,13 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Start of volume rendering">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Lack of time">
+      <change afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/non_zero_sized.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/draw.wgsl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -252,7 +256,9 @@
       <workItem from="1712649464822" duration="61000" />
       <workItem from="1712649560901" duration="7596000" />
       <workItem from="1712697296928" duration="2537000" />
-      <workItem from="1712780589358" duration="698000" />
+      <workItem from="1712780589358" duration="4919000" />
+      <workItem from="1712831426345" duration="6277000" />
+      <workItem from="1712848148968" duration="4107000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -510,7 +516,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712698133922</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Lack of time">
+      <option name="closed" value="true" />
+      <created>1712782344115</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1712782344115</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -529,7 +543,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Start implementation of dicom_file_parser.rs" />
     <MESSAGE value="Continue implementation of dicom_file_parser.rs" />
     <MESSAGE value="Extract value_reader.rs." />
     <MESSAGE value="Small refactoring" />
@@ -554,7 +567,8 @@
     <MESSAGE value="Attempt to add multisampling" />
     <MESSAGE value="Examine possibility of flutter - rust interoperability" />
     <MESSAGE value="Start of volume rendering" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start of volume rendering" />
+    <MESSAGE value="Lack of time" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lack of time" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
