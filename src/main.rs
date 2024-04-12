@@ -19,6 +19,7 @@ use crate::dicom_file::dicom_file::DicomFile;
 use crate::examination::examination::Examination;
 use crate::examinations::examinations::Examinations;
 use crate::files_finder::files_finder::{FilesFinder, FindFiles};
+use crate::rendering::camera::Camera;
 use crate::rendering::utils::{Example, run};
 use crate::utils::data_dimensions::Dimensions;
 
@@ -124,7 +125,10 @@ pub struct ModelViewProjection {
 }
 
 struct Renderer {
-    model_view_projection: ModelViewProjection,
+    model: Model,
+    camera: Camera,
+    dicom_rotation: glam::Quat,
+
     data_dims: Dimensions,
 
     vertex_buf: wgpu::Buffer,
@@ -137,32 +141,17 @@ struct Renderer {
 }
 
 impl Renderer {
-    fn generate_projection_matrix(projection: &Projection) -> glam::Mat4 {
-        glam::Mat4::perspective_rh(projection.fov,
-                                   projection.aspect_ratio,
-                                   projection.near,
-                                   projection.far)
-    }
-
-    fn generate_view_matrix(view: &View) -> glam::Mat4 {
-        glam::Mat4::look_at_rh(view.eye,
-                               view.target,
-                               view.up)
-    }
-
     fn generate_model_matrix(model: &Model) -> glam::Mat4 {
         glam::Mat4::from_scale_rotation_translation(model.scale,
                                                     model.rotation,
                                                     model.translation)
     }
 
-    fn generate_matrix(patient_rotation: &glam::Quat, model: &Model, view: &View, projection: &Projection) -> glam::Mat4 {
-        let projection = Self::generate_projection_matrix(&projection);
-        let view = Self::generate_view_matrix(&view);
+    fn generate_matrix(patient_rotation: &glam::Quat, model: &Model, camera: &Camera) -> glam::Mat4 {
         let model = Self::generate_model_matrix(&model);
         let rotation = glam::Mat4::from_quat(patient_rotation.clone());
 
-        rotation * projection * view * model
+        rotation * camera.build_projection_view_matrix()  * model
     }
 
     fn generate_mvp_matrix(&self) -> glam::Mat4 {
