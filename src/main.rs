@@ -97,37 +97,10 @@ fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
 
     (vertex_data.to_vec(), index_data.to_vec())
 }
-pub struct Projection {
-    pub aspect_ratio: f32,
-    pub fov: f32,
-    pub near: f32,
-    pub far: f32,
-}
-
-//https://www.3dgep.com/understanding-the-view-matrix/#The_View_Matrix
-pub struct View {
-    pub eye: glam::Vec3,
-    pub target: glam::Vec3,
-    pub up: glam::Vec3,
-}
-
-pub struct Model {
-    pub rotation: glam::Quat,
-    pub scale: glam::Vec3,
-    pub translation: glam::Vec3,
-}
-
-pub struct ModelViewProjection {
-    pub dicom_rotation: glam::Quat,
-    pub model: Model,
-    pub view: View,
-    pub projection: Projection
-}
 
 struct Renderer {
     model: Model,
     camera: Camera,
-    dicom_rotation: glam::Quat,
 
     data_dims: Dimensions,
 
@@ -138,28 +111,6 @@ struct Renderer {
     uniform_buf: wgpu::Buffer,
     pipeline: wgpu::RenderPipeline,
     pipeline_wire: Option<wgpu::RenderPipeline>,
-}
-
-impl Renderer {
-    fn generate_model_matrix(model: &Model) -> glam::Mat4 {
-        glam::Mat4::from_scale_rotation_translation(model.scale,
-                                                    model.rotation,
-                                                    model.translation)
-    }
-
-    fn generate_matrix(patient_rotation: &glam::Quat, model: &Model, camera: &Camera) -> glam::Mat4 {
-        let model = Self::generate_model_matrix(&model);
-        let rotation = glam::Mat4::from_quat(patient_rotation.clone());
-
-        rotation * camera.build_projection_view_matrix()  * model
-    }
-
-    fn generate_mvp_matrix(&self) -> glam::Mat4 {
-        Self::generate_matrix(&self.model_view_projection.dicom_rotation,
-                              &self.model_view_projection.model,
-                              &self.model_view_projection.view,
-                              &self.model_view_projection.projection)
-    }
 }
 
 impl Example for Renderer {

@@ -8,9 +8,13 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add camera">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość">
+      <change afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/camera.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +99,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\utils" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\examination" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\information_object_definitions" />
@@ -254,6 +259,7 @@
       <workItem from="1712780589358" duration="4919000" />
       <workItem from="1712831426345" duration="6277000" />
       <workItem from="1712848148968" duration="8111000" />
+      <workItem from="1712958150657" duration="3107000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -527,7 +533,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712871230743</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość">
+      <option name="closed" value="true" />
+      <created>1712958187537</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1712958187537</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -546,7 +560,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Extract value_reader.rs." />
     <MESSAGE value="Small refactoring" />
     <MESSAGE value="Small refactoring - continuation" />
     <MESSAGE value="Start reading of numeric types" />
@@ -571,7 +584,8 @@
     <MESSAGE value="Start of volume rendering" />
     <MESSAGE value="Lack of time" />
     <MESSAGE value="Add camera" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add camera" />
+    <MESSAGE value="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

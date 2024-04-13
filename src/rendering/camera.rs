@@ -3,6 +3,9 @@ use glam::{Mat4, Vec3, Vec4};
 use wgpu::util::DeviceExt;
 use crate::utils::non_zero_sized::NonZeroSized;
 
+//https://learnopengl.com/Getting-started/Coordinate-Systems
+//https://www.3dgep.com/understanding-the-view-matrix/#The_View_Matrix'
+
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct CameraUniform {
@@ -36,17 +39,19 @@ pub struct Camera {
     updated: bool,
 }
 impl Camera {
-    const ZFAR: f32 = 100.;
-    const ZNEAR: f32 = 0.1;
-    const FOVY: f32 = std::f32::consts::PI / 2.0;
-    const UP: Vec3 = Vec3::Y;
+    const ZFAR: f32 = 10.0;
+    const ZNEAR: f32 = 1.0;
+    const FOVY: f32 = std::f32::consts::FRAC_PI_4 / 2.0;
+    const UP: Vec3 = Vec3::Z;
+
+    const START_EYE: Vec3 = Vec3::new(0.0, -5.0, 0.0);
 
     pub fn new(zoom: f32, pitch: f32, yaw: f32, target: Vec3, aspect: f32) -> Self {
         let mut camera = Self {
             zoom,
             pitch,
             yaw,
-            eye: Vec3::ZERO,
+            eye: Self::START_EYE,
             target,
             up: Self::UP,
             aspect,

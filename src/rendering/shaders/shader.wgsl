@@ -4,25 +4,15 @@ struct Camera {
 	inv_proj: mat4x4<f32>,
 };
 
+struct Model {
+    transform: mat4x4<f32>,
+    inv_transform: mat4x4<f32>,
+};
+
 struct VertexOutput {
     @location(0) tex_coord: vec3<f32>,
     @builtin(position) position: vec4<f32>,
 };
-
-@group(0)
-@binding(0)
-var<uniform> transform: mat4x4<f32>;
-
-@vertex
-fn vs_main(
-    @location(0) position: vec4<f32>,
-    @location(1) tex_coord: vec3<f32>,
-) -> VertexOutput {
-    var result: VertexOutput;
-    result.tex_coord = tex_coord;
-    result.position = transform * position;
-    return result;
-}
 
 // https://michvalwin.com/posts/2023/04/26/ray-collisions.html
 fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
@@ -45,6 +35,10 @@ fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
 }
 
 @group(0)
+@binding(0)
+var<uniform> transform: mat4x4<f32>;
+
+@group(0)
 @binding(1)
 var r_color: texture_3d<f32>;
 
@@ -55,6 +49,17 @@ var tex_sampler: sampler;
 @group(0)
 @binding(3)
 var<uniform> camera: Camera;
+
+@vertex
+fn vs_main(
+    @location(0) position: vec4<f32>,
+    @location(1) tex_coord: vec3<f32>,
+) -> VertexOutput {
+    var result: VertexOutput;
+    result.tex_coord = tex_coord;
+    result.position = transform * position;
+    return result;
+}
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
