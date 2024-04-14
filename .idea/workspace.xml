@@ -8,13 +8,15 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość">
-      <change afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Separate camera and model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/camera.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/coordinate_transform.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +261,8 @@
       <workItem from="1712780589358" duration="4919000" />
       <workItem from="1712831426345" duration="6277000" />
       <workItem from="1712848148968" duration="8111000" />
-      <workItem from="1712958150657" duration="3107000" />
+      <workItem from="1712958150657" duration="6043000" />
+      <workItem from="1713129113755" duration="1752000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -541,7 +544,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712958187537</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Separate camera and model.">
+      <option name="closed" value="true" />
+      <created>1713008351996</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1713008351996</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -560,7 +571,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Small refactoring" />
     <MESSAGE value="Small refactoring - continuation" />
     <MESSAGE value="Start reading of numeric types" />
     <MESSAGE value="Explicit VR Little Endian without SQ and UN read" />
@@ -585,7 +595,8 @@
     <MESSAGE value="Lack of time" />
     <MESSAGE value="Add camera" />
     <MESSAGE value="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość" />
+    <MESSAGE value="Separate camera and model." />
+    <option name="LAST_COMMIT_MESSAGE" value="Separate camera and model." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

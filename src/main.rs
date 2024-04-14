@@ -7,6 +7,7 @@ use std::{io, mem};
 use std::f64::consts;
 use std::time::Instant;
 use bytemuck::{cast_slice, Pod, Zeroable};
+use glam::Quat;
 use wgpu::util::DeviceExt;
 use crate::dicom_constants::tags::*;
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
@@ -19,7 +20,8 @@ use crate::dicom_file::dicom_file::DicomFile;
 use crate::examination::examination::Examination;
 use crate::examinations::examinations::Examinations;
 use crate::files_finder::files_finder::{FilesFinder, FindFiles};
-use crate::rendering::camera::Camera;
+use crate::rendering::camera::{Camera, CameraBinding};
+use crate::rendering::model::{Model, ModelBinding};
 use crate::rendering::utils::{Example, run};
 use crate::utils::data_dimensions::Dimensions;
 
@@ -108,7 +110,8 @@ struct Renderer {
     index_buf: wgpu::Buffer,
     index_count: usize,
     bind_group: wgpu::BindGroup,
-    uniform_buf: wgpu::Buffer,
+    model_binding: ModelBinding,
+    camera_binding: CameraBinding,
     pipeline: wgpu::RenderPipeline,
     pipeline_wire: Option<wgpu::RenderPipeline>,
 }
@@ -128,6 +131,9 @@ impl Example for Renderer {
         let data_dims = exam.get_dimensions();
         let data = exam.get_image_data();
 
+        let mut model = Model::new(Quat::IDENTITY);
+        let mut camera = Camera::new(config.width as f32 / config.height as f32);
+
         // Create the vertex and index buffers
         let vertex_size = mem::size_of::<Vertex>();
         let (vertex_data, index_data) = create_vertices(data_dims.get_normalized_dimensions());
@@ -144,22 +150,17 @@ impl Example for Renderer {
             usage: wgpu::BufferUsages::INDEX,
         });
 
+        let mut camera_binding = CameraBinding::new(device, 0);
+        let mut model_binding = ModelBinding::new(device, 1);
+
         // Create pipeline layout
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             label: None,
             entries: &[
+                camera_binding.bind_group_layout_entry(),
+                model_binding.bind_group_layout_entry(),
                 wgpu::BindGroupLayoutEntry {
-                    binding: 0,
-                    visibility: wgpu::ShaderStages::VERTEX,
-                    ty: wgpu::BindingType::Buffer {
-                        ty: wgpu::BufferBindingType::Uniform,
-                        has_dynamic_offset: false,
-                        min_binding_size: wgpu::BufferSize::new(64),
-                    },
-                    count: None,
-                },
-                wgpu::BindGroupLayoutEntry {
-                    binding: 1,
+                    binding: 2,
                     visibility: wgpu::ShaderStages::FRAGMENT,
                     ty: wgpu::BindingType::Texture {
                         multisampled: false,
@@ -195,8 +196,6 @@ impl Example for Renderer {
             view_formats: &[],
         });
 
-
-
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
         queue.write_texture(
             texture.as_image_copy(),
@@ -210,49 +209,18 @@ impl Example for Renderer {
             texture_extent,
         );
 
-        let model_view_projection = ModelViewProjection {
-            dicom_rotation: glam::Quat::IDENTITY,
-            model: Model {
-                rotation: glam::Quat::IDENTITY,
-                scale: glam::Vec3::ONE,
-                translation: glam::Vec3::ZERO,
-            },
-            view: View {
-                eye: glam::Vec3::new(0.0, -5.0, 0.0),
-                target: glam::Vec3::ZERO,
-                up: glam::Vec3::Z,
-            },
-            projection: Projection {
-                aspect_ratio: config.width as f32 / config.height as f32,
-                fov: consts::FRAC_PI_4 as f32,
-                near: 1.0,
-                far: 10.0,
-            }
-        };
 
-        // Create other resources
-        let mx_total = Self::generate_matrix(&model_view_projection.dicom_rotation,
-                                                   &model_view_projection.model,
-                                                   &model_view_projection.view,
-                                                   &model_view_projection.projection);
-
-        let mx_ref: &[f32; 16] = mx_total.as_ref();
-        let uniform_buf = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Uniform Buffer"),
-            contents: bytemuck::cast_slice(mx_ref),
-            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-        });
+        model_binding.update(queue, &mut model);
+        camera_binding.update(queue, &mut camera);
 
         // Create bind group
         let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
             layout: &bind_group_layout,
             entries: &[
+                camera_binding.bind_group_entry(),
+                model_binding.bind_group_entry(),
                 wgpu::BindGroupEntry {
-                    binding: 0,
-                    resource: uniform_buf.as_entire_binding(),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 1,
+                    binding: 2,
                     resource: wgpu::BindingResource::TextureView(&texture_view),
                 },
             ],
@@ -304,13 +272,15 @@ impl Example for Renderer {
         });
 
         Renderer {
-            model_view_projection,
+            model,
+            camera,
             data_dims,
             vertex_buf,
             index_buf,
             index_count: index_data.len(),
             bind_group,
-            uniform_buf,
+            model_binding,
+            camera_binding,
             pipeline,
             pipeline_wire: None,
         }
@@ -320,12 +290,9 @@ impl Example for Renderer {
         &mut self,
         config: &wgpu::SurfaceConfiguration,
         _device: &wgpu::Device,
-        queue: &wgpu::Queue,
+        _queue: &wgpu::Queue,
     ) {
-        self.model_view_projection.projection.aspect_ratio = config.width as f32 / config.height as f32;
-
-        let mvp = self.generate_mvp_matrix();
-        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+        self.camera.set_aspect(config.width, config.height);
     }
 
     fn update(&mut self, _event: winit::event::WindowEvent) {
@@ -336,6 +303,9 @@ impl Example for Renderer {
         let mut encoder =
             device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
         {
+            self.model_binding.update(queue, &mut self.model);
+            self.camera_binding.update(queue, &mut self.camera);
+
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: None,
                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
@@ -373,16 +343,7 @@ impl Example for Renderer {
     }
 
     fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {
-        const ZOOM_SPEED: f32 = 0.08;
-
-        let zoom_delta = -zoom_delta * ZOOM_SPEED;
-        self.model_view_projection.projection.fov += zoom_delta;
-        self.model_view_projection.projection.fov = self.model_view_projection.projection.fov.min(1.0).max(0.25);
-
-        println!("Zoom delta: {}", self.model_view_projection.projection.fov);
-
-        let mvp = self.generate_mvp_matrix();
-        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+        self.camera.set_zoom(self.camera.zoom + zoom_delta);
     }
 
     fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue) {
@@ -391,16 +352,19 @@ impl Example for Renderer {
         let dx = -dx * sensitivity;
         let dy = dy * sensitivity;
 
-        let right = self.model_view_projection.view.eye.cross(self.model_view_projection.view.up).normalize();
-        let up = right.cross(self.model_view_projection.view.eye).normalize();
+        self.camera.add_yaw(dx);
+        self.camera.add_pitch(dy);
 
-        self.model_view_projection.model.rotation =
-            glam::Quat::from_axis_angle(right, dy) *
-            glam::Quat::from_axis_angle(up, dx) *
-            self.model_view_projection.model.rotation;
-
-        let mvp = self.generate_mvp_matrix();
-        queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+        // let right = self.model_view_projection.view.eye.cross(self.model_view_projection.view.up).normalize();
+        // let up = right.cross(self.model_view_projection.view.eye).normalize();
+        //
+        // self.model_view_projection.model.rotation =
+        //     glam::Quat::from_axis_angle(right, dy) *
+        //     glam::Quat::from_axis_angle(up, dx) *
+        //     self.model_view_projection.model.rotation;
+        //
+        // let mvp = self.generate_mvp_matrix();
+        // queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
     }
 }
 

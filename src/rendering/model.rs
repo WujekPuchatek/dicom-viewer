@@ -105,9 +105,9 @@ pub struct ModelBinding {
 }
 
 impl ModelBinding {
-    fn bind_group_layout_entry(binding_index: u32) -> wgpu::BindGroupLayoutEntry {
+    pub fn bind_group_layout_entry(&self) -> wgpu::BindGroupLayoutEntry {
         wgpu::BindGroupLayoutEntry {
-            binding: binding_index,
+            binding: self.binding_index,
             visibility: wgpu::ShaderStages::VERTEX_FRAGMENT,
             ty: wgpu::BindingType::Buffer {
                 ty: wgpu::BufferBindingType::Uniform,
@@ -118,10 +118,17 @@ impl ModelBinding {
         }
     }
 
+    pub fn bind_group_entry(&self) -> wgpu::BindGroupEntry {
+        wgpu::BindGroupEntry {
+            binding: self.binding_index,
+            resource: self.buffer.as_entire_binding(),
+        }
+    }
+
     pub fn new(device: &wgpu::Device, binding_index: u32) -> Self {
         let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Model Buffer"),
-            contents: bytemuck::bytes_of(&ModelBinding::default()),
+            contents: bytemuck::bytes_of(&ModelUniform::default()),
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
         });
 

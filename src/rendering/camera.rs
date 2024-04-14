@@ -46,13 +46,13 @@ impl Camera {
 
     const START_EYE: Vec3 = Vec3::new(0.0, -5.0, 0.0);
 
-    pub fn new(zoom: f32, pitch: f32, yaw: f32, target: Vec3, aspect: f32) -> Self {
+    pub fn new(aspect: f32) -> Self {
         let mut camera = Self {
-            zoom,
-            pitch,
-            yaw,
+            zoom: 1.0,
+            pitch: 0.0,
+            yaw : 0.0,
             eye: Self::START_EYE,
-            target,
+            target : Vec3::ZERO,
             up: Self::UP,
             aspect,
 
@@ -134,9 +134,9 @@ pub struct CameraBinding {
 }
 
 impl CameraBinding {
-    fn bind_group_layout_entry(binding_index: u32) -> wgpu::BindGroupLayoutEntry {
+    pub fn bind_group_layout_entry(&self) -> wgpu::BindGroupLayoutEntry {
         wgpu::BindGroupLayoutEntry {
-            binding: binding_index,
+            binding: self.binding_index,
             visibility: wgpu::ShaderStages::VERTEX_FRAGMENT,
             ty: wgpu::BindingType::Buffer {
                 ty: wgpu::BufferBindingType::Uniform,
@@ -144,6 +144,13 @@ impl CameraBinding {
                 min_binding_size: Some(CameraUniform::SIZE),
             },
             count: None,
+        }
+    }
+
+    pub fn bind_group_entry(&self) -> wgpu::BindGroupEntry {
+        wgpu::BindGroupEntry {
+            binding: self.binding_index,
+            resource: self.buffer.as_entire_binding(),
         }
     }
 
