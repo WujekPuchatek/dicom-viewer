@@ -22,6 +22,7 @@ use crate::examinations::examinations::Examinations;
 use crate::files_finder::files_finder::{FilesFinder, FindFiles};
 use crate::rendering::camera::{Camera, CameraBinding};
 use crate::rendering::model::{Model, ModelBinding};
+use crate::rendering::sampler::{Sampler, SamplerBinding};
 use crate::rendering::utils::{Example, run};
 use crate::utils::data_dimensions::Dimensions;
 
@@ -152,6 +153,7 @@ impl Example for Renderer {
 
         let mut camera_binding = CameraBinding::new(device, 0);
         let mut model_binding = ModelBinding::new(device, 1);
+        let mut sampler_binding = SamplerBinding::new(device, 3, Sampler::new());
 
         // Create pipeline layout
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -169,6 +171,7 @@ impl Example for Renderer {
                     },
                     count: None,
                 },
+                sampler_binding.bind_group_layout_entry(),
             ],
         });
 
@@ -223,6 +226,7 @@ impl Example for Renderer {
                     binding: 2,
                     resource: wgpu::BindingResource::TextureView(&texture_view),
                 },
+                sampler_binding.bind_group_entry(),
             ],
             label: None,
         });
@@ -313,10 +317,10 @@ impl Example for Renderer {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.0,
-                            g: 0.0,
-                            b: 0.0,
-                            a: 0.0,
+                            r: 0.1,
+                            g: 0.2,
+                            b: 0.3,
+                            a: 0.1,
                         }),
                         store: wgpu::StoreOp::Store,
                     },
@@ -342,29 +346,28 @@ impl Example for Renderer {
         queue.submit(Some(encoder.finish()));
     }
 
-    fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {
-        self.camera.set_zoom(self.camera.zoom + zoom_delta);
+    fn update_zoom(&mut self, zoom_delta: f32, _queue: &wgpu::Queue) {
+        const ZOOM_SPEED: f32 = 0.08;
+        let zoom_delta = -zoom_delta * ZOOM_SPEED;
+
+        self.camera.zoom_delta(zoom_delta);
     }
 
-    fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue) {
-        let sensitivity = 0.005; // Adjust this value to your liking
+    fn rotate(&mut self, dx: f32, dy: f32, _queue: &wgpu::Queue) {
+        const SENSITIVITY: f32 = 0.005;
 
-        let dx = -dx * sensitivity;
-        let dy = dy * sensitivity;
+        let dx = -dx * SENSITIVITY;
+        let dy = dy * SENSITIVITY;
 
-        self.camera.add_yaw(dx);
-        self.camera.add_pitch(dy);
+        let eye = self.camera.eye();
+        let camera_up = self.camera.up();
 
-        // let right = self.model_view_projection.view.eye.cross(self.model_view_projection.view.up).normalize();
-        // let up = right.cross(self.model_view_projection.view.eye).normalize();
-        //
-        // self.model_view_projection.model.rotation =
-        //     glam::Quat::from_axis_angle(right, dy) *
-        //     glam::Quat::from_axis_angle(up, dx) *
-        //     self.model_view_projection.model.rotation;
-        //
-        // let mvp = self.generate_mvp_matrix();
-        // queue.write_buffer(&self.uniform_buf, 0, bytemuck::cast_slice(mvp.as_ref()));
+        let right = eye.cross(camera_up).normalize();
+        let up = right.cross(eye).normalize();
+
+        let rotation = Quat::from_axis_angle(right, dy) * Quat::from_axis_angle(up, dx);
+
+        self.model.rotate(rotation);
     }
 }
 

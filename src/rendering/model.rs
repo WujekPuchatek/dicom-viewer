@@ -37,7 +37,7 @@ impl Model {
             scale: Vec3::ONE,
             translation: Vec3::ZERO,
             orig_rotation: exam_rotation,
-            updated: false,
+            updated: true,
         }
     }
 

@@ -9,9 +9,9 @@ use crate::utils::non_zero_sized::NonZeroSized;
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct CameraUniform {
-    pub view_position: Vec4,
+    pub eye_position: Vec4,
     pub proj_view: Mat4,
-    pub inv_proj: Mat4,
+    pub inv_proj_view: Mat4,
 }
 unsafe impl Pod for CameraUniform {}
 unsafe impl Zeroable for CameraUniform {}
@@ -19,111 +19,89 @@ unsafe impl Zeroable for CameraUniform {}
 impl Default for CameraUniform {
     fn default() -> Self {
         Self {
-            view_position: Vec4::ZERO,
+            eye_position: Vec4::ZERO,
             proj_view: Mat4::IDENTITY,
-            inv_proj: Mat4::IDENTITY,
+            inv_proj_view: Mat4::IDENTITY,
         }
     }
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct Camera {
-    pub zoom: f32,
-    pub target: Vec3,
-    pub eye: Vec3,
-    pub pitch: f32,
-    pub yaw: f32,
-    pub up: Vec3,
+    pub near: f32,
+    pub far: f32,
+    pub fovy : f32,
     pub aspect: f32,
+
+    pub eye: Vec3,
+    pub target: Vec3,
+    pub up: Vec3,
 
     updated: bool,
 }
 impl Camera {
     const ZFAR: f32 = 10.0;
     const ZNEAR: f32 = 1.0;
-    const FOVY: f32 = std::f32::consts::FRAC_PI_4 / 2.0;
+    const FOVY: f32 = std::f32::consts::FRAC_PI_4;
     const UP: Vec3 = Vec3::Z;
-
-    const START_EYE: Vec3 = Vec3::new(0.0, -5.0, 0.0);
+    const TARGET: Vec3 = Vec3::ZERO;
+    const EYE: Vec3 = Vec3::new(0.0, -5.0, 0.0);
 
     pub fn new(aspect: f32) -> Self {
-        let mut camera = Self {
-            zoom: 1.0,
-            pitch: 0.0,
-            yaw : 0.0,
-            eye: Self::START_EYE,
-            target : Vec3::ZERO,
-            up: Self::UP,
+        Self {
+            near: Self::ZNEAR,
+            far: Self::ZFAR,
+            fovy: Self::FOVY,
             aspect,
 
+            eye: Self::EYE,
+            target : Self::TARGET,
+            up: Self::UP,
+
             updated: false,
-        };
-        camera.fix_eye();
-        camera
+        }
     }
+    pub fn get_proj_view_matrix(&self) -> CameraUniform {
+        let proj_view = self.generate_projection_matrix() * self.generate_view_matrix();
 
-    pub fn build_projection_view_matrix(&self) -> Mat4 {
-        let view = Mat4::look_at_rh(self.eye, self.target, self.up);
-        let proj = Mat4::perspective_rh(Self::FOVY, self.aspect, Self::ZNEAR, Self::ZFAR);
-        proj * view
+        CameraUniform {
+            eye_position: Vec4::new(self.eye.x, self.eye.y, self.eye.z, 1.0),
+            proj_view,
+            inv_proj_view: proj_view.inverse(),
+        }
     }
+    pub fn zoom_delta(&mut self, zoom_delta: f32) {
+        self.fovy += zoom_delta;
+        self.fovy = self.fovy.clamp(0.25, 1.0);
 
-    pub fn set_zoom(&mut self, zoom: f32) {
-        self.zoom = zoom.clamp(0.3, Self::ZFAR / 2.);
-        self.fix_eye();
         self.updated = true;
-    }
-
-    pub fn add_zoom(&mut self, delta: f32) {
-        self.set_zoom(self.zoom + delta);
-    }
-
-    pub fn set_pitch(&mut self, pitch: f32) {
-        self.pitch = pitch.clamp(
-            -std::f32::consts::PI / 2.0 + f32::EPSILON,
-            std::f32::consts::PI / 2.0 - f32::EPSILON,
-        );
-        self.fix_eye();
-        self.updated = true;
-    }
-
-    pub fn add_pitch(&mut self, delta: f32) {
-        self.set_pitch(self.pitch + delta);
-    }
-
-    pub fn set_yaw(&mut self, yaw: f32) {
-        self.yaw = yaw;
-        self.fix_eye();
-        self.updated = true;
-    }
-
-    pub fn add_yaw(&mut self, delta: f32) {
-        self.set_yaw(self.yaw + delta);
-    }
-
-    fn fix_eye(&mut self) {
-        let pitch_cos = self.pitch.cos();
-        self.eye = self.target
-            - self.zoom
-            * Vec3::new(
-            self.yaw.sin() * pitch_cos,
-            self.pitch.sin(),
-            self.yaw.cos() * pitch_cos,
-        );
     }
 
     pub fn set_aspect(&mut self, width: u32, height: u32) {
         self.aspect = width as f32 / height as f32;
+
         self.updated = true;
     }
 
-    pub fn get_proj_view_matrix(&self) -> CameraUniform {
-        let proj_view = self.build_projection_view_matrix();
-        CameraUniform {
-            view_position: Vec4::new(self.eye.x, self.eye.y, self.eye.z, 1.0),
-            proj_view,
-            inv_proj: proj_view.inverse(),
-        }
+    pub fn up(&self) -> Vec3 {
+        Self::UP
+    }
+
+    pub fn eye(&self) -> Vec3 {
+        Self::EYE
+    }
+
+    fn generate_projection_matrix(&self) -> Mat4 {
+        Mat4::perspective_rh(self.fovy,
+                             self.aspect,
+                             self.near,
+                             self.far)
+    }
+
+    fn generate_view_matrix(&self) -> Mat4 {
+        Mat4::look_at_rh(self.eye,
+                         self.target,
+                         self.up)
     }
 }
 
