@@ -36,6 +36,21 @@ fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
     return vec2<f32>(t_near, t_far);
 }
 
+fn calculate_value(v: f32) -> vec4<f32> {
+    let center = 40.0;
+    let width = 400.0;
+    let min = center - width / 2.0;
+
+    let normalized = (v - min) / width;
+    let saturated = saturate(normalized);
+
+    return vec4<f32>(saturated, saturated, saturated, 1.0);
+}
+
+fn mix(a: vec4<f32>, b: vec4<f32>, f: f32) -> vec4<f32> {
+    return a * (1.0 - f) + b * f;
+}
+
 @group(0)
 @binding(0)
 var<uniform> camera: Camera;
@@ -60,9 +75,11 @@ fn vs_main(
     var result: VertexOutput;
 
     result.tex_coord = tex_coord;
+
     result.position = camera.proj_view * model.transform * position;
-    result.transformed_eye = camera.view_pos.xyz;
-    result.ray_dir = position.xyz - result.transformed_eye;
+    result.transformed_eye = camera.eye_pos.xyz;
+
+    result.ray_dir = -camera.eye_pos.xyz;
 
     return result;
 }
@@ -76,22 +93,29 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     let t_far = t.y;
 
     if t_near > t_far {
-        return vec4<f32>(0.0, 0.0, 0.0, 1.0);
+        return vec4<f32>(0.0, 0.5, 0.5, 1.0);
     }
 
-    let x = f32(vertex.tex_coord.x * 511.0);
-    let y = f32(vertex.tex_coord.y * 511.0);
-    let z = f32(vertex.tex_coord.z * 219.0);
+    let start_x = max(t_near, 0.0);
+    let end_x = min(t_far, 1.0);
 
-    let tex = textureLoad(hu_values, vec3<i32>(i32(x), i32(y), i32(z)), 0);
-    let v = f32(tex.x) - 1024.0;
+    let factory_opacity = 0.1;
 
-    let center = 40.0;
-    let width = 400.0;
-    let min = center - width / 2.0;
+    var color = vec4<f32>(0.0, 0.0, 0.0, 0.0);
+    let step = 0.01;
 
-    let normalized = (v - min) / width;
-    let saturated = saturate(normalized);
+    for (var x = start_x; x < end_x; x += step) {
+        let pos = vertex.transformed_eye + ray_dir * x;
+        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
 
-    return vec4<f32>(saturated, saturated, saturated, 1);
+        let val = calculate_value(tex.x);
+
+        color = mix(color, val, factory_opacity);
+
+        if (color.a >= 0.95) {
+            break;
+        }
+    }
+
+    return vec4<f32>(color.xyz, 1.0);
 }

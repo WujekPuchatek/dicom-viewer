@@ -45,7 +45,7 @@ impl Camera {
     const FOVY: f32 = std::f32::consts::FRAC_PI_4;
     const UP: Vec3 = Vec3::Z;
     const TARGET: Vec3 = Vec3::ZERO;
-    const EYE: Vec3 = Vec3::new(0.0, -5.0, 0.0);
+    const EYE: Vec3 = Vec3::new(0.5, -5.0, 0.5);
 
     pub fn new(aspect: f32) -> Self {
         Self {

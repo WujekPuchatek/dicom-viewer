@@ -8,13 +8,10 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Separate camera and model.">
-      <change afterPath="$PROJECT_DIR$/src/rendering/sampler.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add sampler, start implementation of shader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/camera.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/sampler.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/sampler.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,37 +64,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Cargo.Run.executor": "Debug",
-    "Cargo.Test validator::tests.executor": "Debug",
-    "Cargo.Tests.executor": "Run",
-    "Cargo.add.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/medapp/source/jpeg2k/Cargo.toml",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs": "true",
-    "org.rust.first.attach.projects": "true",
-    "org.rust.first.attach.projects.stats": "true",
-    "org.rust.hideNoCargoProjectNotificationsC:/Users/medapp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Test validator::tests.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Tests.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.add.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/medapp/source/jpeg2k/Cargo.toml&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/data_reader.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/data_reader/pub.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/pixel_data_processor/pixel_data_processor.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/shader.wgsl.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/medapp/RustroverProjects/dicom_viewer/src/value_representations/age_string.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects.stats&quot;: &quot;true&quot;,
+    &quot;org.rust.hideNoCargoProjectNotificationsC:/Users/medapp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/jpeg2k-0.6.6/src/j2k_image.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering" />
@@ -262,7 +259,9 @@
       <workItem from="1712848148968" duration="8111000" />
       <workItem from="1712958150657" duration="6043000" />
       <workItem from="1713129113755" duration="1752000" />
-      <workItem from="1713185397832" duration="10101000" />
+      <workItem from="1713185397832" duration="10844000" />
+      <workItem from="1713252203202" duration="1140000" />
+      <workItem from="1713257416599" duration="5873000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -552,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713008351996</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Add sampler, start implementation of shader">
+      <option name="closed" value="true" />
+      <created>1713204846586</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1713204846586</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -571,7 +578,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Small refactoring - continuation" />
     <MESSAGE value="Start reading of numeric types" />
     <MESSAGE value="Explicit VR Little Endian without SQ and UN read" />
     <MESSAGE value="Extract standard_string.rs and extended_string.rs" />
@@ -596,7 +602,8 @@
     <MESSAGE value="Add camera" />
     <MESSAGE value="Dziecko ma kolkę, więc dziś tylko, by zachować ciągłość" />
     <MESSAGE value="Separate camera and model." />
-    <option name="LAST_COMMIT_MESSAGE" value="Separate camera and model." />
+    <MESSAGE value="Add sampler, start implementation of shader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add sampler, start implementation of shader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -18,8 +18,8 @@ impl Sampler {
         Self {
             address_mode: wgpu::AddressMode::ClampToEdge,
 
-            mag_filter: wgpu::FilterMode::Linear,
-            min_filter: wgpu::FilterMode::Linear,
+            mag_filter: wgpu::FilterMode::Nearest,
+            min_filter: wgpu::FilterMode::Nearest,
             mipmap_filter: wgpu::FilterMode::Nearest,
         }
     }
@@ -35,7 +35,7 @@ impl SamplerBinding {
         wgpu::BindGroupLayoutEntry {
             binding: self.binding_index,
             visibility: wgpu::ShaderStages::FRAGMENT,
-            ty: wgpu::BindingType::Sampler (SamplerBindingType::Filtering),
+            ty: wgpu::BindingType::Sampler (SamplerBindingType::NonFiltering),
             count: None,
         }
     }
