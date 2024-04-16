@@ -18,13 +18,16 @@ struct VertexOutput {
 
 // https://michvalwin.com/posts/2023/04/26/ray-collisions.html
 fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
-    let box_min = vec3<f32>(0.0);
-    let box_max = vec3<f32>(1.0);
+    let local_ray_origin = model.inv_transform * vec4<f32>(orig, 1.0);
+    let local_ray_dir = model.inv_transform * vec4<f32>(dir, 0.0);
 
-    let inv_dir = 1.0 / dir;
+    let box_min = vec3<f32>(-1);
+    let box_max = vec3<f32>(1);
 
-    let tmin_tmp = (box_min - orig) * inv_dir;
-    let tmax_tmp = (box_max - orig) * inv_dir;
+    let inv_dir = 1.0 / local_ray_dir.xyz;
+
+    let tmin_tmp = (box_min - local_ray_origin.xyz) * inv_dir;
+    let tmax_tmp = (box_max - local_ray_origin.xyz) * inv_dir;
 
     // In case of negative values, we need to swap them
     let t_min = min(tmin_tmp, tmax_tmp);
@@ -79,43 +82,52 @@ fn vs_main(
     result.position = camera.proj_view * model.transform * position;
     result.transformed_eye = camera.eye_pos.xyz;
 
-    result.ray_dir = -camera.eye_pos.xyz;
+    result.ray_dir = position.xyz - camera.eye_pos.xyz;
 
     return result;
 }
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
+    let eye = vertex.transformed_eye;
     let ray_dir = normalize(vertex.ray_dir);
 
     let t = intersect_box(vertex.transformed_eye, ray_dir);
     let t_near = t.x;
     let t_far = t.y;
 
-    if t_near > t_far {
-        return vec4<f32>(0.0, 0.5, 0.5, 1.0);
-    }
-
     let start_x = max(t_near, 0.0);
     let end_x = min(t_far, 1.0);
 
     let factory_opacity = 0.1;
 
-    var color = vec4<f32>(0.0, 0.0, 0.0, 0.0);
-    let step = 0.01;
+    let tex = textureSampleLevel(hu_values, hu_sampler, vertex.position.xyz, 0.0);
+    let val = calculate_value(tex.x);
 
-    for (var x = start_x; x < end_x; x += step) {
-        let pos = vertex.transformed_eye + ray_dir * x;
-        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
-
-        let val = calculate_value(tex.x);
-
-        color = mix(color, val, factory_opacity);
-
-        if (color.a >= 0.95) {
-            break;
-        }
-    }
-
-    return vec4<f32>(color.xyz, 1.0);
+    return vec4<f32>(vertex.position.xyz, 1.0);
+//
+//    var color = vec4<f32>(0.0, 0.0, 0.0, 0.0);
+//    let step = 0.01;
+//
+//    for (var x = start_x; x < end_x; x += step) {
+//        let pos = vertex.transformed_eye + ray_dir * x;
+//        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
+//
+//        let val = calculate_value(tex.x);
+//        if (val.a < 0.01) {
+//            continue;
+//        }
+//
+//        if (val.a > 0.95) {
+//            return val;
+//        }
+//
+//        color = mix(color, val, factory_opacity);
+//
+//        if (color.a >= 0.95) {
+//            break;
+//        }
+//    }
+//
+//    return vec4<f32>(color.xyz, 1.0);
 }
