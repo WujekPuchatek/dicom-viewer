@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 use glam::Vec3;
-use web_sys::js_sys::Math::abs;
 use crate::dicom_file::dicom_file::DicomFile;
 use crate::pixel_data_processor::pixel_data_processor::PixelDataProcessor;
 use crate::utils::data_dimensions::Dimensions;
@@ -51,7 +50,7 @@ impl Examination {
             1.0
         };
 
-        let mut builder = Dimensions::builder();
+        let builder = Dimensions::builder();
         builder.width(image_pixel.columns as u32)
                .height(image_pixel.rows as u32)
                .depth(self.dicom_files.len() as u32)

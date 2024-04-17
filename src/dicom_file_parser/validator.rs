@@ -28,8 +28,6 @@ impl<'a> Validator<'a> {
 }
 
 mod tests {
-    use super::*;
-
     #[test]
     fn test_new() {
         let data = b"some data";

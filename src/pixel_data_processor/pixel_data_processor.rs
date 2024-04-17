@@ -1,12 +1,7 @@
 extern crate test;
 
-use std::ops::{Not, BitAnd, BitOr, Sub};
-use std::io::{Cursor, Read, Seek, SeekFrom};
+use std::io::{Cursor, Seek, SeekFrom};
 use byteorder::{LittleEndian, ReadBytesExt};
-use rayon::prelude::{IntoParallelRefIterator, IntoParallelRefMutIterator, ParallelSliceMut};
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use rayon::iter::IndexedParallelIterator;
-use rayon::slice::ParallelSlice;
 use crate::dataset::tag::Tag;
 use crate::dataset::value_field::ValueField;
 use crate::dataset::value_field::ValueField::{OtherByte, OtherWord};
@@ -76,13 +71,13 @@ impl PixelDataProcessor {
             return Err(DicomFileInconsistency::NotSupported("Multiple JPEG2000 frames into one slice"));
         }
 
-        let mut decoder = JpegFileDecoder::new();
+        let decoder = JpegFileDecoder::new();
         decoder.decode(slices[0], voxels, bytes_per_pixel)?;
 
         Ok(())
     }
 
-    fn process_jpeg_examination(&self, exam: &Examination) {}
+    fn process_jpeg_examination(&self, _exam: &Examination) {}
 
     fn get_pixel_data<'a>(&self, pixel_data: &'a ValueField) -> &'a [u8] {
         match pixel_data {
@@ -137,7 +132,7 @@ impl PixelDataProcessor {
                 tag != SEQUENCE_DELIMITATION
             } {}
 
-            reader.seek(SeekFrom::Current(4)); //Sequence Delimitation Item Length - equal to 0
+            reader.seek(SeekFrom::Current(4)).unwrap(); //Sequence Delimitation Item Length - equal to 0
         }
 
         slices
@@ -149,7 +144,7 @@ impl PixelDataProcessor {
         });
     }
 
-    fn read_uint8(&self, voxels: &mut [f32], data: &[u8], high_bit: u16) {
+    fn read_uint8(&self, voxels: &mut [f32], data: &[u8], _high_bit: u16) {
         data.iter().zip(voxels.iter_mut()).for_each(|(byte, voxel)| {
             *voxel = *byte as f32;
         });
@@ -162,7 +157,7 @@ impl PixelDataProcessor {
         });
     }
 
-    fn read_uint16_le(&self, voxels: &mut [f32], data: &[u8], high_bit: u16) {
+    fn read_uint16_le(&self, voxels: &mut [f32], data: &[u8], _high_bit: u16) {
         data.chunks(2).zip(voxels.iter_mut()).for_each(|(chunk, voxel)| {
             let val = u16::from_le_bytes([chunk[0], chunk[1]]);
             *voxel = val as f32;

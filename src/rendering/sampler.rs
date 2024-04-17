@@ -1,8 +1,4 @@
-use bytemuck::{Pod, Zeroable};
-use glam::{Mat4, Quat, Vec3};
-use wgpu::{BindingResource, SamplerBindingType, SamplerBorderColor};
-use wgpu::util::DeviceExt;
-use crate::utils::non_zero_sized::NonZeroSized;
+use wgpu::{BindingResource, SamplerBindingType};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sampler {

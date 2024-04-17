@@ -40,18 +40,19 @@ fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
 }
 
 fn calculate_value(v: f32) -> vec4<f32> {
+    let rescale_slope = 1.0;
+    let rescale_intercept = -1024.0;
+
+    let rescaled = v * rescale_slope + rescale_intercept;
+
     let center = 40.0;
     let width = 400.0;
     let min = center - width / 2.0;
 
-    let normalized = (v - min) / width;
+    let normalized = (rescaled - min) / width;
     let saturated = saturate(normalized);
 
-    return vec4<f32>(saturated, saturated, saturated, 1.0);
-}
-
-fn mix(a: vec4<f32>, b: vec4<f32>, f: f32) -> vec4<f32> {
-    return a * (1.0 - f) + b * f;
+    return vec4<f32>(saturated, saturated, saturated, saturated);
 }
 
 @group(0)
@@ -89,6 +90,8 @@ fn vs_main(
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
+    let tex_dimensions = vec3<f32>(511.0, 511.0, 219.0);
+
     let eye = vertex.transformed_eye;
     let ray_dir = normalize(vertex.ray_dir);
 
@@ -96,38 +99,22 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     let t_near = t.x;
     let t_far = t.y;
 
-    let start_x = max(t_near, 0.0);
-    let end_x = min(t_far, 1.0);
+    let step = 0.001;
 
-    let factory_opacity = 0.1;
+    var color = vec4<f32>(ray_dir, 1.0);
 
-    let tex = textureSampleLevel(hu_values, hu_sampler, vertex.position.xyz, 0.0);
-    let val = calculate_value(tex.x);
+    for (var x = -20.0; x < 20.0; x += step) {
+        let pos = eye + ray_dir * x;
 
-    return vec4<f32>(vertex.position.xyz, 1.0);
-//
-//    var color = vec4<f32>(0.0, 0.0, 0.0, 0.0);
-//    let step = 0.01;
-//
-//    for (var x = start_x; x < end_x; x += step) {
-//        let pos = vertex.transformed_eye + ray_dir * x;
-//        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
-//
-//        let val = calculate_value(tex.x);
-//        if (val.a < 0.01) {
-//            continue;
-//        }
-//
-//        if (val.a > 0.95) {
-//            return val;
-//        }
-//
-//        color = mix(color, val, factory_opacity);
-//
-//        if (color.a >= 0.95) {
-//            break;
-//        }
-//    }
-//
-//    return vec4<f32>(color.xyz, 1.0);
+        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
+
+        let val = calculate_value(tex.x);
+
+        if (val.a > 0.3) {
+            color = val;
+            break;
+        }
+    }
+
+    return color;
 }

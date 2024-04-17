@@ -4,7 +4,6 @@
 use std::borrow::Cow;
 use std::io::{ErrorKind, Read, Write};
 use std::{io, mem};
-use std::f64::consts;
 use std::time::Instant;
 use bytemuck::{cast_slice, Pod, Zeroable};
 use glam::Quat;
@@ -153,7 +152,7 @@ impl Example for Renderer {
 
         let mut camera_binding = CameraBinding::new(device, 0);
         let mut model_binding = ModelBinding::new(device, 1);
-        let mut sampler_binding = SamplerBinding::new(device, 3, Sampler::new());
+        let sampler_binding = SamplerBinding::new(device, 3, Sampler::new());
 
         // Create pipeline layout
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
