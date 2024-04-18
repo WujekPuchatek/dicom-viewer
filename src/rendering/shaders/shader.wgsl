@@ -12,7 +12,7 @@ struct Model {
 struct VertexOutput {
     @location(0) tex_coord: vec3<f32>,
     @location(1) ray_dir: vec3<f32>,
-    @location(2) transformed_eye: vec3<f32>,
+    @location(2) eye_pos: vec3<f32>,
     @builtin(position) position: vec4<f32>,
 };
 
@@ -52,7 +52,12 @@ fn calculate_value(v: f32) -> vec4<f32> {
     let normalized = (rescaled - min) / width;
     let saturated = saturate(normalized);
 
-    return vec4<f32>(saturated, saturated, saturated, saturated);
+    var alpha = 1.0;
+    if (saturated < 0.02) {
+        alpha = 0.0;
+    }
+
+    return vec4<f32>(saturated, saturated, saturated, alpha);
 }
 
 @group(0)
@@ -76,43 +81,39 @@ fn vs_main(
     @location(0) position: vec4<f32>,
     @location(1) tex_coord: vec3<f32>,
 ) -> VertexOutput {
+    let world_pos = model.transform * position;
+
     var result: VertexOutput;
-
     result.tex_coord = tex_coord;
-
-    result.position = camera.proj_view * model.transform * position;
-    result.transformed_eye = camera.eye_pos.xyz;
-
-    result.ray_dir = position.xyz - camera.eye_pos.xyz;
+    result.eye_pos = camera.eye_pos.xyz;
+    result.position = camera.proj_view * world_pos;
+    result.ray_dir = world_pos.xyz - camera.eye_pos.xyz;
 
     return result;
 }
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
-    let tex_dimensions = vec3<f32>(511.0, 511.0, 219.0);
-
-    let eye = vertex.transformed_eye;
+    let eye = vertex.eye_pos;
+    let dims = vec3<f32>(512.0, 512.0, 220.0);
     let ray_dir = normalize(vertex.ray_dir);
+    let ray_dir_dt = ray_dir / dims;
 
-    let t = intersect_box(vertex.transformed_eye, ray_dir);
+    let t = intersect_box(vertex.eye_pos, ray_dir);
     let t_near = t.x;
     let t_far = t.y;
 
     let step = 0.001;
+    let start = -3.0;
+    let num_of_steps = 40000;
 
-    var color = vec4<f32>(ray_dir, 1.0);
+    var color = vec4<f32>(0.0);
 
-    for (var x = -20.0; x < 20.0; x += step) {
-        let pos = eye + ray_dir * x;
+    for (var i = 0; i < i32(num_of_steps); i += 1) {
+        let pos = eye + ray_dir_dt * f32(i);
 
-        let tex = textureSampleLevel(hu_values, hu_sampler, pos, 0.0);
-
-        let val = calculate_value(tex.x);
-
-        if (val.a > 0.3) {
-            color = val;
-            break;
+        if (length(pos - vertex.tex_coord) < 1) {
+            color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
         }
     }
 

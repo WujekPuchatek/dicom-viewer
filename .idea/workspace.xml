@@ -8,16 +8,10 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="continue">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Next failure attempt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file_parser/validator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file_parser/validator.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examination/examination.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/examination/examination.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/pixel_data_processor/pixel_data_processor.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/camera.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/sampler.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/sampler.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,6 +265,8 @@
       <workItem from="1713371388551" duration="5242000" />
       <workItem from="1713377295259" duration="1173000" />
       <workItem from="1713379099482" duration="3330000" />
+      <workItem from="1713389802141" duration="3164000" />
+      <workItem from="1713447573524" duration="3513000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -584,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713306834220</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Next failure attempt">
+      <option name="closed" value="true" />
+      <created>1713389848081</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1713389848082</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -603,7 +607,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Extract standard_string.rs and extended_string.rs" />
     <MESSAGE value="standard_string.rs and extended_string.rs changed to dicom_string.rs. Create numeric_type.rs" />
     <MESSAGE value="Try to implement lazy reading of element" />
     <MESSAGE value="Read single dicom file without SQ and UN" />
@@ -628,7 +631,8 @@
     <MESSAGE value="Add sampler, start implementation of shader" />
     <MESSAGE value="Problem with calculate intersection" />
     <MESSAGE value="continue" />
-    <option name="LAST_COMMIT_MESSAGE" value="continue" />
+    <MESSAGE value="Next failure attempt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Next failure attempt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
