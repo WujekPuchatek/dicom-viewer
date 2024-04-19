@@ -10,54 +10,61 @@ struct Model {
 };
 
 struct VertexOutput {
-    @location(0) tex_coord: vec3<f32>,
-    @location(1) ray_dir: vec3<f32>,
-    @location(2) eye_pos: vec3<f32>,
     @builtin(position) position: vec4<f32>,
+    @location(0) world_pos: vec3<f32>,
+    @location(1) ray_dir: vec3<f32>,
 };
 
-// https://michvalwin.com/posts/2023/04/26/ray-collisions.html
-fn intersect_box(orig: vec3<f32>, dir: vec3<f32>) -> vec2<f32> {
-    let local_ray_origin = model.inv_transform * vec4<f32>(orig, 1.0);
-    let local_ray_dir = model.inv_transform * vec4<f32>(dir, 0.0);
+fn aabbIntersect (origin: vec3<f32>, direction: vec3<f32>) -> vec2<f32> {
+    let min = vec3<f32>(-1.0, -1.0, -0.56);
+    let max = vec3<f32>(1.0, 1.0, 0.56);
 
-    let box_min = vec3<f32>(-1);
-    let box_max = vec3<f32>(1);
+    let tmin = (min - origin) / direction;
+    let tmax = (max - origin) / direction;
 
-    let inv_dir = 1.0 / local_ray_dir.xyz;
+    let t1 = min(tmin, tmax);
+    let t2 = max(tmin, tmax);
 
-    let tmin_tmp = (box_min - local_ray_origin.xyz) * inv_dir;
-    let tmax_tmp = (box_max - local_ray_origin.xyz) * inv_dir;
-
-    // In case of negative values, we need to swap them
-    let t_min = min(tmin_tmp, tmax_tmp);
-    let t_max = max(tmin_tmp, tmax_tmp);
-
-    let t_near = max(t_min.x, max(t_min.y, t_min.z));
-    let t_far = min(t_max.x, min(t_max.y, t_max.z));
+    let t_near = max(max(t1.x, t1.y), t1.z);
+    let t_far = min(min(t2.x, t2.y), t2.z);
 
     return vec2<f32>(t_near, t_far);
 }
 
-fn calculate_value(v: f32) -> vec4<f32> {
-    let rescale_slope = 1.0;
+fn convert_range(old_value: f32, old_min: f32, old_max: f32, new_min: f32, new_max: f32) -> f32 {
+    return (old_value - old_min) / (old_max - old_min) * (new_max - new_min) + new_min;
+}
+
+fn convert_vec3(old_vec: vec3<f32>) -> vec3<f32> {
+    return vec3<f32>(
+        convert_range(old_vec.x, -1.0, 1.0, 0.0, 1.0),
+        convert_range(old_vec.y, -1.0, 1.0, 0.0, 1.0),
+        convert_range(old_vec.z, -0.56, 0.56, 0.0, 1.0),
+    );
+}
+
+fn convert_value(old_value: f32) -> f32 {
+    let rescale_scale = 1.0;
     let rescale_intercept = -1024.0;
 
-    let rescaled = v * rescale_slope + rescale_intercept;
+    let window_center = 40.0;
+    let window_width = 400.0;
 
-    let center = 40.0;
-    let width = 400.0;
-    let min = center - width / 2.0;
+    let new_value = (old_value * rescale_scale) + rescale_intercept;
 
-    let normalized = (rescaled - min) / width;
-    let saturated = saturate(normalized);
+    let min_value = window_center - (window_width / 2.0);
+    let max_value = window_center + (window_width / 2.0);
 
-    var alpha = 1.0;
-    if (saturated < 0.02) {
-        alpha = 0.0;
-    }
+    let converted = convert_range(new_value, min_value, max_value, 0.0, 1.0);
+    return saturate(converted);
+}
 
-    return vec4<f32>(saturated, saturated, saturated, alpha);
+fn raymarchHit (pos: vec3<f32>) -> vec4<f32> {
+    let converted_pos = convert_vec3(pos);
+    let texel = textureSampleLevel(hu_values, hu_sampler, converted_pos, 0.0);
+
+    let value = convert_value(texel.r);
+    return vec4<f32>(value);
 }
 
 @group(0)
@@ -81,41 +88,55 @@ fn vs_main(
     @location(0) position: vec4<f32>,
     @location(1) tex_coord: vec3<f32>,
 ) -> VertexOutput {
-    let world_pos = model.transform * position;
-
     var result: VertexOutput;
-    result.tex_coord = tex_coord;
-    result.eye_pos = camera.eye_pos.xyz;
-    result.position = camera.proj_view * world_pos;
-    result.ray_dir = world_pos.xyz - camera.eye_pos.xyz;
+
+    result.world_pos = position.xyz;
+    result.position = camera.proj_view * model.transform * position;
+
+    result.ray_dir = normalize(result.world_pos - (model.inv_transform * camera.eye_pos).xyz);
 
     return result;
 }
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
-    let eye = vertex.eye_pos;
-    let dims = vec3<f32>(512.0, 512.0, 220.0);
-    let ray_dir = normalize(vertex.ray_dir);
-    let ray_dir_dt = ray_dir / dims;
+    let direction = vertex.ray_dir;
+    let position = vertex.world_pos;
 
-    let t = intersect_box(vertex.eye_pos, ray_dir);
+    let t = aabbIntersect(position, direction);
     let t_near = t.x;
     let t_far = t.y;
 
-    let step = 0.001;
-    let start = -3.0;
-    let num_of_steps = 40000;
+    if (t_near > t_far) {
+        return vec4<f32>(0.0);
+    }
 
-    var color = vec4<f32>(0.0);
+    let steps = 15000;
+    let step_size = 0.01;
+    let factory_opacity = 0.96;
 
-    for (var i = 0; i < i32(num_of_steps); i += 1) {
-        let pos = eye + ray_dir_dt * f32(i);
+    var pos = position + direction * t_near;
 
-        if (length(pos - vertex.tex_coord) < 1) {
-            color = vec4<f32>(1.0, 0.0, 0.0, 1.0);
+    var result = vec4<f32>(0.0, 0.0, 0.0, 0.0);
+
+    for (var t = t_near; t < t_far; t += step_size) {
+        var src = raymarchHit(pos);
+
+        var rgb = src.rgb;
+        rgb *= src.a;
+
+        src = vec4<f32>(rgb, src.a);
+
+        src *= factory_opacity;
+
+        result += (1.0 - result.a) * src;
+
+        pos += direction * step_size;
+
+        if (result.a > 0.95) {
+            break;
         }
     }
 
-    return color;
+    return result;
 }

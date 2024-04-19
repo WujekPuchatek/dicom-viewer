@@ -40,12 +40,12 @@ pub struct Camera {
     updated: bool,
 }
 impl Camera {
-    const ZFAR: f32 = 10.0;
+    const ZFAR: f32 = 100.0;
     const ZNEAR: f32 = 1.0;
     const FOVY: f32 = std::f32::consts::FRAC_PI_4;
     const UP: Vec3 = Vec3::Z;
     const TARGET: Vec3 = Vec3::ZERO;
-    const EYE: Vec3 = Vec3::new(0.0, -3.0, 0.0);
+    const EYE: Vec3 = Vec3::new(3.0, -6.0, 2.0);
 
     pub fn new(aspect: f32) -> Self {
         Self {
@@ -72,7 +72,7 @@ impl Camera {
     }
     pub fn zoom_delta(&mut self, zoom_delta: f32) {
         self.fovy += zoom_delta;
-        self.fovy = self.fovy.clamp(0.25, 1.0);
+        self.fovy = self.fovy.clamp(0.25, 5.0);
 
         self.updated = true;
     }
