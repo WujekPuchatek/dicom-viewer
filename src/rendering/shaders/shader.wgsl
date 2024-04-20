@@ -67,6 +67,12 @@ fn raymarchHit (pos: vec3<f32>) -> vec4<f32> {
     return vec4<f32>(value);
 }
 
+fn random (seed: vec3<f32>) -> f32 {
+    return fract(sin(dot(seed, vec3<f32>(12.9898, 78.233, 35.864)))*
+        43758.5453123);
+}
+
+
 @group(0)
 @binding(0)
 var<uniform> camera: Camera;
@@ -115,7 +121,7 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     let step_size = 0.01;
     let factory_opacity = 0.96;
 
-    var pos = position + direction * t_near;
+    var pos = position + direction * (t_near - random(position) * step_size);
 
     var result = vec4<f32>(0.0, 0.0, 0.0, 0.0);
 
