@@ -8,11 +8,15 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="And Next failure attempt">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add random start position of raymarching">
+      <change afterPath="$PROJECT_DIR$/src/rendering/renderer.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/normal_calculation.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/camera.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/camera.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -270,7 +274,10 @@
       <workItem from="1713389802141" duration="3164000" />
       <workItem from="1713447573524" duration="3529000" />
       <workItem from="1713472016010" duration="7654000" />
-      <workItem from="1713520381883" duration="17275000" />
+      <workItem from="1713520381883" duration="18112000" />
+      <workItem from="1713614167447" duration="3279000" />
+      <workItem from="1713649803577" duration="9000" />
+      <workItem from="1713697788995" duration="8572000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -600,7 +607,23 @@
       <option name="project" value="LOCAL" />
       <updated>1713467408420</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Success!">
+      <option name="closed" value="true" />
+      <created>1713549447724</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1713549447724</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Add random start position of raymarching">
+      <option name="closed" value="true" />
+      <created>1713647929178</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1713647929178</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -619,8 +642,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Try to implement lazy reading of element" />
-    <MESSAGE value="Read single dicom file without SQ and UN" />
     <MESSAGE value="Start rendering data" />
     <MESSAGE value="Mix compute and fragment / vertex shader" />
     <MESSAGE value="Add cube example. Start of work on rendering" />
@@ -644,7 +665,9 @@
     <MESSAGE value="continue" />
     <MESSAGE value="Next failure attempt" />
     <MESSAGE value="And Next failure attempt" />
-    <option name="LAST_COMMIT_MESSAGE" value="And Next failure attempt" />
+    <MESSAGE value="Success!" />
+    <MESSAGE value="Add random start position of raymarching" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add random start position of raymarching" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

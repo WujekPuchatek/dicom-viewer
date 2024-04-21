@@ -353,6 +353,8 @@ impl Example for Renderer {
     }
 
     fn rotate(&mut self, dx: f32, dy: f32, _queue: &wgpu::Queue) {
+        // TODO : use https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+        // Rotating 3D Render with the Mouse | CAD From Scratch [4]
         const SENSITIVITY: f32 = 0.005;
 
         let dx = -dx * SENSITIVITY;

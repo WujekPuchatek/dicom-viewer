@@ -68,7 +68,7 @@ impl Model {
     }
 
     pub fn rotate(&mut self, delta_rotation: Quat) {
-        self.rotation = delta_rotation * self.rotation;
+        self.rotation *= delta_rotation;
         self.updated = true;
     }
 

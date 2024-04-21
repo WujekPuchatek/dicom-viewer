@@ -414,6 +414,16 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
                             _ => {}
                         }
                     }
+                    WindowEvent::KeyboardInput {
+                        event:
+                        KeyEvent {
+                            logical_key: Key::Character(s),
+                            ..
+                        },
+                        ..
+                    } if s == "r" => {
+                        println!("{:#?}", context.instance.generate_report());
+                    }
                     WindowEvent::MouseWheel {
                         delta,
                         ..
@@ -487,7 +497,6 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
         },
     );
 }
-
 pub fn run<E: Example>(title: &'static str, exam: &Examination) {
     pollster::block_on(start::<E>(title, exam));
 }

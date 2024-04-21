@@ -106,6 +106,10 @@ fn vs_main(
 
 @fragment
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
+    let light_color = vec3<f32>(1.0);
+    let ambient_color = vec3<f32>(0.1);
+
+
     let direction = vertex.ray_dir;
     let position = vertex.world_pos;
 
@@ -118,10 +122,10 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     }
 
     let steps = 15000;
-    let step_size = 0.01;
+    let step_size = 0.005;
     let factory_opacity = 0.96;
 
-    var pos = position + direction * (t_near - random(position) * step_size);
+    var pos = position + direction * (t_near - random(position) * step_size );
 
     var result = vec4<f32>(0.0, 0.0, 0.0, 0.0);
 
