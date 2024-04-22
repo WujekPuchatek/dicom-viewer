@@ -7,6 +7,7 @@ use crate::information_object_definitions::general_study::GeneralStudy;
 use crate::information_object_definitions::image_pixel::ImagePixel;
 use crate::information_object_definitions::image_plane::ImagePlane;
 use crate::information_object_definitions::inconsistency::DicomFileInconsistency;
+use crate::information_object_definitions::modality_lut::ModalityLut;
 
 macro_rules! get {
     ($pat: path, $target: expr, $err: expr) => {
@@ -63,6 +64,7 @@ pub struct DicomFile {
     pub general_series: GeneralSeries,
     pub image_pixel: ImagePixel,
     pub image_plane: ImagePlane,
+    pub modality_lut: ModalityLut,
 }
 
 impl DicomFile {
@@ -81,6 +83,7 @@ impl DicomFileFactory {
         let mut general_series = GeneralSeries::builder();
         let mut image_pixel = ImagePixel::builder();
         let mut image_plane = ImagePlane::builder();
+        let mut modality_lut = ModalityLut::builder();
 
         for data_elem in data_elems {
             let tag = data_elem.tag;
@@ -153,6 +156,14 @@ impl DicomFileFactory {
                     let image_position = &get!(ValueField::DecimalString, data_elem, inconsistencies);
                     image_plane.image_position(cast_array!(f32, 3, image_position, inconsistencies));
                 }
+                RESCALE_SLOPE => {
+                    let rescale_slope = &get!(ValueField::DecimalString, data_elem, inconsistencies);
+                    modality_lut.rescale_slope(cast!(f32, rescale_slope, inconsistencies));
+                }
+                RESCALE_INTERCEPT => {
+                    let rescale_intercept = &get!(ValueField::DecimalString, data_elem, inconsistencies);
+                    modality_lut.rescale_intercept(cast!(f32, rescale_intercept, inconsistencies));
+                }
                 _ => {}
             }
         }
@@ -161,12 +172,14 @@ impl DicomFileFactory {
         let general_series = general_series.build();
         let image_pixel = image_pixel.build();
         let image_plane = image_plane.build();
+        let modality_lut = modality_lut.build();
 
         let inconsistensies =
             self.accumulate_inconsistencies(&general_study,
                                             &general_series,
                                             &image_pixel,
-                                            &image_plane);
+                                            &image_plane,
+                                            &modality_lut);
 
         if !inconsistensies.is_empty() {
             return Err(inconsistensies);
@@ -177,14 +190,17 @@ impl DicomFileFactory {
             general_study: general_study?,
             general_series: general_series?,
             image_pixel: image_pixel?,
-            image_plane: image_plane? })
+            image_plane: image_plane?,
+            modality_lut: modality_lut?})
     }
 
-    fn accumulate_inconsistencies(&self,
-                                  general_study: &Result<GeneralStudy, Vec<DicomFileInconsistency>>,
-                                  general_series: &Result<GeneralSeries, Vec<DicomFileInconsistency>>,
-                                  image_pixel: &Result<ImagePixel, Vec<DicomFileInconsistency>>,
-                                  image_plane: &Result<ImagePlane, Vec<DicomFileInconsistency>>) -> Vec<DicomFileInconsistency> {
+    fn accumulate_inconsistencies(
+        &self,
+        general_study: &Result<GeneralStudy, Vec<DicomFileInconsistency>>,
+        general_series: &Result<GeneralSeries, Vec<DicomFileInconsistency>>,
+        image_pixel: &Result<ImagePixel, Vec<DicomFileInconsistency>>,
+        image_plane: &Result<ImagePlane, Vec<DicomFileInconsistency>>,
+        modality_lut: &Result<ModalityLut, Vec<DicomFileInconsistency>>) -> Vec<DicomFileInconsistency> {
         let mut inconsistencies = Vec::<DicomFileInconsistency>::new();
 
         if let Err(err) = general_study {
@@ -200,6 +216,10 @@ impl DicomFileFactory {
         }
 
         if let Err(err) = image_plane {
+            inconsistencies.extend(err.clone());
+        }
+
+        if let Err(err) = modality_lut {
             inconsistencies.extend(err.clone());
         }
 

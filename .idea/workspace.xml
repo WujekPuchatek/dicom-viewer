@@ -9,14 +9,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add random start position of raymarching">
-      <change afterPath="$PROJECT_DIR$/src/rendering/renderer.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/normal_calculation.wgsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/modality_lut.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_normal_to_surface.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_shader.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/model.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/renderer.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -102,11 +105,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering\compute_shaders" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\utils" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\examination" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\information_object_definitions" />
-      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\dataset" />
     </key>
   </component>
   <component name="RunManager" selected="Cargo.Run">
@@ -278,6 +281,8 @@
       <workItem from="1713614167447" duration="3279000" />
       <workItem from="1713649803577" duration="9000" />
       <workItem from="1713697788995" duration="8572000" />
+      <workItem from="1713790477034" duration="4725000" />
+      <workItem from="1713810079317" duration="3381000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />

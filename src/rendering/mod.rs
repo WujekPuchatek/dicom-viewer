@@ -2,4 +2,4 @@ pub mod utils;
 pub mod camera;
 pub mod model;
 pub mod sampler;
-mod renderer;
+mod compute_shaders;

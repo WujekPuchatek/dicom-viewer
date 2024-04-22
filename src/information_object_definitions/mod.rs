@@ -3,3 +3,4 @@ pub mod image_plane;
 pub mod image_pixel;
 pub mod inconsistency;
 pub mod general_study;
+pub mod modality_lut;
