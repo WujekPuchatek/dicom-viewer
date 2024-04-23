@@ -8,18 +8,19 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add random start position of raymarching">
-      <change afterPath="$PROJECT_DIR$/src/information_object_definitions/modality_lut.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_normal_to_surface.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_shader.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add rescale_values compute shader and add calculation normal to surface compute shader">
+      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/raycast_renderer.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/renderer.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/dicom_file/dicom_file.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/information_object_definitions/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/renderer.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/ray_cast.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shader.wgsl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -105,11 +106,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering\renderers" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering\compute_shaders" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\rendering" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\utils" />
       <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\examination" />
-      <recent name="C:\Users\medapp\RustroverProjects\dicom_viewer\src\information_object_definitions" />
     </key>
   </component>
   <component name="RunManager" selected="Cargo.Run">
@@ -282,7 +283,9 @@
       <workItem from="1713649803577" duration="9000" />
       <workItem from="1713697788995" duration="8572000" />
       <workItem from="1713790477034" duration="4725000" />
-      <workItem from="1713810079317" duration="3381000" />
+      <workItem from="1713810079317" duration="3440000" />
+      <workItem from="1713865030303" duration="5899000" />
+      <workItem from="1713901523949" duration="4305000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -628,7 +631,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713647929178</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Add rescale_values compute shader and add calculation normal to surface compute shader">
+      <option name="closed" value="true" />
+      <created>1713815665994</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1713815665995</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -647,7 +658,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Start rendering data" />
     <MESSAGE value="Mix compute and fragment / vertex shader" />
     <MESSAGE value="Add cube example. Start of work on rendering" />
     <MESSAGE value="Add zoom" />
@@ -672,7 +682,8 @@
     <MESSAGE value="And Next failure attempt" />
     <MESSAGE value="Success!" />
     <MESSAGE value="Add random start position of raymarching" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add random start position of raymarching" />
+    <MESSAGE value="Add rescale_values compute shader and add calculation normal to surface compute shader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add rescale_values compute shader and add calculation normal to surface compute shader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -691,11 +702,6 @@
           <url>file://$USER_HOME$/.cargo/git/checkouts/jpeg2k-1577084468b1992b/2fb49a6/src/j2k_image.rs</url>
           <line>64</line>
           <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>89</line>
-          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

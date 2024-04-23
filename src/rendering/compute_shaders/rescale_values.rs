@@ -24,7 +24,7 @@ impl RescaleValues {
     }
 }
 
-struct ComputeRescaleValues {
+pub struct ComputeRescaleValues {
     shader: ShaderModule,
     bind_group: BindGroup,
     pipeline: ComputePipeline,
@@ -35,19 +35,19 @@ impl ComputeRescaleValues {
     pub fn init(_adapter: &wgpu::Adapter,
                 device: &wgpu::Device,
                 _queue: &wgpu::Queue,
-                exam: Examination,
-                data: TextureView) -> Self {
+                exam: &Examination,
+                data: &TextureView) -> Self {
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: Some("Compute normal"),
+            label: Some("Compute rescaled values"),
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!("../shaders/rescale_values.wgsl"))),
         });
 
         let texture_entry = wgpu::BindGroupLayoutEntry {
             binding: 0,
             visibility: wgpu::ShaderStages::COMPUTE,
-            ty: wgpu::BindingType::StorageTexture {
-                access: wgpu::StorageTextureAccess::ReadWrite,
-                format: wgpu::TextureFormat::R32Float,
+            ty: wgpu::BindingType::Texture {
+                multisampled: false,
+                sample_type: wgpu::TextureSampleType::Float { filterable: false },
                 view_dimension: wgpu::TextureViewDimension::D3,
             },
             count: None,
@@ -55,30 +55,47 @@ impl ComputeRescaleValues {
 
         let rescale_values = Self::get_rescale_values(&exam);
 
-        let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Array Buffer"),
-            contents: bytemuck::cast_slice(&rescale_values),
+        let slopes_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Slopes Buffer"),
+            contents: bytemuck::cast_slice(&rescale_values.0),
             usage: wgpu::BufferUsages::STORAGE,
         });
 
-        let rescale_values_entry = wgpu::BindGroupLayoutEntry {
+        let slopes_values_entry = wgpu::BindGroupLayoutEntry {
             binding: 1,
             visibility: wgpu::ShaderStages::COMPUTE,
             ty: wgpu::BindingType::Buffer {
                 ty: wgpu::BufferBindingType::Storage { read_only: true },
                 has_dynamic_offset: false,
-                min_binding_size: wgpu::BufferSize::new(4 * std::mem::size_of::<f32>() as u64),
+                min_binding_size: wgpu::BufferSize::new(std::mem::size_of::<f32>() as u64),
+            },
+            count: None,
+        };
+
+        let intercepts_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Slopes Buffer"),
+            contents: bytemuck::cast_slice(&rescale_values.1),
+            usage: wgpu::BufferUsages::STORAGE,
+        });
+
+        let intercepts_values_entry = wgpu::BindGroupLayoutEntry {
+            binding: 2,
+            visibility: wgpu::ShaderStages::COMPUTE,
+            ty: wgpu::BindingType::Buffer {
+                ty: wgpu::BufferBindingType::Storage { read_only: true },
+                has_dynamic_offset: false,
+                min_binding_size: wgpu::BufferSize::new(std::mem::size_of::<f32>() as u64),
             },
             count: None,
         };
 
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             label: Some("Rescale values bind group layout"),
-            entries: &[texture_entry, rescale_values_entry],
+            entries: &[texture_entry, slopes_values_entry, intercepts_values_entry],
         });
 
         let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("Normal calculation bind group"),
+            label: Some("Rescale values bind group"),
             layout: &bind_group_layout,
             entries: &[
                 wgpu::BindGroupEntry {
@@ -87,7 +104,11 @@ impl ComputeRescaleValues {
                 },
                 wgpu::BindGroupEntry {
                     binding: 1,
-                    resource: buffer.as_entire_binding(),
+                    resource: slopes_buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 2,
+                    resource: intercepts_buffer.as_entire_binding(),
                 },
             ],
         });
@@ -119,14 +140,19 @@ impl ComputeRescaleValues {
         }
     }
 
-    fn get_rescale_values(exam: &Examination) -> Vec<RescaleValues> {
+    fn get_rescale_values(exam: &Examination) -> (Vec<f32>, Vec<f32>) {
         let dicom_files = exam.get_dicom_files();
 
-        dicom_files
-            .iter()
-            .map(|file|
-                RescaleValues::from_modality_lut(&file.modality_lut))
-            .collect::<Vec<_>>()
+        let mut slopes = Vec::new();
+        let mut intercepts = Vec::new();
+
+        for dicom_file in dicom_files {
+            let modality_lut = &dicom_file.modality_lut;
+            slopes.push(modality_lut.rescale_slope);
+            intercepts.push(modality_lut.rescale_intercept);
+        }
+
+        (slopes, intercepts)
     }
 }
 

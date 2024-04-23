@@ -31,7 +31,7 @@ pub trait Example: 'static + Sized {
     }
 
     fn required_limits() -> wgpu::Limits {
-        wgpu::Limits::downlevel_webgl2_defaults() // These downlevel limits will allow the code to run on all possible hardware
+        wgpu::Limits::default()
     }
 
     fn init(
