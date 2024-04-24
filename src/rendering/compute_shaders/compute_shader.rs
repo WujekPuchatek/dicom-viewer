@@ -1,5 +1,7 @@
+use wgpu::CommandEncoder;
+
 pub trait ComputeShader {
-    fn step(&self, device: &wgpu::Device, queue: &wgpu::Queue);
+    fn step(&self, device: &wgpu::Device, queue: &wgpu::Queue, command_encoder: &mut CommandEncoder);
 
     fn compute_work_group_count(
         dimensions: (u32, u32, u32),

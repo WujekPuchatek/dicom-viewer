@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use bytemuck::{Pod, Zeroable};
-use wgpu::{BindGroup, ComputePipeline, ShaderModule, TextureView};
+use wgpu::{BindGroup, CommandEncoder, ComputePipeline, ShaderModule, TextureView};
 use wgpu::util::DeviceExt;
 use crate::examination::examination::Examination;
 use crate::information_object_definitions::modality_lut::ModalityLut;
@@ -45,9 +45,9 @@ impl ComputeRescaleValues {
         let texture_entry = wgpu::BindGroupLayoutEntry {
             binding: 0,
             visibility: wgpu::ShaderStages::COMPUTE,
-            ty: wgpu::BindingType::Texture {
-                multisampled: false,
-                sample_type: wgpu::TextureSampleType::Float { filterable: false },
+            ty: wgpu::BindingType::StorageTexture {
+                access: wgpu::StorageTextureAccess::ReadWrite,
+                format: wgpu::TextureFormat::R32Float,
                 view_dimension: wgpu::TextureViewDimension::D3,
             },
             count: None,
@@ -157,20 +157,19 @@ impl ComputeRescaleValues {
 }
 
 impl ComputeShader for ComputeRescaleValues {
-    fn step(&self, device: &wgpu::Device, queue: &wgpu::Queue) {
-        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-            label: Some("Command Encoder for GPU compute"),
-        });
-        let (dispatch_width, dispatch_height, dispatch_depth) = self.work_group_count;
-        let mut compute_pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            label: Some("Rescale values pass"),
-            timestamp_writes: None,
-        });
-        compute_pass.set_pipeline(&self.pipeline);
-        compute_pass.set_bind_group(0, &self.bind_group, &[]);
-        compute_pass.dispatch_workgroups(dispatch_width, dispatch_height, dispatch_depth);
-        drop(compute_pass);
-        // Resolves any queries that might be in flight.
-        queue.submit(std::iter::once(encoder.finish()));
+    fn step(&self, _device: &wgpu::Device, _queue: &wgpu::Queue, encoder: &mut CommandEncoder) {
+        encoder.push_debug_group("compute rescale values");
+        {
+            let (dispatch_width, dispatch_height, dispatch_depth) = self.work_group_count;
+            let mut compute_pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
+                label: Some("Rescale values pass"),
+                timestamp_writes: None,
+            });
+
+            compute_pass.set_pipeline(&self.pipeline);
+            compute_pass.set_bind_group(0, &self.bind_group, &[]);
+            compute_pass.dispatch_workgroups(dispatch_width, dispatch_height, dispatch_depth);
+        }
+        encoder.pop_debug_group();
     }
 }

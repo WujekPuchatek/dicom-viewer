@@ -13,6 +13,7 @@ struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) world_pos: vec3<f32>,
     @location(1) ray_dir: vec3<f32>,
+    @location(2) tex_coord: vec3<f32>,
 };
 
 fn aabbIntersect (origin: vec3<f32>, direction: vec3<f32>) -> vec2<f32> {
@@ -43,19 +44,14 @@ fn convert_vec3(old_vec: vec3<f32>) -> vec3<f32> {
     );
 }
 
-fn convert_value(old_value: f32) -> f32 {
-    let rescale_scale = 1.0;
-    let rescale_intercept = -1024.0;
-
+fn convert_value(value: f32) -> f32 {
     let window_center = 40.0;
     let window_width = 400.0;
-
-    let new_value = (old_value * rescale_scale) + rescale_intercept;
 
     let min_value = window_center - (window_width / 2.0);
     let max_value = window_center + (window_width / 2.0);
 
-    let converted = convert_range(new_value, min_value, max_value, 0.0, 1.0);
+    let converted = convert_range(value, min_value, max_value, 0.0, 1.0);
     return saturate(converted);
 }
 
@@ -68,7 +64,7 @@ fn raymarchHit (pos: vec3<f32>) -> vec4<f32> {
 }
 
 fn random (seed: vec3<f32>) -> f32 {
-    return fract(sin(dot(seed, vec3<f32>(12.9898, 78.233, 35.864)))*
+    return fract(sin(dot(seed, vec3<f32>(12.9898, 78.233, 35.864))) *
         43758.5453123);
 }
 
@@ -98,6 +94,7 @@ fn vs_main(
 
     result.world_pos = position.xyz;
     result.position = camera.proj_view * model.transform * position;
+    result.tex_coord = tex_coord;
 
     result.ray_dir = normalize(result.world_pos - (model.inv_transform * camera.eye_pos).xyz);
 
@@ -108,7 +105,6 @@ fn vs_main(
 fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     let light_color = vec3<f32>(1.0);
     let ambient_color = vec3<f32>(0.1);
-
 
     let direction = vertex.ray_dir;
     let position = vertex.world_pos;
@@ -125,7 +121,7 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
     let step_size = 0.005;
     let factory_opacity = 0.96;
 
-    var pos = position + direction * (t_near - random(position) * step_size );
+    var pos = position + direction * (t_near - random(position) * step_size);
 
     var result = vec4<f32>(0.0, 0.0, 0.0, 0.0);
 
@@ -148,5 +144,9 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         }
     }
 
-    return result;
+    let tex_coord = vertex.tex_coord * vec3<f32>(511.0, 511.0, 219.0);
+    let tex_coord_u32 = vec3<u32>(u32(tex_coord.x), u32(tex_coord.y), u32(tex_coord.z));
+
+    let value = textureLoad(hu_values, tex_coord_u32, 0).r;
+    return vec4<f32>(value, value, value, 1.0);
 }

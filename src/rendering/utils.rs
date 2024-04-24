@@ -19,7 +19,7 @@ pub trait Example: 'static + Sized {
     }
 
     fn required_features() -> wgpu::Features {
-        wgpu::Features::empty()
+        wgpu::Features::FLOAT32_FILTERABLE | wgpu::Features::TEXTURE_ADAPTER_SPECIFIC_FORMAT_FEATURES
     }
 
     fn required_downlevel_capabilities() -> wgpu::DownlevelCapabilities {

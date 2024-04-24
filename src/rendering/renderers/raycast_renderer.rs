@@ -122,7 +122,7 @@ impl RayCastRenderer {
                     visibility: wgpu::ShaderStages::FRAGMENT,
                     ty: wgpu::BindingType::Texture {
                         multisampled: false,
-                        sample_type: wgpu::TextureSampleType::Float { filterable: false },
+                        sample_type: wgpu::TextureSampleType::Float { filterable: true },
                         view_dimension: wgpu::TextureViewDimension::D3,
                     },
                     count: None,
@@ -254,13 +254,17 @@ impl RayCastRenderer {
 }
 
 impl Renderer for RayCastRenderer {
-    fn render(&mut self, view: &wgpu::TextureView, device: &wgpu::Device, queue: &wgpu::Queue) {
-        let mut encoder =
-            device.create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
-        {
-            self.model_binding.update(queue, &mut self.model);
-            self.camera_binding.update(queue, &mut self.camera);
+    fn render(&mut self,
+              view: &wgpu::TextureView,
+              _device: &wgpu::Device,
+              queue: &wgpu::Queue,
+              encoder: &mut wgpu::CommandEncoder)
+    {
+        self.model_binding.update(queue, &mut self.model);
+        self.camera_binding.update(queue, &mut self.camera);
 
+        encoder.push_debug_group("ray cast render pass");
+        {
             let mut rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: None,
                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
@@ -280,16 +284,13 @@ impl Renderer for RayCastRenderer {
                 timestamp_writes: None,
                 occlusion_query_set: None,
             });
-            rpass.push_debug_group("Prepare data for draw.");
+
             rpass.set_pipeline(&self.pipeline);
             rpass.set_bind_group(0, &self.bind_group, &[]);
             rpass.set_index_buffer(self.index_buf.slice(..), wgpu::IndexFormat::Uint16);
             rpass.set_vertex_buffer(0, self.vertex_buf.slice(..));
-            rpass.pop_debug_group();
-            rpass.insert_debug_marker("Draw!");
             rpass.draw_indexed(0..self.index_count as u32, 0, 0..1);
         }
-
-        queue.submit(Some(encoder.finish()));
+        encoder.pop_debug_group();
     }
 }

@@ -3,7 +3,7 @@ use wgpu::{BindGroup, ComputePipeline, ShaderModule, Texture, TextureView};
 use crate::rendering::compute_shaders::compute_shader::ComputeShader;
 use crate::utils::data_dimensions::Dimensions;
 
-struct ComputeNormalToSurface {
+pub struct ComputeNormalToSurface {
     shader: ShaderModule,
     bind_group: BindGroup,
     pipeline: ComputePipeline,
@@ -14,11 +14,15 @@ struct ComputeNormalToSurface {
 }
 
 impl ComputeNormalToSurface {
+    pub fn get_normal_to_surface_view(&self) -> &TextureView {
+        &self.normal_view
+    }
+
     pub fn init(_adapter: &wgpu::Adapter,
                 device: &wgpu::Device,
                 _queue: &wgpu::Queue,
-                dimensions: Dimensions,
-                data_tex_view: TextureView) -> Self {
+                dimensions: &Dimensions,
+                data_tex_view: &TextureView) -> Self {
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Compute normal"),
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!("../shaders/normal_calculation.wgsl"))),
@@ -35,7 +39,9 @@ impl ComputeNormalToSurface {
             sample_count: 1,
             dimension: wgpu::TextureDimension::D3,
             format: wgpu::TextureFormat::Rgba32Float,
-            usage: wgpu::TextureUsages::STORAGE_BINDING | wgpu::TextureUsages::COPY_SRC,
+            usage: wgpu::TextureUsages::STORAGE_BINDING |
+                   wgpu::TextureUsages::COPY_SRC |
+                   wgpu::TextureUsages::TEXTURE_BINDING,
             view_formats: &[],
         });
 
@@ -103,7 +109,7 @@ impl ComputeNormalToSurface {
             pipeline,
             work_group_count: Self::compute_work_group_count(
                 (dimensions.width, dimensions.height, dimensions.depth),
-                (8, 8, 8),
+                (8, 8, 4),
             ),
             normal_tex,
             normal_view,
@@ -112,10 +118,8 @@ impl ComputeNormalToSurface {
 }
 
 impl ComputeShader for ComputeNormalToSurface {
-    fn step(&self, device: &wgpu::Device, queue: &wgpu::Queue) {
-        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-            label: Some("Command Encoder for GPU compute"),
-        });
+    fn step(&self, _device: &wgpu::Device, _queue: &wgpu::Queue, encoder: &mut wgpu::CommandEncoder) {
+
         let (dispatch_width, dispatch_height, dispatch_depth) = self.work_group_count;
         let mut compute_pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
             label: Some("Heat pass"),
@@ -124,8 +128,5 @@ impl ComputeShader for ComputeNormalToSurface {
         compute_pass.set_pipeline(&self.pipeline);
         compute_pass.set_bind_group(0, &self.bind_group, &[]);
         compute_pass.dispatch_workgroups(dispatch_width, dispatch_height, dispatch_depth);
-        drop(compute_pass);
-        // Resolves any queries that might be in flight.
-        queue.submit(std::iter::once(encoder.finish()));
     }
 }

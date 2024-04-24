@@ -2,8 +2,9 @@
 #![feature(test)]
 
 use std::io::{ErrorKind, Read, Write};
-use std::{io};
+use std::{io, mem};
 use std::time::Instant;
+use bytemuck::cast_slice;
 use crate::dicom_constants::tags::*;
 use crate::dicom_file_parser::dicom_file_parser::DicomFileParser;
 
@@ -16,6 +17,7 @@ use crate::examination::examination::Examination;
 use crate::examinations::examinations::Examinations;
 use crate::rendering::renderers::renderer::Renderer;
 use crate::files_finder::files_finder::{FilesFinder, FindFiles};
+use crate::rendering::compute_shaders::compute_normal_to_surface::ComputeNormalToSurface;
 use crate::rendering::compute_shaders::compute_shader::ComputeShader;
 use crate::rendering::compute_shaders::rescale_values::ComputeRescaleValues;
 use crate::rendering::renderers::raycast_renderer::RayCastRenderer;
@@ -52,6 +54,7 @@ struct MainRenderer {
     texture: wgpu::Texture,
     texture_view : wgpu::TextureView,
 
+    compute_normal_to_surface: ComputeNormalToSurface,
     values_rescaler : ComputeRescaleValues,
     raycast_renderer: RayCastRenderer,
 }
@@ -84,11 +87,24 @@ impl Example for MainRenderer {
             dimension: wgpu::TextureDimension::D3,
             format: wgpu::TextureFormat::R32Float,
             usage: wgpu::TextureUsages::TEXTURE_BINDING |
+                   wgpu::TextureUsages::STORAGE_BINDING |
                    wgpu::TextureUsages::COPY_DST,
             view_formats: &[],
         });
 
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
+        let data = exam. get_image_data();
+        queue.write_texture(
+            texture.as_image_copy(),
+            cast_slice(&data),
+            wgpu::ImageDataLayout {
+                offset: 0,
+                bytes_per_row: Some(data_dims.width * mem::size_of::<f32>() as u32),
+                rows_per_image: Some(data_dims.height),
+
+            },
+            texture_extent,
+        );
 
         let values_rescaler = ComputeRescaleValues::init(
             adapter,
@@ -98,18 +114,36 @@ impl Example for MainRenderer {
             &texture_view
         );
 
+        let compute_normal_to_surface = ComputeNormalToSurface::init(
+            adapter,
+            device,
+            queue,
+            &data_dims,
+            &texture_view
+        );
+
+        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+            label: Some("Command Encoder for GPU compute"),
+        });
+
+        values_rescaler.step(device, queue, &mut encoder);
+        compute_normal_to_surface.step(device, queue, &mut encoder);
+
+        queue.submit(Some(encoder.finish()));
+
         let raycast_renderer = RayCastRenderer::init(
             config,
             adapter,
             device,
             queue,
             exam,
-            &texture_view
+            &compute_normal_to_surface.get_normal_to_surface_view()
         );
 
         MainRenderer {
             texture,
             texture_view,
+            compute_normal_to_surface,
             values_rescaler,
             raycast_renderer
         }
@@ -129,8 +163,13 @@ impl Example for MainRenderer {
     }
 
     fn render(&mut self, view: &wgpu::TextureView, device: &wgpu::Device, queue: &wgpu::Queue) {
-        self.values_rescaler.step(device, queue);
-        self.raycast_renderer.render(view, device, queue);
+        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+            label: Some("Command Encoder for GPU compute"),
+        });
+
+        self.raycast_renderer.render(view, device, queue, &mut encoder);
+
+        queue.submit(Some(encoder.finish()));
     }
 
     fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue) {

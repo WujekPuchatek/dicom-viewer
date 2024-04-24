@@ -8,19 +8,18 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add rescale_values compute shader and add calculation normal to surface compute shader">
-      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/raycast_renderer.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/renderer.rs" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Try to resolve problem">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_normal_to_surface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_normal_to_surface.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_shader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/compute_shader.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/compute_shaders/rescale_values.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/renderers/raycast_renderer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/renderers/raycast_renderer.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/renderers/renderer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/renderers/renderer.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/normal_calculation.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/normal_calculation.wgsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/ray_cast.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/ray_cast.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/rescale_values.wgsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/shader.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/ray_cast.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rendering/utils.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/utils.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shader.wgsl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -285,7 +284,9 @@
       <workItem from="1713790477034" duration="4725000" />
       <workItem from="1713810079317" duration="3440000" />
       <workItem from="1713865030303" duration="5899000" />
-      <workItem from="1713901523949" duration="4305000" />
+      <workItem from="1713901523949" duration="5798000" />
+      <workItem from="1713952443385" duration="5418000" />
+      <workItem from="1713970408373" duration="2489000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -639,7 +640,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713815665995</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Try to resolve problem">
+      <option name="closed" value="true" />
+      <created>1713907254416</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1713907254416</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -658,7 +667,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Mix compute and fragment / vertex shader" />
     <MESSAGE value="Add cube example. Start of work on rendering" />
     <MESSAGE value="Add zoom" />
     <MESSAGE value="Add rotate + data dimensions class" />
@@ -683,7 +691,8 @@
     <MESSAGE value="Success!" />
     <MESSAGE value="Add random start position of raymarching" />
     <MESSAGE value="Add rescale_values compute shader and add calculation normal to surface compute shader" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add rescale_values compute shader and add calculation normal to surface compute shader" />
+    <MESSAGE value="Try to resolve problem" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try to resolve problem" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -702,6 +711,11 @@
           <url>file://$USER_HOME$/.cargo/git/checkouts/jpeg2k-1577084468b1992b/2fb49a6/src/j2k_image.rs</url>
           <line>64</line>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/main.rs</url>
+          <line>108</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
