@@ -9,12 +9,21 @@ struct Model {
     inv_transform: mat4x4<f32>,
 };
 
+struct Light {
+    position: vec3<f32>,
+    ambient: vec3<f32>,
+    diffuse: vec3<f32>,
+    specular: vec3<f32>,
+};
+
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) world_pos: vec3<f32>,
     @location(1) ray_dir: vec3<f32>,
     @location(2) tex_coord: vec3<f32>,
 };
+
+const AMBIENT_STRENGTH: f32 = 0.1;
 
 fn aabbIntersect (origin: vec3<f32>, direction: vec3<f32>) -> vec2<f32> {
     let min = vec3<f32>(-1.0, -1.0, -0.56);
@@ -57,7 +66,7 @@ fn convert_value(value: f32) -> f32 {
 
 fn raymarchHit (pos: vec3<f32>) -> vec4<f32> {
     let converted_pos = convert_vec3(pos);
-    let texel = textureSampleLevel(hu_values, hu_sampler, converted_pos, 0.0);
+    let texel = textureSampleLevel(hu_values, tex_sampler, converted_pos, 0.0);
 
     let value = convert_value(texel.r);
     return vec4<f32>(value);
@@ -68,22 +77,28 @@ fn random (seed: vec3<f32>) -> f32 {
         43758.5453123);
 }
 
+fn correct_gamma (color: vec4<f32>) -> vec4<f32> {
+    let gamma = 2.2;
+    let gamma_vec = vec4<f32>(gamma, gamma, gamma, 1.0);
+    return pow(color, gamma_vec);
+}
 
-@group(0)
-@binding(0)
-var<uniform> camera: Camera;
+fn diffuse (pos: vec3<f32>) -> vec3<f32> {
+    let light_dir = normalize(light.position - pos);
 
-@group(0)
-@binding(1)
-var<uniform> model: Model;
+    let converted_pos = convert_vec3(pos);
+    let normal = textureSampleLevel(normal_to_surface, tex_sampler, converted_pos, 0.0).rgb;
 
-@group(0)
-@binding(2)
-var hu_values : texture_3d<f32>;
+    let diff = max(dot(normal, light_dir), 0.0);
+    return diff * light.diffuse;
+}
 
-@group(0)
-@binding(3)
-var hu_sampler: sampler;
+@group(0) @binding(0) var<uniform> camera: Camera;
+@group(0) @binding(1) var<uniform> model: Model;
+@group(0) @binding(2) var hu_values : texture_3d<f32>;
+@group(0) @binding(3) var tex_sampler: sampler;
+@group(0) @binding(4) var<uniform> light: Light;
+@group(0) @binding(5) var normal_to_surface : texture_3d<f32>;
 
 @vertex
 fn vs_main(
@@ -117,6 +132,8 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         return vec4<f32>(0.0);
     }
 
+    let ambient = AMBIENT_STRENGTH * light.ambient;
+
     let steps = 15000;
     let step_size = 0.005;
     let factory_opacity = 0.96;
@@ -131,6 +148,8 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         var rgb = src.rgb;
         rgb *= src.a;
 
+        rgb *= ambient;
+
         src = vec4<f32>(rgb, src.a);
 
         src *= factory_opacity;
@@ -144,9 +163,14 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         }
     }
 
-    let tex_coord = vertex.tex_coord * vec3<f32>(511.0, 511.0, 219.0);
-    let tex_coord_u32 = vec3<u32>(u32(tex_coord.x), u32(tex_coord.y), u32(tex_coord.z));
+    let coord = vertex.tex_coord * vec3<f32>(511.0, 511.0, 219.0);
+    let coord_u32 = vec3<u32>(u32(coord.x), u32(coord.y), u32(coord.z));
 
-    let value = textureLoad(hu_values, tex_coord_u32, 0).r;
-    return vec4<f32>(value, value, value, 1.0);
+    let value = textureLoad(hu_values, coord_u32, 0).r;
+    let color = AMBIENT_STRENGTH * light.ambient * value;
+
+    result = vec4<f32>(color, 1.0);
+
+    let corrected_gamma = correct_gamma(result);
+    return corrected_gamma;
 }

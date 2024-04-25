@@ -93,7 +93,7 @@ impl Example for MainRenderer {
         });
 
         let texture_view = texture.create_view(&wgpu::TextureViewDescriptor::default());
-        let data = exam. get_image_data();
+        let data = exam.get_image_data();
         queue.write_texture(
             texture.as_image_copy(),
             cast_slice(&data),
@@ -131,14 +131,14 @@ impl Example for MainRenderer {
 
         queue.submit(Some(encoder.finish()));
 
-        let raycast_renderer = RayCastRenderer::init(
-            config,
-            adapter,
-            device,
-            queue,
-            exam,
-            &compute_normal_to_surface.get_normal_to_surface_view()
-        );
+        let raycast_renderer =
+            RayCastRenderer::init(config,
+                                  adapter,
+                                  device,
+                                  queue,
+                                  exam,
+                                  &texture_view,
+                                  &compute_normal_to_surface.get_normal_to_surface_view());
 
         MainRenderer {
             texture,

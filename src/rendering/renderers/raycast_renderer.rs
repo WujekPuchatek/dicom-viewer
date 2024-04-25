@@ -2,9 +2,11 @@ use std::borrow::Cow;
 use std::mem;
 use bytemuck::{Pod, Zeroable};
 use glam::Quat;
+use wgpu::BindingType;
 use wgpu::util::DeviceExt;
 use crate::examination::examination::Examination;
 use crate::rendering::camera::{Camera, CameraBinding};
+use crate::rendering::light::{Light, LightBinding};
 use crate::rendering::model::{Model, ModelBinding};
 use crate::rendering::renderers::renderer::Renderer;
 use crate::rendering::sampler::{Sampler, SamplerBinding};
@@ -60,6 +62,7 @@ fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
 
 pub struct RayCastRenderer {
     model: Model,
+    light: Light,
     camera: Camera,
 
     data_dims: Dimensions,
@@ -68,6 +71,7 @@ pub struct RayCastRenderer {
     index_buf: wgpu::Buffer,
     index_count: usize,
     bind_group: wgpu::BindGroup,
+    light_binding: LightBinding,
     model_binding: ModelBinding,
     camera_binding: CameraBinding,
     pipeline: wgpu::RenderPipeline,
@@ -85,9 +89,11 @@ impl RayCastRenderer {
         queue: &wgpu::Queue,
         exam: &Examination,
         data_view: &wgpu::TextureView,
+        normal_view: &wgpu::TextureView,
     ) -> Self {
         let data_dims = exam.get_dimensions();
 
+        let mut light = Light::new();
         let mut model = Model::new(Quat::IDENTITY);
         let mut camera = Camera::new(config.width as f32 / config.height as f32);
 
@@ -110,6 +116,7 @@ impl RayCastRenderer {
         let mut camera_binding = CameraBinding::new(device, 0);
         let mut model_binding = ModelBinding::new(device, 1);
         let sampler_binding = SamplerBinding::new(device, 3, Sampler::new());
+        let mut light_binding = LightBinding::new(device, 4);
 
         // Create pipeline layout
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -128,6 +135,17 @@ impl RayCastRenderer {
                     count: None,
                 },
                 sampler_binding.bind_group_layout_entry(),
+                light_binding.bind_group_layout_entry(),
+                wgpu::BindGroupLayoutEntry {
+                    binding: 5,
+                    visibility: wgpu::ShaderStages::FRAGMENT,
+                    ty: BindingType::Texture {
+                        multisampled: false,
+                        sample_type: wgpu::TextureSampleType::Float { filterable: true },
+                        view_dimension: wgpu::TextureViewDimension::D3,
+                    },
+                    count: None,
+                }
             ],
         });
 
@@ -137,6 +155,7 @@ impl RayCastRenderer {
             push_constant_ranges: &[],
         });
 
+        light_binding.update(queue, &mut light);
         model_binding.update(queue, &mut model);
         camera_binding.update(queue, &mut camera);
 
@@ -151,6 +170,11 @@ impl RayCastRenderer {
                     resource: wgpu::BindingResource::TextureView(&data_view),
                 },
                 sampler_binding.bind_group_entry(),
+                light_binding.bind_group_entry(),
+                wgpu::BindGroupEntry {
+                    binding: 5,
+                    resource: wgpu::BindingResource::TextureView(&normal_view),
+                }
             ],
             label: None,
         });
@@ -202,11 +226,13 @@ impl RayCastRenderer {
         RayCastRenderer {
             model,
             camera,
+            light,
             data_dims,
             vertex_buf,
             index_buf,
             index_count: index_data.len(),
             bind_group,
+            light_binding,
             model_binding,
             camera_binding,
             pipeline,
@@ -260,6 +286,7 @@ impl Renderer for RayCastRenderer {
               queue: &wgpu::Queue,
               encoder: &mut wgpu::CommandEncoder)
     {
+        self.light_binding.update(queue, &mut self.light);
         self.model_binding.update(queue, &mut self.model);
         self.camera_binding.update(queue, &mut self.camera);
 
