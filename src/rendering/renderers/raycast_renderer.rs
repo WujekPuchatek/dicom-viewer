@@ -3,7 +3,11 @@ use std::mem;
 use bytemuck::{Pod, Zeroable};
 use glam::Quat;
 use wgpu::BindingType;
+use wgpu::naga::SwizzleComponent::W;
 use wgpu::util::DeviceExt;
+use winit::event::WindowEvent;
+use winit::keyboard::{Key, NamedKey, NativeKey};
+use winit::keyboard::Key::Named;
 use crate::examination::examination::Examination;
 use crate::rendering::camera::{Camera, CameraBinding};
 use crate::rendering::light::{Light, LightBinding};
@@ -248,8 +252,17 @@ impl RayCastRenderer {
         self.camera.set_aspect(config.width, config.height);
     }
 
-    pub fn update(&mut self, _event: winit::event::WindowEvent) {
-        //empty
+    pub fn update(&mut self, event: WindowEvent) {
+        println!("Event: {:?}", event);
+
+        if let WindowEvent::KeyboardInput { event, .. } = event {
+            if event.state == winit::event::ElementState::Pressed {
+                match event.logical_key {
+                    Key::Character(s)=> println!("Character: {}", s),
+                    _ => {}
+                }
+            }
+        }
     }
 
     pub fn update_zoom(&mut self, zoom_delta: f32, _queue: &wgpu::Queue) {
@@ -276,6 +289,18 @@ impl RayCastRenderer {
         let rotation = Quat::from_axis_angle(right, dy) * Quat::from_axis_angle(up, dx);
 
         self.model.rotate(rotation);
+    }
+
+    pub fn move_forward(&mut self, delta: f32) {
+        self.camera.move_forward(delta);
+    }
+
+    pub fn move_right(&mut self, delta: f32) {
+        self.camera.move_right(delta);
+    }
+
+    pub fn move_up(&mut self, delta: f32) {
+        self.camera.move_up(delta);
     }
 }
 

@@ -9,7 +9,9 @@ use winit::{
     window::Window,
 };
 use winit::event::MouseScrollDelta;
+use winit::keyboard::KeyCode;
 use crate::examination::examination::Examination;
+use winit_input_helper::WinitInputHelper;
 
 pub trait Example: 'static + Sized {
     const SRGB: bool = true;
@@ -54,6 +56,12 @@ pub trait Example: 'static + Sized {
     fn render(&mut self, view: &wgpu::TextureView, device: &wgpu::Device, queue: &wgpu::Queue);
     fn update_zoom(&mut self, zoom_delta: f32, queue: &wgpu::Queue);
     fn rotate(&mut self, dx: f32, dy: f32, queue: &wgpu::Queue);
+
+    fn move_forward(&mut self, delta: f32);
+
+    fn move_right(&mut self, delta: f32);
+
+    fn move_up(&mut self, delta: f32);
 }
 
 fn init_logger() {
@@ -351,6 +359,7 @@ impl FrameCounter {
 
 async fn start<E: Example>(title: &str, exam: &Examination) {
     init_logger();
+    let mut input = WinitInputHelper::new();
 
     let window_loop = EventLoopWrapper::new(title);
     let mut surface = SurfaceWrapper::new();
@@ -384,91 +393,8 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
                         ));
                     }
                 }
-                Event::Suspended => {
-                    surface.suspend();
-                }
-                Event::WindowEvent { event, .. } => match event {
-                    WindowEvent::Resized(size) => {
-                        surface.resize(&context, size);
-                        example.as_mut().unwrap().resize(
-                            &surface.config(),
-                            &context.device,
-                            &context.queue,
-                        );
-
-                        window_loop.window.request_redraw();
-                    }
-                    WindowEvent::MouseInput {
-                        state,
-                        button,
-                        ..
-                    } => {
-                        let mouse = &mut context.mouse;
-                        match button {
-                            winit::event::MouseButton::Left => {
-                                mouse.left_pressed = state == winit::event::ElementState::Pressed;
-                            }
-                            winit::event::MouseButton::Right => {
-                                mouse.right_pressed = state == winit::event::ElementState::Pressed;
-                            }
-                            _ => {}
-                        }
-                    }
-                    WindowEvent::KeyboardInput {
-                        event:
-                        KeyEvent {
-                            logical_key: Key::Character(s),
-                            ..
-                        },
-                        ..
-                    } if s == "r" => {
-                        println!("{:#?}", context.instance.generate_report());
-                    }
-                    WindowEvent::MouseWheel {
-                        delta,
-                        ..
-                    } => {
-                        if let MouseScrollDelta::LineDelta(_dx, dy) = delta
-                        {
-                            example.as_mut().unwrap().update_zoom(dy, &context.queue);
-                        }
-                    }
-                    WindowEvent::CursorMoved { position, .. } => {
-                        let old_position = context.mouse.position;
-                        context.mouse.position = <(f32, f32)>::from(position);
-
-                        let delta_x = old_position.0 - context.mouse.position.0;
-                        let delta_y = old_position.1 - context.mouse.position.1;
-                        if context.mouse.left_pressed {
-                            example.as_mut().unwrap().rotate(delta_x, delta_y, &context.queue);
-                        }
-                    }
-                    WindowEvent::KeyboardInput {
-                        event:
-                        KeyEvent {
-                            logical_key: Key::Named(NamedKey::Escape),
-                            ..
-                        },
-                        ..
-                    }
-                    | WindowEvent::CloseRequested => {
-                        target.exit();
-                    }
-                    WindowEvent::KeyboardInput {
-                        event:
-                        KeyEvent {
-                            logical_key: Key::Character(s),
-                            ..
-                        },
-                        ..
-                    } if s == "r" => {
-                        println!("{:#?}", context.instance.generate_report());
-                    }
+                Event::WindowEvent { ref event, .. } => match event {
                     WindowEvent::RedrawRequested => {
-                        // On MacOS, currently redraw requested comes in _before_ Init does.
-                        // If this happens, just drop the requested redraw on the floor.
-                        //
-                        // See https://github.com/rust-windowing/winit/issues/3235 for some discussion
                         if example.is_none() {
                             return;
                         }
@@ -490,10 +416,96 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
 
                         window_loop.window.request_redraw();
                     }
-                    _ => example.as_mut().unwrap().update(event),
-                },
+                    _ => {}
+                }
                 _ => {}
             }
+
+            if input.update(&event) {
+                let window_resized = input.window_resized();
+                if let Some(window_size) = window_resized {
+                    surface.resize(&context, window_size);
+                    example.as_mut().unwrap().resize(
+                        &surface.config(),
+                        &context.device,
+                        &context.queue,
+                    );
+
+                    window_loop.window.request_redraw();
+                }
+
+                if input.destroyed() || input.key_pressed(KeyCode::Escape) {
+                    target.exit();
+                }
+
+                if input.key_pressed(KeyCode::KeyW) || input.key_held(KeyCode::KeyW) {
+                    example.as_mut().unwrap().move_forward(0.3);
+                }
+
+                if input.key_pressed(KeyCode::KeyS) || input.key_held(KeyCode::KeyS) {
+                    example.as_mut().unwrap().move_forward(-0.3);
+                }
+
+                if input.key_pressed(KeyCode::KeyA) || input.key_held(KeyCode::KeyA) {
+                    example.as_mut().unwrap().move_right(-0.3);
+                }
+
+                if input.key_pressed(KeyCode::KeyD) || input.key_held(KeyCode::KeyD) {
+                    example.as_mut().unwrap().move_right(0.3);
+                }
+
+                if input.key_pressed(KeyCode::KeyQ) || input.key_held(KeyCode::KeyQ) {
+                    example.as_mut().unwrap().move_up(-0.3);
+                }
+
+                if input.key_pressed(KeyCode::KeyE) || input.key_held(KeyCode::KeyE) {
+                    example.as_mut().unwrap().move_up(0.3);
+                }
+
+
+            }
+
+            // match event {
+            //     Event::WindowEvent { event, .. } => match event {
+            //         WindowEvent::MouseInput {
+            //             state,
+            //             button,
+            //             ..
+            //         } => {
+            //             let mouse = &mut context.mouse;
+            //             match button {
+            //                 winit::event::MouseButton::Left => {
+            //                     mouse.left_pressed = state == winit::event::ElementState::Pressed;
+            //                 }
+            //                 winit::event::MouseButton::Right => {
+            //                     mouse.right_pressed = state == winit::event::ElementState::Pressed;
+            //                 }
+            //                 _ => {}
+            //             }
+            //         }
+            //         WindowEvent::MouseWheel {
+            //             delta,
+            //             ..
+            //         } => {
+            //             if let MouseScrollDelta::LineDelta(_dx, dy) = delta
+            //             {
+            //                 example.as_mut().unwrap().update_zoom(dy, &context.queue);
+            //             }
+            //         }
+            //         WindowEvent::CursorMoved { position, .. } => {
+            //             let old_position = context.mouse.position;
+            //             context.mouse.position = <(f32, f32)>::from(position);
+            //
+            //             let delta_x = old_position.0 - context.mouse.position.0;
+            //             let delta_y = old_position.1 - context.mouse.position.1;
+            //             if context.mouse.left_pressed {
+            //                 example.as_mut().unwrap().rotate(delta_x, delta_y, &context.queue);
+            //             }
+            //         }
+            //         _ => example.as_mut().unwrap().update(event),
+            //     },
+            //     _ => {}
+            // }
         },
     );
 }

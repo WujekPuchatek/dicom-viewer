@@ -45,7 +45,7 @@ impl Camera {
     const FOVY: f32 = std::f32::consts::FRAC_PI_4;
     const UP: Vec3 = Vec3::Z;
     const TARGET: Vec3 = Vec3::ZERO;
-    const EYE: Vec3 = Vec3::new(3.0, -6.0, 2.0);
+    const EYE: Vec3 = Vec3::new(0.0, -4.0, 0.0);
 
     pub fn new(aspect: f32) -> Self {
         Self {
@@ -80,6 +80,31 @@ impl Camera {
     pub fn set_aspect(&mut self, width: u32, height: u32) {
         self.aspect = width as f32 / height as f32;
 
+        self.updated = true;
+    }
+
+    pub fn move_forward(&mut self, delta: f32) {
+        let forward = (self.target - self.eye).normalize();
+        self.eye += forward * delta;
+        self.target += forward * delta;
+        self.updated = true;
+    }
+
+    pub fn move_right(&mut self, delta: f32) {
+        let start_distance = (self.target - self.eye).length();
+
+        let mut forward = (self.target - self.eye).normalize();
+        let right = forward.cross(Self::UP).normalize();
+        self.eye += right * delta;
+
+        forward = (self.target - self.eye).normalize();
+        self.target = self.eye + forward * start_distance;
+
+        self.updated = true;
+    }
+
+    pub fn move_up(&mut self, delta: f32) {
+        self.eye += Self::UP * delta;
         self.updated = true;
     }
 

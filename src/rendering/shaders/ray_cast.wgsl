@@ -94,7 +94,7 @@ fn diffuse (pos: vec3<f32>) -> vec3<f32> {
 }
 
 @group(0) @binding(0) var<uniform> camera: Camera;
-@group(0) @binding(1) var<uniform> model: Model;
+//@group(0) @binding(1) var<uniform> model: Model;
 @group(0) @binding(2) var hu_values : texture_3d<f32>;
 @group(0) @binding(3) var tex_sampler: sampler;
 @group(0) @binding(4) var<uniform> light: Light;
@@ -108,10 +108,10 @@ fn vs_main(
     var result: VertexOutput;
 
     result.world_pos = position.xyz;
-    result.position = camera.proj_view * model.transform * position;
+    result.position = camera.proj_view * position;
     result.tex_coord = tex_coord;
 
-    result.ray_dir = normalize(result.world_pos - (model.inv_transform * camera.eye_pos).xyz);
+    result.ray_dir = normalize(result.world_pos - camera.eye_pos.xyz);
 
     return result;
 }
@@ -148,8 +148,6 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
         var rgb = src.rgb;
         rgb *= src.a;
 
-        rgb *= ambient;
-
         src = vec4<f32>(rgb, src.a);
 
         src *= factory_opacity;
@@ -162,14 +160,6 @@ fn fs_main(vertex: VertexOutput) -> @location(0) vec4<f32> {
             break;
         }
     }
-
-    let coord = vertex.tex_coord * vec3<f32>(511.0, 511.0, 219.0);
-    let coord_u32 = vec3<u32>(u32(coord.x), u32(coord.y), u32(coord.z));
-
-    let value = textureLoad(hu_values, coord_u32, 0).r;
-    let color = AMBIENT_STRENGTH * light.ambient * value;
-
-    result = vec4<f32>(color, 1.0);
 
     let corrected_gamma = correct_gamma(result);
     return corrected_gamma;

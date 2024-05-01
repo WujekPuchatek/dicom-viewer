@@ -64,6 +64,18 @@ impl Example for MainRenderer {
         wgpu::Features::POLYGON_MODE_LINE
     }
 
+    fn move_forward(&mut self, delta: f32) {
+        self.raycast_renderer.move_forward(delta);
+    }
+
+    fn move_right(&mut self, delta: f32) {
+        self.raycast_renderer.move_right(delta);
+    }
+
+    fn move_up(&mut self, delta: f32) {
+        self.raycast_renderer.move_up(delta);
+    }
+
     fn init(
         config: &wgpu::SurfaceConfiguration,
         adapter: &wgpu::Adapter,
