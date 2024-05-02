@@ -1,5 +1,5 @@
 use bytemuck::{Pod, Zeroable};
-use glam::{Mat4, Vec3, Vec4};
+use glam::{Mat4, Quat, Vec3, Vec4};
 use wgpu::util::DeviceExt;
 use crate::utils::non_zero_sized::NonZeroSized;
 
@@ -83,28 +83,39 @@ impl Camera {
         self.updated = true;
     }
 
+    pub fn rotate(&mut self, dx: f32, dy: f32) {
+        let eye = self.eye();
+        let camera_up = self.up();
+
+        let right = eye.cross(camera_up).normalize();
+        let up = right.cross(eye).normalize();
+
+        let rotation = Quat::from_axis_angle(right, dy) * Quat::from_axis_angle(up, dx);
+
+        self.eye = rotation * (self.eye - self.target) + self.target;
+
+
+        self.updated = true;
+    }
+
     pub fn move_forward(&mut self, delta: f32) {
-        let forward = (self.target - self.eye).normalize();
-        self.eye += forward * delta;
-        self.target += forward * delta;
+        self.eye += delta * Vec3::Z;
+        self.target += delta * Vec3::Z;
+
         self.updated = true;
     }
 
     pub fn move_right(&mut self, delta: f32) {
-        let start_distance = (self.target - self.eye).length();
-
-        let mut forward = (self.target - self.eye).normalize();
-        let right = forward.cross(Self::UP).normalize();
-        self.eye += right * delta;
-
-        forward = (self.target - self.eye).normalize();
-        self.target = self.eye + forward * start_distance;
+        self.eye += delta * Vec3::X;
+        self.target += delta * Vec3::X;
 
         self.updated = true;
     }
 
     pub fn move_up(&mut self, delta: f32) {
         self.eye += Self::UP * delta;
+        self.target += Self::UP * delta;
+
         self.updated = true;
     }
 

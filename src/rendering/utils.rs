@@ -8,7 +8,7 @@ use winit::{
     keyboard::{Key, NamedKey},
     window::Window,
 };
-use winit::event::MouseScrollDelta;
+use winit::event::{MouseButton, MouseScrollDelta};
 use winit::keyboard::KeyCode;
 use crate::examination::examination::Examination;
 use winit_input_helper::WinitInputHelper;
@@ -416,6 +416,16 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
 
                         window_loop.window.request_redraw();
                     }
+                    WindowEvent::CursorMoved { position, .. } => {
+                        let old_position = context.mouse.position;
+                        context.mouse.position = (position.x as f32, position.y as f32);
+
+                        let delta_x = old_position.0 - context.mouse.position.0;
+                        let delta_y = old_position.1 - context.mouse.position.1;
+                        if input.mouse_pressed(MouseButton::Left) || input.mouse_held(MouseButton::Left) {
+                            example.as_mut().unwrap().rotate(delta_x, delta_y, &context.queue);
+                        }
+                    }
                     _ => {}
                 }
                 _ => {}
@@ -461,8 +471,6 @@ async fn start<E: Example>(title: &str, exam: &Examination) {
                 if input.key_pressed(KeyCode::KeyE) || input.key_held(KeyCode::KeyE) {
                     example.as_mut().unwrap().move_up(0.3);
                 }
-
-
             }
 
             // match event {

@@ -273,22 +273,13 @@ impl RayCastRenderer {
     }
 
     pub fn rotate(&mut self, dx: f32, dy: f32, _queue: &wgpu::Queue) {
-        // TODO : use https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
-        // Rotating 3D Render with the Mouse | CAD From Scratch [4]
+
         const SENSITIVITY: f32 = 0.005;
 
         let dx = -dx * SENSITIVITY;
         let dy = dy * SENSITIVITY;
 
-        let eye = self.camera.eye();
-        let camera_up = self.camera.up();
-
-        let right = eye.cross(camera_up).normalize();
-        let up = right.cross(eye).normalize();
-
-        let rotation = Quat::from_axis_angle(right, dy) * Quat::from_axis_angle(up, dx);
-
-        self.model.rotate(rotation);
+        self.camera.rotate(dx, dy);
     }
 
     pub fn move_forward(&mut self, delta: f32) {
