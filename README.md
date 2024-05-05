@@ -13,5 +13,3 @@ This library is written in Rust and provides functionality for parsing and viewi
 ## Usage
 
 To use the library, create an instance of `DicomFileParser` with the path to the DICOM file. Then, call the `parse` method on the parser instance.
-
-Hello
