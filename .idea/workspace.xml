@@ -8,12 +8,9 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Attempt to move model rotation to camera">
-      <change afterPath="$PROJECT_DIR$/src/rendering/renderers/montage_renderer.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/montage.wgsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rendering/shaders/raycast_compute.wgsl" afterDir="false" />
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Prepare to perform raycast using compute renderer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/renderers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/renderers/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/raycast_compute.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/raycast_compute.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -284,7 +281,8 @@
       <workItem from="1713991833181" duration="6126000" />
       <workItem from="1714596897941" duration="3092000" />
       <workItem from="1714662033434" duration="5290000" />
-      <workItem from="1714944670739" duration="179000" />
+      <workItem from="1714944670739" duration="808000" />
+      <workItem from="1715024801316" duration="3089000" />
     </task>
     <task id="LOCAL-00001" summary="Complete implementation of data_reader">
       <option name="closed" value="true" />
@@ -697,7 +695,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add dicom_file.rs" />
     <MESSAGE value="Add casting numeric string" />
     <MESSAGE value="add remove trailing whitespaces" />
     <MESSAGE value="Modification of examination" />
@@ -722,7 +719,8 @@
     <MESSAGE value="Fix" />
     <MESSAGE value="Camera tests" />
     <MESSAGE value="Attempt to move model rotation to camera" />
-    <option name="LAST_COMMIT_MESSAGE" value="Attempt to move model rotation to camera" />
+    <MESSAGE value="Prepare to perform raycast using compute renderer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Prepare to perform raycast using compute renderer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
