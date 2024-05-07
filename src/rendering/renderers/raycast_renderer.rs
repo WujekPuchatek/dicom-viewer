@@ -14,21 +14,9 @@ use crate::rendering::light::{Light, LightBinding};
 use crate::rendering::model::{Model, ModelBinding};
 use crate::rendering::renderers::renderer::Renderer;
 use crate::rendering::sampler::{Sampler, SamplerBinding};
+use crate::rendering::vertex::{Vertex, vertex};
 use crate::utils::data_dimensions::Dimensions;
 
-#[repr(C)]
-#[derive(Clone, Copy, Pod, Zeroable)]
-struct Vertex {
-    pub pos: [f32; 4],
-    pub tex_coord: [f32; 3],
-}
-
-fn vertex(pos: [i8; 3], tc: [i8; 3]) -> Vertex {
-    Vertex {
-        pos: [pos[0] as f32, pos[1] as f32, pos[2] as f32, 1.0],
-        tex_coord: [tc[0] as f32, tc[1] as f32, tc[2] as f32],
-    }
-}
 
 fn create_vertices(normalized_dims: [f32; 3]) -> (Vec<Vertex>, Vec<u16>) {
     let mut vertex_data = [
