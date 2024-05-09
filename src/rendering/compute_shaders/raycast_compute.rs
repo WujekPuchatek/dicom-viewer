@@ -20,12 +20,12 @@ impl RaycastCompute {
                 dimensions: &Dimensions,
                 data_tex_view: &TextureView) -> Self {
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: Some("Compute normal"),
+            label: Some("Raycast compute"),
             source: wgpu::ShaderSource::Wgsl(Cow::Borrowed(include_str!("../shaders/raycast_compute.wgsl"))),
         });
 
         let normal_tex = device.create_texture(&wgpu::TextureDescriptor {
-            label: Some("Normal texture"),
+            label: Some("Raycast texture"),
             size: wgpu::Extent3d {
                 width: dimensions.width,
                 height: dimensions.height,
@@ -66,12 +66,12 @@ impl RaycastCompute {
         };
 
         let bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-            label: Some("Normal calculation bind group layout"),
+            label: Some("Raycast compute bind group layout"),
             entries: &[input_entry, output_entry],
         });
 
         let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
-            label: Some("Normal calculation bind group"),
+            label: Some("Raycast compute bind group"),
             layout: &bind_group_layout,
             entries: &[
                 wgpu::BindGroupEntry {
@@ -87,13 +87,13 @@ impl RaycastCompute {
 
         let compute_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-                label: Some("Normal calculation pipeline layout"),
+                label: Some("Raycast compute pipeline layout"),
                 bind_group_layouts: &[&bind_group_layout],
                 push_constant_ranges: &[],
             });
 
         let pipeline = device.create_compute_pipeline(&wgpu::ComputePipelineDescriptor {
-            label: Some("Normal calculation pipeline"),
+            label: Some("Raycast compute pipeline"),
             layout: Some(&compute_pipeline_layout),
             module: &shader,
             entry_point: "main",
@@ -113,12 +113,12 @@ impl RaycastCompute {
     }
 }
 
-impl ComputeShader for ComputeNormalToSurface {
+impl ComputeShader for RaycastCompute {
     fn step(&self, _device: &wgpu::Device, _queue: &wgpu::Queue, encoder: &mut wgpu::CommandEncoder) {
 
         let (dispatch_width, dispatch_height, dispatch_depth) = self.work_group_count;
         let mut compute_pass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            label: Some("Heat pass"),
+            label: Some("Raycast compute pass"),
             timestamp_writes: None,
         });
         compute_pass.set_pipeline(&self.pipeline);
