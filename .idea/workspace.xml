@@ -8,9 +8,8 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Prepare to perform raycast using compute renderer">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add raycast_compute to mod.rs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rendering/shaders/raycast_compute.wgsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/rendering/shaders/raycast_compute.wgsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,14 +37,12 @@
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="6bbe2c4d-a076-4d29-9948-093a4e2ba00f" />
   </component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="6bbe2c4d-a076-4d29-9948-093a4e2ba00f" />
-        <option name="url" value="https://github.com/WujekPuchatek/dicom-viewer.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/WujekPuchatek/dicom-viewer.git&quot;,
+    &quot;accountId&quot;: &quot;6bbe2c4d-a076-4d29-9948-093a4e2ba00f&quot;
+  }
+}</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="fhviqm7y" />
   </component>
@@ -283,22 +280,10 @@
       <workItem from="1714662033434" duration="5290000" />
       <workItem from="1714944670739" duration="808000" />
       <workItem from="1715024801316" duration="3089000" />
-    </task>
-    <task id="LOCAL-00001" summary="Complete implementation of data_reader">
-      <option name="closed" value="true" />
-      <created>1709634458288</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1709634458288</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Complete implementation of data_reader and add tests">
-      <option name="closed" value="true" />
-      <created>1709748715442</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1709748715442</updated>
+      <workItem from="1715115831219" duration="194000" />
+      <workItem from="1715116112171" duration="743000" />
+      <workItem from="1715201592174" duration="2226000" />
+      <workItem from="1715461968357" duration="2198000" />
     </task>
     <task id="LOCAL-00003" summary="Start implementation of dicom_file_parser.rs">
       <option name="closed" value="true" />
@@ -676,7 +661,23 @@
       <option name="project" value="LOCAL" />
       <updated>1714666639895</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Add raycast_compute.rs">
+      <option name="closed" value="true" />
+      <created>1715203952862</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1715203952862</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Add raycast_compute to mod.rs">
+      <option name="closed" value="true" />
+      <created>1715463442257</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1715463442258</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -695,8 +696,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add casting numeric string" />
-    <MESSAGE value="add remove trailing whitespaces" />
     <MESSAGE value="Modification of examination" />
     <MESSAGE value="start pixel_data_processor.rs" />
     <MESSAGE value="Modify rendering pipeline to render 3D" />
@@ -720,7 +719,9 @@
     <MESSAGE value="Camera tests" />
     <MESSAGE value="Attempt to move model rotation to camera" />
     <MESSAGE value="Prepare to perform raycast using compute renderer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Prepare to perform raycast using compute renderer" />
+    <MESSAGE value="Add raycast_compute.rs" />
+    <MESSAGE value="Add raycast_compute to mod.rs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add raycast_compute to mod.rs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
