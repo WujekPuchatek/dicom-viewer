@@ -8,9 +8,8 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Add raycast_compute to mod.rs">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Self-edu related to rendering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,14 +283,7 @@
       <workItem from="1715116112171" duration="743000" />
       <workItem from="1715201592174" duration="2226000" />
       <workItem from="1715461968357" duration="2198000" />
-    </task>
-    <task id="LOCAL-00003" summary="Start implementation of dicom_file_parser.rs">
-      <option name="closed" value="true" />
-      <created>1709849991649</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1709849991649</updated>
+      <workItem from="1715636597550" duration="117000" />
     </task>
     <task id="LOCAL-00004" summary="Continue implementation of dicom_file_parser.rs">
       <option name="closed" value="true" />
@@ -677,7 +669,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715463442258</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Self-edu related to rendering">
+      <option name="closed" value="true" />
+      <created>1715636708956</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1715636708957</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -696,7 +696,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Modification of examination" />
     <MESSAGE value="start pixel_data_processor.rs" />
     <MESSAGE value="Modify rendering pipeline to render 3D" />
     <MESSAGE value="Attempt to add multisampling" />
@@ -721,7 +720,8 @@
     <MESSAGE value="Prepare to perform raycast using compute renderer" />
     <MESSAGE value="Add raycast_compute.rs" />
     <MESSAGE value="Add raycast_compute to mod.rs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add raycast_compute to mod.rs" />
+    <MESSAGE value="Self-edu related to rendering" />
+    <option name="LAST_COMMIT_MESSAGE" value="Self-edu related to rendering" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
