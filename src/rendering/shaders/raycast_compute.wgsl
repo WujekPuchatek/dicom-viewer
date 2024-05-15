@@ -59,9 +59,9 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
 
     // How to calculate the intersection of a ray with a 3D texture?
     output_texture.write(vec4<f32>(ray_dir, 1.0), vec2<i32>(global_id.xy));
-//    let t_near_far = aabbIntersect(camera.eye_pos.xyz, ray_dir, vec3<f32>(-1.0, -1.0, -1.0), vec3<f32>(1.0, 1.0, 1.0));
-//    let t_near = t_near_far.x;
-//    let t_far = t_near_far.y;
+    let t_near_far = aabbIntersect(camera.eye_pos.xyz, ray_dir, vec3<f32>(-1.0, -1.0, -1.0), vec3<f32>(1.0, 1.0, 1.0));
+    let t_near = t_near_far.x;
+    let t_far = t_near_far.y;
 
 //    if t_near < t_far {
 //        let hit_pos = camera.eye_pos.xyz + ray_dir * t_near;
