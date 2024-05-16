@@ -8,8 +8,9 @@
     <cargoProject FILE="$USER_HOME$/source/jpeg2k/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Self-edu related to rendering">
+    <list default="true" id="4ae1eb06-59b0-4d1c-876e-00f88ff424d6" name="Changes" comment="Try to debug compute shader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,30 +285,9 @@
       <workItem from="1715201592174" duration="2226000" />
       <workItem from="1715461968357" duration="2198000" />
       <workItem from="1715636597550" duration="117000" />
-    </task>
-    <task id="LOCAL-00004" summary="Continue implementation of dicom_file_parser.rs">
-      <option name="closed" value="true" />
-      <created>1709905532423</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1709905532423</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Continue implementation of dicom_file_parser.rs">
-      <option name="closed" value="true" />
-      <created>1709905596174</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1709905596174</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Continue implementation of dicom_file_parser.rs">
-      <option name="closed" value="true" />
-      <created>1709905619319</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1709905619319</updated>
+      <workItem from="1715721204387" duration="1804000" />
+      <workItem from="1715808255895" duration="633000" />
+      <workItem from="1715892676128" duration="16000" />
     </task>
     <task id="LOCAL-00007" summary="Extract value_reader.rs.">
       <option name="closed" value="true" />
@@ -677,7 +657,31 @@
       <option name="project" value="LOCAL" />
       <updated>1715636708957</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Self-edu related to rendering">
+      <option name="closed" value="true" />
+      <created>1715721213366</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1715721213366</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Self-edu related to rendering">
+      <option name="closed" value="true" />
+      <created>1715721226660</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1715721226660</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Try to debug compute shader">
+      <option name="closed" value="true" />
+      <created>1715808289328</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1715808289328</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -696,7 +700,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="start pixel_data_processor.rs" />
     <MESSAGE value="Modify rendering pipeline to render 3D" />
     <MESSAGE value="Attempt to add multisampling" />
     <MESSAGE value="Examine possibility of flutter - rust interoperability" />
@@ -721,7 +724,8 @@
     <MESSAGE value="Add raycast_compute.rs" />
     <MESSAGE value="Add raycast_compute to mod.rs" />
     <MESSAGE value="Self-edu related to rendering" />
-    <option name="LAST_COMMIT_MESSAGE" value="Self-edu related to rendering" />
+    <MESSAGE value="Try to debug compute shader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try to debug compute shader" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
