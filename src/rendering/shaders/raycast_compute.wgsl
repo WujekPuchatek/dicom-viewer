@@ -63,15 +63,15 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     let t_near = t_near_far.x;
     let t_far = t_near_far.y;
 
-//    if t_near < t_far {
-//        let hit_pos = camera.eye_pos.xyz + ray_dir * t_near;
-//        let hit_normal = normalize(hit_pos);
-//
-//        let light_dir = normalize(light.position - hit_pos);
-//        let diffuse = max(dot(hit_normal, light_dir), 0.0) * light.diffuse;
-//        let specular = pow(max(dot(reflect(-light_dir, hit_normal), -ray_dir), 0.0), 32.0) * light.specular;
-//
-//        let color = diffuse + specular;
-//        output_texture.write(vec3<f32>(color, 1.0), vec3<i32>(0, 0, 0));
-//    }
+    if t_near < t_far {
+        let hit_pos = camera.eye_pos.xyz + ray_dir * t_near;
+        let hit_normal = normalize(hit_pos);
+
+        let light_dir = normalize(light.position - hit_pos);
+        let diffuse = max(dot(hit_normal, light_dir), 0.0) * light.diffuse;
+        let specular = pow(max(dot(reflect(-light_dir, hit_normal), -ray_dir), 0.0), 32.0) * light.specular;
+
+        let color = diffuse + specular;
+        output_texture.write(vec3<f32>(color, 1.0), vec3<i32>(0, 0, 0));
+    }
 }
