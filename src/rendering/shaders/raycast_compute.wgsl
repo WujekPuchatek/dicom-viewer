@@ -54,11 +54,13 @@ fn getScreenCoord(global_id: vec3<u32>) -> vec2<f32> {
 
 @compute @workgroup_size(16, 16, 1)
 fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
+    // Get the screen position of the current pixel
     let screen_pos = getScreenCoord(global_id);
     let ray_dir = getRayDir(screen_pos, 1.0);
 
     // How to calculate the intersection of a ray with a 3D texture?
-    output_texture.write(vec4<f32>(ray_dir, 1.0), vec2<i32>(global_id.xy));
+
+    // Calculate the intersection of the ray with the unit cube
     let t_near_far = aabbIntersect(camera.eye_pos.xyz, ray_dir, vec3<f32>(-1.0, -1.0, -1.0), vec3<f32>(1.0, 1.0, 1.0));
     let t_near = t_near_far.x;
     let t_far = t_near_far.y;
@@ -74,4 +76,6 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         let color = diffuse + specular;
         output_texture.write(vec3<f32>(color, 1.0), vec3<i32>(0, 0, 0));
     }
+
+
 }
