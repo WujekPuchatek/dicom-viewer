@@ -1,6 +1,6 @@
 # DICOM Viewer
 
-This library is written in Rust and provides functionality for parsing and viewing DICOM files.
+This application is written in Rust and provides functionality for parsing and viewing DICOM files.
 ksje
 ## Features
 
