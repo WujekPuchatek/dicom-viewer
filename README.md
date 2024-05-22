@@ -12,4 +12,4 @@ This application is written in Rust and provides functionality for parsing and v
 
 ## Usage
 
-To use the application, create an instance of `DicomFileParser` with the path to the DICOM file. Then, call the `parse` method on the parser instance.
+To use the application, create an instance of `DicomFileParser` with the path to the DICOM file. Then, call the `parse` method on the parser instance. 
