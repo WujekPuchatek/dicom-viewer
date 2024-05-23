@@ -1,6 +1,6 @@
 # DICOM Viewer
 
-This application is written in Rust and provides functionality for parsing and viewing DICOM files in 3D or as montage of 2D images.
+This application is written in Rust and provides functionality for parsing and viewing DICOM files in 3D or as montage of 2D images
 
 ## Features
 
